@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora de Orçamentos — EcoSmart Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#0b0d10; --panel:#0f1317; --card:#141922; --muted:#9aa4b2; --txt:#dde6ee;
+      --brand:#185b24; --brand-2:#0f4319; --ok:#38c172; --warn:#ffcc00; --danger:#ef6b6b;
+      --border:#1f2430; --shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg, #0b0d10 0%, #0c1014 100%);color:var(--txt);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,13,16,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+    .wrap{max-width:1120px;margin:0 auto;padding:16px}
+    .title{display:flex;gap:12px;align-items:center}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand) 0%, #2b8a3e 50%, var(--brand-2) 100%);box-shadow:var(--shadow)}
+    .title h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.2px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin:16px 0}
+    @media (min-width:980px){.grid{grid-template-columns:1fr 360px}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#aac0d4}
+    .card .body{padding:16px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input,select{width:100%;background:#0e1218;color:var(--txt);border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:14px;outline:none}
+    input:focus,select:focus{border-color:#2b8a3e;box-shadow:0 0 0 3px rgba(43,138,62,.15)}
+    .row{display:grid;gap:12px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    .cols-4{grid-template-columns:repeat(4,1fr)}
+    @media(max-width:760px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0e1218;color:#e8f5ee;padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+    .btn:hover{border-color:#2b8a3e}
+    .btn.primary{background:linear-gradient(180deg, #1b6e2a 0%, #13541f 100%);border-color:#1e6d2b}
+    .note{font-size:12px;color:#a5b2bf}
+    .stat{background:#0e1218;border:1px solid var(--border);padding:10px 12px;border-radius:12px}
+    .right{text-align:right}
+    .footerbar{position:sticky;bottom:0;background:rgba(15,19,23,.9);backdrop-filter:blur(8px);border-top:1px solid var(--border)}
+    .footerbar .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+    .success{color:#6be28a;font-weight:700}
+    .warn{color:#ffd36b;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap title">
+      <div class="logo" aria-hidden></div>
+      <h1>Calculadora de Orçamentos • EcoSmart Group</h1>
+      <span id="status" class="stat" style="margin-left:auto">Conectado ao Supabase</span>
+    </div>
+  </header>
+
+  <div class="wrap grid">
+    <div style="display:grid;gap:16px">
+      <!-- Transporte -->
+      <div class="card">
+        <h2>Transporte</h2>
+        <div class="body">
+          <div class="row cols-3">
+            <div><label>Custo do combustível por litro (R$)</label><input id="combustivel_preco" type="number" step="0.01" value="0"></div>
+            <div><label>Autonomia (km/l)</label><input id="autonomia" type="number" step="0.1" value="0"></div>
+            <div><label>Distância total (km)</label><input id="dist_total" type="number" step="1" value="0"></div>
+          </div>
+          <p class="note" style="margin-top:8px">Subtotal Transporte: <strong id="sub_transporte">R$ 0,00</strong></p>
+        </div>
+      </div>
+
+      <!-- Mão de obra -->
+      <div class="card">
+        <h2>Mão de Obra</h2>
+        <div class="body">
+          <div class="row cols-2">
+            <div><label>Valor por hora de campo (R$)</label><input id="vh_campo" type="number" step="0.01" value="0"></div>
+            <div><label>Horas de campo</label><input id="h_campo" type="number" step="0.5" value="0"></div>
+          </div>
+          <div class="row cols-2" style="margin-top:12px">
+            <div><label>Valor por hora de escritório (R$)</label><input id="vh_escr" type="number" step="0.01" value="0"></div>
+            <div><label>Horas de escritório</label><input id="h_escr" type="number" step="0.5" value="0"></div>
+          </div>
+          <p class="note" style="margin-top:8px">Subtotal Mão de Obra: <strong id="sub_mao">R$ 0,00</strong></p>
+        </div>
+      </div>
+
+      <!-- Análises -->
+      <div class="card">
+        <h2>Análises</h2>
+        <div class="body">
+          <div class="row cols-2">
+            <div><label>Valor por amostra (R$)</label><input id="v_amostra" type="number" step="0.01" value="0"></div>
+            <div><label>Número de amostras</label><input id="n_amostras" type="number" step="1" value="0"></div>
+          </div>
+          <p class="note" style="margin-top:8px">Subtotal Análises: <strong id="sub_analises">R$ 0,00</strong></p>
+        </div>
+      </div>
+
+      <!-- Variáveis adicionais -->
+      <div class="card">
+        <h2>Variáveis Adicionais</h2>
+        <div class="body">
+          <div class="row cols-3">
+            <div><label>💰 Diárias de campo (R$)</label><input id="diaria" type="number" step="0.01" value="0"></div>
+            <div><label>📅 Quantidade de dias</label><input id="dias" type="number" step="1" value="0"></div>
+            <div><label>👥 Número de pessoas</label><input id="pessoas" type="number" step="1" value="0"></div>
+          </div>
+          <div class="row cols-3" style="margin-top:12px">
+            <div><label>🏨 Alojamento por pessoa (R$)</label><input id="aloj" type="number" step="0.01" value="0"></div>
+            <div><label>🍽 Alimentação por pessoa (R$)</label><input id="alim" type="number" step="0.01" value="0"></div>
+            <div><label>📋 ART - valor (R$)</label><input id="art_valor" type="number" step="0.01" value="0"></div>
+          </div>
+          <div class="row cols-3" style="margin-top:12px">
+            <div><label>📋 ART - quantidade</label><input id="art_qtd" type="number" step="1" value="0"></div>
+            <div><label>📡 Drone LIDAR/Multiespectral/RGB - hectares</label><input id="drone_ha" type="number" step="0.1" value="0"></div>
+            <div><label>💵 Preço por hectare (R$)</label><input id="preco_ha" type="number" step="0.01" value="0"></div>
+          </div>
+          <div class="row cols-2" style="margin-top:12px">
+            <div>
+              <label>⚙ Fator de complexidade do terreno</label>
+              <select id="fator">
+                <option value="1">1 - Baixa complexidade (região plana sem edificações)</option>
+                <option value="1.2">1,2 - Média complexidade</option>
+                <option value="1.5">1,5 - Alta complexidade</option>
+              </select>
+            </div>
+            <div>
+              <label>📝 Assinatura de 1 ano — preço mensal (R$)</label>
+              <input id="assin_mensal" type="number" step="0.01" value="0">
+            </div>
+          </div>
+          <p class="note" style="margin-top:8px">Subtotal Variáveis Adicionais: <strong id="sub_var">R$ 0,00</strong></p>
+        </div>
+      </div>
+
+      <!-- Acréscimos e totais -->
+      <div class="card">
+        <h2>Acréscimos / Impostos / Margem</h2>
+        <div class="body">
+          <div class="row cols-3">
+            <div><label>Emissão de Nota Fiscal (%)</label><input id="p_nf" type="number" step="0.1" value="0"></div>
+            <div><label>Prestação de Serviços (%)</label><input id="p_serv" type="number" step="0.1" value="0"></div>
+            <div><label>Impostos e Taxas (%)</label><input id="p_tax" type="number" step="0.1" value="0"></div>
+          </div>
+          <div class="row cols-3" style="margin-top:12px">
+            <div><label>Taxa Administrativa (%)</label><input id="p_admin" type="number" step="0.1" value="0"></div>
+            <div><label>Outros Custos (R$)</label><input id="outros" type="number" step="0.01" value="0"></div>
+            <div><label>Margem de Lucro (%)</label><input id="p_margem" type="number" step="0.1" value="0"></div>
+          </div>
+          <div class="row cols-2" style="margin-top:12px">
+            <div class="stat">Base de Cálculo: <strong id="base_calc">R$ 0,00</strong></div>
+            <div class="stat">Total com Acréscimos: <strong id="total_acresc">R$ 0,00</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumo -->
+      <div class="card">
+        <h2>Resumo</h2>
+        <div class="body">
+          <div class="row cols-4">
+            <div class="stat">🚗 Transporte: <strong id="r_transporte">R$ 0,00</strong></div>
+            <div class="stat">👷‍♂️ Mão de Obra: <strong id="r_mao">R$ 0,00</strong></div>
+            <div class="stat">🧪 Análises: <strong id="r_analises">R$ 0,00</strong></div>
+            <div class="stat">⚙ Variáveis Adicionais: <strong id="r_var">R$ 0,00</strong></div>
+          </div>
+          <div class="row cols-3" style="margin-top:12px">
+            <div class="stat">Subtotal Base: <strong id="sub_base">R$ 0,00</strong></div>
+            <div class="stat">Base × Fator: <strong id="base_x_fator">R$ 0,00</strong></div>
+            <div class="stat success">TOTAL DO ORÇAMENTO: <strong id="total_final">R$ 0,00</strong></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <button class="btn primary" id="btnSalvar">Salvar no Supabase</button>
+            <button class="btn" id="btnPDF">Exportar PDF</button>
+            <button class="btn" id="btnShare">Compartilhar link</button>
+            <button class="btn" id="btnWhats">WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lateral/ajuda -->
+    <aside style="display:grid;gap:16px">
+      <div class="card">
+        <h2>Como funciona</h2>
+        <div class="body">
+          <p class="note">Esta calculadora replica o modelo com as mesmas seções e variáveis: Transporte, Mão de Obra, Análises, Variáveis Adicionais, Fator de Complexidade, Acréscimos (%), Base de Cálculo e Total com Acréscimos. Valores ficam salvos no navegador e, quando configurado, também no Supabase. Para carregar um orçamento salvo, abra o link com <code>?o=SEU_SLUG</code>.</p>
+          <div class="stat">Status: <span id="status2">online</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="footerbar">
+    <div class="wrap" style="justify-content:flex-end">
+      <div class="stat">Total atual: <span id="total_footer" class="success">R$ 0,00</span></div>
+    </div>
+  </div>
+
+<script>
+// ==========================
+// Supabase: client pronto (fixo)
+// ==========================
+const supabaseUrl = 'https://lyzjznvxxvnpgwyyxcyw.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5emp6bnZ4eHZucGd3eXl4Y3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NjAzNjcsImV4cCI6MjA3MjQzNjM2N30.rRK4h5bVMNe7toXLh83KaYYtum01q9I0hIzHXlFHd78';
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// ==========================
+// Estado e utilidades
+// ==========================
+const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
+const fmt = v => BRL.format(v||0);
+const n = v => { if(typeof v==='number') return v; return parseFloat(String(v||'0').replace(/\./g,'').replace(',', '.'))||0 };
+
+function saveLS(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+function loadLS(key, def){ try{ return JSON.parse(localStorage.getItem(key)) ?? def }catch{ return def } }
+
+const I = {
+  combustivel_preco: document.getElementById('combustivel_preco'),
+  autonomia: document.getElementById('autonomia'),
+  dist_total: document.getElementById('dist_total'),
+  vh_campo: document.getElementById('vh_campo'), h_campo: document.getElementById('h_campo'),
+  vh_escr: document.getElementById('vh_escr'), h_escr: document.getElementById('h_escr'),
+  v_amostra: document.getElementById('v_amostra'), n_amostras: document.getElementById('n_amostras'),
+  diaria: document.getElementById('diaria'), dias: document.getElementById('dias'), pessoas: document.getElementById('pessoas'),
+  aloj: document.getElementById('aloj'), alim: document.getElementById('alim'),
+  art_valor: document.getElementById('art_valor'), art_qtd: document.getElementById('art_qtd'),
+  drone_ha: document.getElementById('drone_ha'), preco_ha: document.getElementById('preco_ha'),
+  fator: document.getElementById('fator'), assin_mensal: document.getElementById('assin_mensal'),
+  p_nf: document.getElementById('p_nf'), p_serv: document.getElementById('p_serv'), p_tax: document.getElementById('p_tax'), p_admin: document.getElementById('p_admin'),
+  outros: document.getElementById('outros'), p_margem: document.getElementById('p_margem')
+}
+
+const O = {
+  sub_transporte: document.getElementById('sub_transporte'),
+  sub_mao: document.getElementById('sub_mao'),
+  sub_analises: document.getElementById('sub_analises'),
+  sub_var: document.getElementById('sub_var'),
+  r_transporte: document.getElementById('r_transporte'), r_mao: document.getElementById('r_mao'), r_analises: document.getElementById('r_analises'), r_var: document.getElementById('r_var'),
+  sub_base: document.getElementById('sub_base'),
+  base_x_fator: document.getElementById('base_x_fator'),
+  base_calc: document.getElementById('base_calc'),
+  total_acresc: document.getElementById('total_acresc'),
+  total_final: document.getElementById('total_final'),
+  total_footer: document.getElementById('total_footer'),
+  status: document.getElementById('status'), status2: document.getElementById('status2')
+}
+
+function snapshot(){
+  const s = {}; Object.keys(I).forEach(k=> s[k] = I[k].value); return s;
+}
+
+function applySnapshot(s){
+  if(!s) return; Object.keys(I).forEach(k=>{ if(s[k]!==undefined) I[k].value = s[k]; });
+}
+
+function recalc(){
+  const litros = n(I.autonomia.value) > 0 ? n(I.dist_total.value)/n(I.autonomia.value) : 0;
+  const subTransporte = litros * n(I.combustivel_preco.value);
+
+  const subMao = n(I.vh_campo.value)*n(I.h_campo.value) + n(I.vh_escr.value)*n(I.h_escr.value);
+
+  const subAnalises = n(I.v_amostra.value)*n(I.n_amostras.value);
+
+  const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAloj = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAlim = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalART = n(I.art_valor.value)*n(I.art_qtd.value);
+  const totalDrone = n(I.drone_ha.value)*n(I.preco_ha.value);
+  const totalAssin = n(I.assin_mensal.value)*12; // anual
+  const subVar = totalDiarias + totalAloj + totalAlim + totalART + totalDrone + totalAssin;
+
+  const subBase = subTransporte + subMao + subAnalises + subVar;
+  const fator = n(I.fator.value)||1;
+  const baseMultiplicada = subBase * fator;
+
+  const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
+  const outros = n(I.outros.value);
+  const acrescimos = baseMultiplicada * pSoma;
+  const margem = (baseMultiplicada + acrescimos + outros) * (n(I.p_margem.value)/100);
+  const total = baseMultiplicada + acrescimos + outros + margem;
+
+  O.sub_transporte.textContent = fmt(subTransporte);
+  O.sub_mao.textContent = fmt(subMao);
+  O.sub_analises.textContent = fmt(subAnalises);
+  O.sub_var.textContent = fmt(subVar);
+  O.r_transporte.textContent = fmt(subTransporte);
+  O.r_mao.textContent = fmt(subMao);
+  O.r_analises.textContent = fmt(subAnalises);
+  O.r_var.textContent = fmt(subVar);
+  O.sub_base.textContent = fmt(subBase);
+  O.base_x_fator.textContent = fmt(baseMultiplicada);
+  O.base_calc.textContent = fmt(baseMultiplicada);
+  O.total_acresc.textContent = fmt(baseMultiplicada + acrescimos);
+  O.total_final.textContent = fmt(total);
+  O.total_footer.textContent = fmt(total);
+
+  saveLS('calc.ecosmart.v2', snapshot());
+
+  return { subTransporte, subMao, subAnalises, subVar, subBase, baseMultiplicada, acrescimos, outros, margem, total };
+}
+
+Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
+
+// Salvar no Supabase
+const btnSalvar = document.getElementById('btnSalvar');
+btnSalvar.addEventListener('click', async ()=>{
+  const r = recalc();
+  const row = {
+    slug: crypto.randomUUID().slice(0,8),
+    cliente: null, contato: null, telefone: null, email: null,
+    projeto: null, local: null, data_ref: null,
+    parametros: snapshot(),
+    itens: [
+      {categoria:'transporte', total:r.subTransporte},
+      {categoria:'mao_de_obra', total:r.subMao},
+      {categoria:'analises', total:r.subAnalises},
+      {categoria:'variaveis_adicionais', total:r.subVar}
+    ],
+    subtotal: r.subBase,
+    impostos: r.acrescimos, // acrescimos percentuais
+    markup: r.margem,       // margem de lucro
+    total: r.total,
+    observacoes: null
+  };
+  try{
+    const { error } = await supabaseClient.from('orcamentos').insert(row);
+    if(error){ console.error(error); alert('Erro ao salvar: '+error.message); return; }
+    const url = new URL(window.location.href); url.searchParams.set('o', row.slug); history.replaceState(null,'', url);
+    alert('Orçamento salvo! Link atualizado na barra do navegador.');
+  }catch(err){ console.error(err); alert('Erro inesperado ao salvar. Veja o console.'); }
+});
+
+// Carregar por slug (?o=xxxx)
+(async function loadBySlug(){
+  const slug = new URLSearchParams(location.search).get('o');
+  if(!slug) { const data = loadLS('calc.ecosmart.v2', {}); applySnapshot(data); recalc(); return; }
+  try{
+    const { data, error } = await supabaseClient.from('orcamentos').select('*').eq('slug', slug).single();
+    if(error){ console.warn('Não foi possível carregar o orçamento:', error.message); return; }
+    if(data && data.parametros){ applySnapshot(data.parametros); recalc(); }
+  }catch(e){ console.warn(e); }
+})();
+
+// Compartilhar
+const btnShare = document.getElementById('btnShare');
+btnShare.addEventListener('click', ()=>{ const url = location.href; if(navigator.clipboard) navigator.clipboard.writeText(url); alert('Link copiado.'); });
+
+const btnWhats = document.getElementById('btnWhats');
+btnWhats.addEventListener('click', ()=>{
+  const t = document.getElementById('total_final').textContent || '';
+  const msg = encodeURIComponent(`Olá! Segue o orçamento: ${t}. Link: ${location.href}`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+});
+
+// PDF
+const btnPDF = document.getElementById('btnPDF');
+btnPDF.addEventListener('click', ()=>{
+  const { jsPDF } = window.jspdf; const doc = new jsPDF({unit:'pt', format:'a4'});
+  const pad=36; let y=pad;
+  const r = recalc();
+  doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.text('EcoSmart Group — Orçamento', pad, y); y+=18;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  doc.text(`Transporte: ${fmt(r.subTransporte)}  |  Mão de Obra: ${fmt(r.subMao)}  |  Análises: ${fmt(r.subAnalises)}  |  Variáveis: ${fmt(r.subVar)}`, pad, y); y+=16;
+  doc.text(`Subtotal Base: ${fmt(r.subBase)}  |  Base × Fator: ${fmt(r.baseMultiplicada)}`, pad, y); y+=16;
+  doc.setFont('helvetica','bold'); doc.text(`TOTAL DO ORÇAMENTO: ${fmt(r.total)}`, pad, y); y+=24;
+  doc.save('orcamento_ecosmart.pdf');
+});
+
+// Primeira renderização
+recalc();
+</script>
+</body>
+</html>
