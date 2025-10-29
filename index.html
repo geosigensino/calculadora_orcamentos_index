@@ -794,13 +794,15 @@
             <div class="field">
               <label class="field-label">
                 ⚙ Fator de complexidade do terreno
-                <small>1 = fácil / 1,5 = difícil</small>
+                <small>aplicado só ao custo de drone</small>
               </label>
               <div class="input-shell">
+                <!-- ATUALIZADO: opções do fator -->
                 <select id="fator">
-                  <option value="1">1 - Baixa complexidade (região plana sem edificações)</option>
+                  <option value="1">Sem fator</option>
                   <option value="1.2">1,2 - Média complexidade</option>
                   <option value="1.5">1,5 - Alta complexidade</option>
+                  <option value="1.8">1,8 - Muito alta complexidade</option>
                 </select>
               </div>
             </div>
@@ -943,7 +945,8 @@
           <div class="note">
             Esta calculadora segue os mesmos blocos do orçamento técnico:
             Transporte, Mão de Obra, Análises, Variáveis Adicionais,
-            Fator de Complexidade, Acréscimos (%), Base de Cálculo e Total Final.
+            Fator de Complexidade (aplicado ao custo de drone),
+            Acréscimos (%), Base de Cálculo e Total Final.
             Os valores ficam salvos no navegador e também podem ser enviados ao Supabase.
             Para carregar um orçamento salvo, abra o link com <code>?o=SEU_SLUG</code>.
           </div>
@@ -1136,22 +1139,32 @@ function recalc(){
   const subAnalises =
     n(I.v_amostra.value)*n(I.n_amostras.value);
 
+  // FATOR DE COMPLEXIDADE (aplicado somente ao DRONE)
+  const fatorVal = n(I.fator.value) || 1;
+
   // VARIÁVEIS ADICIONAIS
   const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
-  const totalDrone   = n(I.drone_ha.value)*n(I.preco_ha.value);
-  const totalAssin   = n(I.assin_mensal.value)*12; // assinatura anual
+
+  // custo de drone = hectares * preço_por_hectare * fator de complexidade
+  const totalDroneRaw = n(I.drone_ha.value)*n(I.preco_ha.value);
+  const totalDrone    = totalDroneRaw * fatorVal;
+
+  // assinatura é mensal *12 (anual)
+  const totalAssin   = n(I.assin_mensal.value)*12;
 
   const subVar =
     totalDiarias + totalAloj + totalAlim +
     totalART + totalDrone + totalAssin;
 
-  // BASE
+  // BASE (agora o fator já foi aplicado só no drone, então a base final já está corrigida)
   const subBase = subTransporte + subMao + subAnalises + subVar;
-  const fatorVal = n(I.fator.value)||1;
-  const baseMultiplicada = subBase * fatorVal;
+
+  // baseMultiplicada agora NÃO multiplica de novo pelo fator,
+  // porque o fator já foi incluso no custo do drone.
+  const baseMultiplicada = subBase;
 
   // ACRÉSCIMOS (%)
   const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
@@ -1176,9 +1189,12 @@ function recalc(){
   O.r_var.textContent          = fmt(subVar);
 
   O.sub_base.textContent       = fmt(subBase);
+
+  // "Base × Fator" agora é só a base já com fator aplicado ao drone,
+  // então mostramos a mesma coisa.
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
 
-  // base_calc é a base usada para impostos (base × fator)
+  // base_calc é a base usada para impostos
   O.base_calc.textContent      = fmt(baseMultiplicada);
 
   // total_acresc = baseMultiplicada + acrescimos (sem margem e sem outros)
@@ -1252,21 +1268,16 @@ btnSalvar.addEventListener('click', async ()=>{
 
 /* ==========================
    Carregar por slug (?o=xxxx)
-   IMPORTANTE:
-   - Agora NÃO carregamos mais o último orçamento salvo do navegador
-     automaticamente. Tudo começa zerado.
+   Mantém inicial zerado se não houver slug
 ========================== */
 (async function loadBySlug(){
   const slug = new URLSearchParams(location.search).get('o');
 
   if(!slug) {
-    // Cenário normal: página aberta "do zero"
-    // Não aplica snapshot salvo. Mantém tudo "0".
     recalc();
     return;
   }
 
-  // Cenário com slug: buscar orçamento salvo no Supabase
   try{
     const { data, error } = await supabaseClient
       .from('orcamentos')
