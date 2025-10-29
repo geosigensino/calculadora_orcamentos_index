@@ -1026,7 +1026,7 @@ function n(v){
   const s = String(v || '0')
     .trim()
     .replace(/\./g, '')   // remove separador de milhar
-    .replace(/,/g, '.');  // converte vírgula decimal para ponto
+    .replace(/,/g, '.');  // vírgula decimal -> ponto
   const out = parseFloat(s);
   return isNaN(out) ? 0 : out;
 }
@@ -1100,7 +1100,7 @@ const O = {
 };
 
 /* ==========================
-   Snapshot para salvar/local
+   Snapshot
 ========================== */
 function snapshot(){
   const s = {};
@@ -1177,9 +1177,11 @@ function recalc(){
 
   O.sub_base.textContent       = fmt(subBase);
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
+
+  // base_calc é a base usada para impostos (base × fator)
   O.base_calc.textContent      = fmt(baseMultiplicada);
 
-  // total_acresc = baseMultiplicada + acrescimos (ainda sem margem e sem "outros")
+  // total_acresc = baseMultiplicada + acrescimos (sem margem e sem outros)
   O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
 
   O.total_final.textContent    = fmt(total);
@@ -1250,15 +1252,21 @@ btnSalvar.addEventListener('click', async ()=>{
 
 /* ==========================
    Carregar por slug (?o=xxxx)
+   IMPORTANTE:
+   - Agora NÃO carregamos mais o último orçamento salvo do navegador
+     automaticamente. Tudo começa zerado.
 ========================== */
 (async function loadBySlug(){
   const slug = new URLSearchParams(location.search).get('o');
+
   if(!slug) {
-    const data = loadLS('calc.ecosmart.v2', {});
-    applySnapshot(data);
+    // Cenário normal: página aberta "do zero"
+    // Não aplica snapshot salvo. Mantém tudo "0".
     recalc();
     return;
   }
+
+  // Cenário com slug: buscar orçamento salvo no Supabase
   try{
     const { data, error } = await supabaseClient
       .from('orcamentos')
@@ -1268,14 +1276,16 @@ btnSalvar.addEventListener('click', async ()=>{
 
     if(error){
       console.warn('Não foi possível carregar o orçamento:', error.message);
+      recalc();
       return;
     }
     if(data && data.parametros){
       applySnapshot(data.parametros);
-      recalc();
     }
+    recalc();
   }catch(e){
     console.warn(e);
+    recalc();
   }
 })();
 
@@ -1325,9 +1335,6 @@ btnPDF.addEventListener('click', ()=>{
 
   doc.save('orcamento_ecosmart.pdf');
 });
-
-/* Primeira renderização */
-recalc();
 </script>
 </body>
 </html>
