@@ -15,7 +15,28 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <style>
+    /* -------------------------------------------------
+      TOKENS GERAIS (independentes de tema)
+    ------------------------------------------------- */
     :root{
+      --radius-lg:20px;
+      --radius-md:12px;
+      --radius-sm:8px;
+
+      --shadow-big-dark:0 24px 64px rgba(0,0,0,.6);
+      --shadow-big-light:0 32px 64px rgba(0,0,0,.07);
+
+      --shadow-card-dark:0 12px 32px rgba(0,0,0,.4);
+      --shadow-card-light:0 8px 24px rgba(0,0,0,.08);
+
+      --section-gap:16px;
+      --card-padding:16px;
+    }
+
+    /* -------------------------------------------------
+      THEME: DARK
+    ------------------------------------------------- */
+    body.theme-dark{
       --bg-body:#0b0d10;
       --bg-grad-start:#0b0d10;
       --bg-grad-end:#0c1014;
@@ -28,11 +49,11 @@
       --txt-primary:#dde6ee;
       --txt-secondary:#9aa4b2;
       --txt-muted:#6b7380;
-      --txt-accent:#aeeec2;
+      --txt-soft-on-accent:#eafff0;
 
-      --brand-main:#1b6e2a;
-      --brand-alt:#13541f;
-      --brand-soft:rgba(43,138,62,.15);
+      --accent-main:#1b6e2a;
+      --accent-alt:#13541f;
+      --accent-soft:rgba(43,138,62,.15);
 
       --good:#6be28a;
       --warn:#ffd36b;
@@ -40,26 +61,102 @@
 
       --border:#1f2430;
       --border-strong:#2f384a;
-      --shadow-big:0 24px 64px rgba(0,0,0,.6);
-      --radius-lg:20px;
-      --radius-md:12px;
-      --radius-sm:8px;
 
-      --card-padding:16px;
-      --section-gap:16px;
+      --brand-badge-bg:radial-gradient(circle at 20% 20%,#2b8a3e 0%,#1b6e2a 40%,#13541f 100%);
+      --brand-badge-shadow:0 12px 32px rgba(38,108,52,.5);
+
+      --header-bg:rgba(11,13,16,.7);
+      --header-shadow:0 24px 48px rgba(0,0,0,.8);
+
+      --card-bg-gradient:linear-gradient(
+        160deg,
+        rgba(20,25,34,.9) 0%,
+        rgba(15,19,23,.6) 100%
+      );
+      --card-border-glow:radial-gradient(circle at 0% 0%,rgba(43,138,62,.35) 0%,rgba(0,0,0,0) 70%);
+
+      --card-header-bg:linear-gradient(
+        to right,
+        rgba(27,110,42,.08) 0%,
+        rgba(19,24,29,0) 60%
+      );
+
+      --footer-bg:rgba(15,19,23,.75);
+
+      --shadow-big:var(--shadow-big-dark);
+      --shadow-card:var(--shadow-card-dark);
     }
 
+    /* -------------------------------------------------
+      THEME: LIGHT
+    ------------------------------------------------- */
+    body.theme-light{
+      --bg-body:#f5f7fa;
+      --bg-grad-start:#f5f7fa;
+      --bg-grad-end:#eef2f6;
+
+      --panel:#ffffff;
+      --surface:#ffffff;
+      --surface-hover:#f5f9f4;
+      --input-bg:#ffffff;
+
+      --txt-primary:#1a1f2a;
+      --txt-secondary:#4a5568;
+      --txt-muted:#7b8498;
+      --txt-soft-on-accent:#ffffff;
+
+      --accent-main:#1b6e2a;
+      --accent-alt:#145323;
+      --accent-soft:rgba(43,138,62,.12);
+
+      --good:#1b6e2a;
+      --warn:#b37a00;
+      --danger:#c0392b;
+
+      --border:#d4d9e3;
+      --border-strong:#aeb7c9;
+
+      --brand-badge-bg:radial-gradient(circle at 20% 20%,#2b8a3e 0%,#1b6e2a 40%,#13541f 100%);
+      --brand-badge-shadow:0 8px 20px rgba(27,110,42,.25);
+
+      --header-bg:rgba(255,255,255,.7);
+      --header-shadow:0 24px 48px rgba(0,0,0,.06);
+
+      --card-bg-gradient:linear-gradient(
+        160deg,
+        rgba(255,255,255,1) 0%,
+        rgba(245,247,250,.8) 100%
+      );
+      --card-border-glow:radial-gradient(circle at 0% 0%,rgba(43,138,62,.18) 0%,rgba(255,255,255,0) 70%);
+
+      --card-header-bg:linear-gradient(
+        to right,
+        rgba(27,110,42,.06) 0%,
+        rgba(255,255,255,0) 60%
+      );
+
+      --footer-bg:rgba(255,255,255,.9);
+
+      --shadow-big:var(--shadow-big-light);
+      --shadow-card:var(--shadow-card-light);
+    }
+
+    /* -------------------------------------------------
+      BASE / GLOBAL
+    ------------------------------------------------- */
     *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
 
     body{
       margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:radial-gradient(circle at 20% 10%,rgba(34,120,52,.18) 0%,rgba(11,13,16,0) 60%),linear-gradient(180deg,var(--bg-grad-start) 0%,var(--bg-grad-end) 100%);
-      background-color:var(--bg-body);
-      color:var(--txt-primary);
       min-height:100vh;
       display:flex;
       flex-direction:column;
+      background:
+        radial-gradient(circle at 20% 10%,rgba(34,120,52,.18) 0%,rgba(0,0,0,0) 60%),
+        linear-gradient(180deg,var(--bg-grad-start) 0%,var(--bg-grad-end) 100%);
+      background-color:var(--bg-body);
+      color:var(--txt-primary);
     }
 
     /* ---------- HEADER ---------- */
@@ -67,11 +164,13 @@
       position:sticky;
       top:0;
       z-index:50;
-      background:rgba(11,13,16,.7);
+      background:var(--header-bg);
       backdrop-filter:blur(10px) saturate(140%);
       -webkit-backdrop-filter:blur(10px) saturate(140%);
       border-bottom:1px solid var(--border);
+      box-shadow:var(--header-shadow);
     }
+
     .wrap-header{
       max-width:1280px;
       margin:0 auto;
@@ -79,22 +178,24 @@
       display:flex;
       align-items:center;
       gap:12px;
+      flex-wrap:wrap;
     }
+
     .brand-badge{
       min-width:40px;
       min-height:40px;
       border-radius:12px;
-      background:radial-gradient(circle at 20% 20%,#2b8a3e 0%,var(--brand-main) 40%,var(--brand-alt) 100%);
-      box-shadow:0 12px 32px rgba(38,108,52,.5);
+      background:var(--brand-badge-bg);
+      box-shadow:var(--brand-badge-shadow);
       border:1px solid rgba(255,255,255,.08);
       display:flex;
       align-items:center;
       justify-content:center;
       font-size:10px;
       font-weight:600;
-      color:#eafff0;
+      color:var(--txt-soft-on-accent);
       letter-spacing:.04em;
-      text-shadow:0 1px 2px rgba(0,0,0,.6);
+      text-shadow:0 1px 2px rgba(0,0,0,.4);
     }
 
     .head-texts{
@@ -147,7 +248,7 @@
       align-items:center;
       gap:6px;
       font-weight:500;
-      box-shadow:0 10px 24px rgba(0,0,0,.4);
+      box-shadow:var(--shadow-card);
     }
     .chip-status .dot-online{
       width:8px;
@@ -155,6 +256,28 @@
       border-radius:999px;
       background:var(--good);
       box-shadow:0 0 8px var(--good);
+    }
+
+    .theme-toggle-btn{
+      background:var(--input-bg);
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      box-shadow:var(--shadow-card);
+      color:var(--txt-primary);
+      font-size:12px;
+      font-weight:600;
+      line-height:1.2;
+      padding:8px 10px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      min-width:max-content;
+    }
+    .theme-toggle-btn:hover{
+      background:var(--surface-hover);
+      border-color:var(--accent-main);
+      box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4);
     }
 
     /* ---------- LAYOUT GRID ---------- */
@@ -168,7 +291,6 @@
       gap:var(--section-gap);
     }
 
-    /* 2 col em desktop */
     @media(min-width:1080px){
       .page{
         grid-template-columns:minmax(0,1fr) 320px;
@@ -184,25 +306,20 @@
     /* ---------- CARD / PAINEL ---------- */
     .card{
       position:relative;
-      background:linear-gradient(
-        160deg,
-        rgba(20,25,34,.9) 0%,
-        rgba(15,19,23,.6) 100%
-      );
+      background:var(--card-bg-gradient);
       border:1px solid var(--border);
       border-radius:var(--radius-lg);
       box-shadow:var(--shadow-big);
       overflow:hidden;
     }
 
-    /* Borda glow verde suave no topo */
     .card::before{
       content:"";
       position:absolute;
       inset:0;
       border-radius:inherit;
       padding:1px;
-      background:radial-gradient(circle at 0% 0%,rgba(43,138,62,.35) 0%,rgba(0,0,0,0) 70%);
+      background:var(--card-border-glow);
       -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -219,11 +336,7 @@
       gap:8px 12px;
       padding:16px var(--card-padding) 12px;
       border-bottom:1px solid var(--border);
-      background:linear-gradient(
-        to right,
-        rgba(27,110,42,.08) 0%,
-        rgba(19,24,29,0) 60%
-      );
+      background:var(--card-header-bg);
     }
     .card-title-wrap{
       display:flex;
@@ -237,8 +350,8 @@
       font-size:10px;
       line-height:1.2;
       font-weight:600;
-      color:var(--brand-main);
-      background:rgba(27,110,42,.12);
+      color:var(--accent-main);
+      background:var(--accent-soft);
       border:1px solid rgba(27,110,42,.4);
       border-radius:var(--radius-sm);
       padding:3px 6px;
@@ -250,7 +363,7 @@
       font-size:14px;
       font-weight:600;
       line-height:1.4;
-      color:#aac0d4;
+      color:var(--txt-secondary);
       text-transform:uppercase;
       letter-spacing:.12em;
     }
@@ -310,12 +423,12 @@
       background:var(--input-bg);
       border:1px solid var(--border);
       border-radius:var(--radius-md);
-      box-shadow:0 12px 32px rgba(0,0,0,.4);
+      box-shadow:var(--shadow-card);
       transition:border .15s, box-shadow .15s, background .15s;
     }
     .input-shell:focus-within{
-      border-color:var(--brand-main);
-      box-shadow:0 0 0 4px var(--brand-soft),0 20px 32px rgba(0,0,0,.6);
+      border-color:var(--accent-main);
+      box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15);
     }
 
     .input-shell input,
@@ -333,7 +446,7 @@
       appearance:none;
     }
 
-    /* value box / estatísticas */
+    /* ---------- STAT / VALORES ---------- */
     .stat-box{
       background:var(--input-bg);
       border:1px solid var(--border);
@@ -346,7 +459,7 @@
       flex-direction:column;
       gap:4px;
       min-height:56px;
-      box-shadow:0 12px 32px rgba(0,0,0,.4);
+      box-shadow:var(--shadow-card);
     }
     .stat-label{
       color:var(--txt-muted);
@@ -359,15 +472,22 @@
       font-weight:600;
       line-height:1.3;
       word-break:break-word;
+      color:var(--txt-primary);
+      text-shadow:none;
     }
-    .stat-value.good{color:var(--good);text-shadow:0 0 8px rgba(107,226,138,.4)}
-    .stat-value.warn{color:var(--warn)}
+    .stat-value.good{
+      color:var(--good);
+      text-shadow:0 0 8px rgba(107,226,138,.4);
+    }
+    .stat-value.warn{
+      color:var(--warn);
+    }
 
     /* nota menor */
     .note{
       font-size:12px;
       line-height:1.4;
-      color:#a5b2bf;
+      color:var(--txt-secondary);
       font-weight:400;
       display:flex;
       flex-wrap:wrap;
@@ -391,30 +511,36 @@
       gap:8px;
       border:1px solid var(--border);
       background:var(--input-bg);
-      color:#e8f5ee;
+      color:var(--txt-primary);
       padding:10px 12px;
       border-radius:var(--radius-md);
       cursor:pointer;
       font-weight:600;
       font-size:13px;
       line-height:1.3;
-      box-shadow:0 12px 32px rgba(0,0,0,.4);
+      box-shadow:var(--shadow-card);
       transition:all .15s;
     }
     .btn:hover{
       background:var(--surface-hover);
-      border-color:var(--brand-main);
-      box-shadow:0 16px 40px rgba(0,0,0,.6),0 0 12px rgba(43,138,62,.4);
+      border-color:var(--accent-main);
+      box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4);
     }
     .btn.primary{
-      background:linear-gradient(180deg,var(--brand-main) 0%,var(--brand-alt) 100%);
+      background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%);
       border-color:#1e6d2b;
-      color:#fff;
+      color:var(--txt-soft-on-accent);
       text-shadow:0 1px 2px rgba(0,0,0,.6);
     }
     .btn.primary:hover{
-      box-shadow:0 16px 40px rgba(0,0,0,.7),0 0 16px rgba(43,138,62,.5);
+      box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5);
     }
+
+    /* ícones simples via data-attr */
+    .btn[data-icon="save"]::before{content:"💾";}
+    .btn[data-icon="pdf"]::before{content:"📄";}
+    .btn[data-icon="link"]::before{content:"🔗";}
+    .btn[data-icon="wa"]::before{content:"📲";}
 
     /* ---------- ASIDE / AJUDA ---------- */
     aside{
@@ -425,7 +551,7 @@
     @media(min-width:1080px){
       aside{
         position:sticky;
-        top:88px; /* abaixo do header */
+        top:88px;
         align-self:start;
       }
     }
@@ -436,13 +562,17 @@
       bottom:0;
       left:0;
       right:0;
-      background:rgba(15,19,23,.75);
+      background:var(--footer-bg);
       backdrop-filter:blur(10px) saturate(140%);
       -webkit-backdrop-filter:blur(10px) saturate(140%);
       border-top:1px solid var(--border);
-      box-shadow:0 -24px 48px rgba(0,0,0,.8);
+      box-shadow:0 -24px 48px rgba(0,0,0,.4);
       z-index:60;
     }
+    body.theme-light .footerbar{
+      box-shadow:0 -24px 48px rgba(0,0,0,.07);
+    }
+
     .footer-inner{
       max-width:1280px;
       margin:0 auto;
@@ -456,7 +586,7 @@
       border:1px solid var(--border);
       border-radius:var(--radius-md);
       padding:10px 12px;
-      box-shadow:0 12px 32px rgba(0,0,0,.5);
+      box-shadow:var(--shadow-card);
       font-size:13px;
       line-height:1.4;
       color:var(--txt-primary);
@@ -478,16 +608,10 @@
       text-shadow:0 0 8px rgba(107,226,138,.4);
       word-break:break-word;
     }
-
-    /* ícones simples só usando pseudo-elemento */
-    .btn[data-icon="save"]::before{content:"💾";}
-    .btn[data-icon="pdf"]::before{content:"📄";}
-    .btn[data-icon="link"]::before{content:"🔗";}
-    .btn[data-icon="wa"]::before{content:"📲";}
-
   </style>
 </head>
-<body>
+
+<body class="theme-dark">
   <!-- HEADER -->
   <header>
     <div class="wrap-header">
@@ -507,6 +631,11 @@
           <span class="dot-online"></span>
           <span id="status">Conectado ao Supabase</span>
         </div>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Escuro</span>
+        </button>
       </div>
     </div>
   </header>
@@ -740,7 +869,7 @@
 
           <div class="row cols-2">
             <div class="stat-box">
-              <div class="stat-label">Base de Cálculo</div>
+              <div class="stat-label">Base de Cálculo (Base × Fator)</div>
               <div class="stat-value" id="base_calc">R$ 0,00</div>
             </div>
             <div class="stat-box">
@@ -818,10 +947,10 @@
         </div>
         <div class="card-body">
           <div class="note">
-            Esta calculadora segue os mesmos blocos do orçamento técnico: Transporte, Mão de Obra,
-            Análises, Variáveis Adicionais, Fator de Complexidade, Acréscimos (%), Base de Cálculo
-            e Total com Acréscimos.
-            Os valores ficam salvos no navegador e, se desejar, também no Supabase.
+            Esta calculadora segue os mesmos blocos do orçamento técnico:
+            Transporte, Mão de Obra, Análises, Variáveis Adicionais,
+            Fator de Complexidade, Acréscimos (%), Base de Cálculo e Total Final.
+            Os valores ficam salvos no navegador e também podem ser enviados ao Supabase.
             Para carregar um orçamento salvo, abra o link com <code>?o=SEU_SLUG</code>.
           </div>
 
@@ -845,6 +974,46 @@
   </footer>
 
 <script>
+/* ==========================
+   Tema claro/escuro
+========================== */
+const THEME_KEY = 'calc.theme.v1';
+const bodyEl = document.body;
+const themeBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+const themeLabel = document.getElementById('themeLabel');
+
+function applyTheme(theme){
+  bodyEl.classList.remove('theme-dark','theme-light');
+  bodyEl.classList.add(theme);
+  if(theme === 'theme-light'){
+    themeIcon.textContent = '☀️';
+    themeLabel.textContent = 'Claro';
+  }else{
+    themeIcon.textContent = '🌙';
+    themeLabel.textContent = 'Escuro';
+  }
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+function initTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if(saved === 'theme-light' || saved === 'theme-dark'){
+    applyTheme(saved);
+    return;
+  }
+  // fallback: respeita prefers-color-scheme
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(prefersDark ? 'theme-dark' : 'theme-light');
+}
+
+themeBtn.addEventListener('click', ()=>{
+  const isDark = bodyEl.classList.contains('theme-dark');
+  applyTheme(isDark ? 'theme-light' : 'theme-dark');
+});
+
+initTheme();
+
 /* ==========================
    Supabase: client pronto
 ========================== */
@@ -872,17 +1041,39 @@ const I = {
   combustivel_preco: document.getElementById('combustivel_preco'),
   autonomia: document.getElementById('autonomia'),
   dist_total: document.getElementById('dist_total'),
-  vh_campo: document.getElementById('vh_campo'), h_campo: document.getElementById('h_campo'),
-  vh_escr: document.getElementById('vh_escr'), h_escr: document.getElementById('h_escr'),
-  v_amostra: document.getElementById('v_amostra'), n_amostras: document.getElementById('n_amostras'),
-  diaria: document.getElementById('diaria'), dias: document.getElementById('dias'), pessoas: document.getElementById('pessoas'),
-  aloj: document.getElementById('aloj'), alim: document.getElementById('alim'),
-  art_valor: document.getElementById('art_valor'), art_qtd: document.getElementById('art_qtd'),
-  drone_ha: document.getElementById('drone_ha'), preco_ha: document.getElementById('preco_ha'),
-  fator: document.getElementById('fator'), assin_mensal: document.getElementById('assin_mensal'),
-  p_nf: document.getElementById('p_nf'), p_serv: document.getElementById('p_serv'),
-  p_tax: document.getElementById('p_tax'), p_admin: document.getElementById('p_admin'),
-  outros: document.getElementById('outros'), p_margem: document.getElementById('p_margem')
+
+  vh_campo: document.getElementById('vh_campo'),
+  h_campo: document.getElementById('h_campo'),
+
+  vh_escr: document.getElementById('vh_escr'),
+  h_escr: document.getElementById('h_escr'),
+
+  v_amostra: document.getElementById('v_amostra'),
+  n_amostras: document.getElementById('n_amostras'),
+
+  diaria: document.getElementById('diaria'),
+  dias: document.getElementById('dias'),
+  pessoas: document.getElementById('pessoas'),
+
+  aloj: document.getElementById('aloj'),
+  alim: document.getElementById('alim'),
+
+  art_valor: document.getElementById('art_valor'),
+  art_qtd: document.getElementById('art_qtd'),
+
+  drone_ha: document.getElementById('drone_ha'),
+  preco_ha: document.getElementById('preco_ha'),
+
+  fator: document.getElementById('fator'),
+  assin_mensal: document.getElementById('assin_mensal'),
+
+  p_nf: document.getElementById('p_nf'),
+  p_serv: document.getElementById('p_serv'),
+  p_tax: document.getElementById('p_tax'),
+  p_admin: document.getElementById('p_admin'),
+
+  outros: document.getElementById('outros'),
+  p_margem: document.getElementById('p_margem')
 };
 
 const O = {
@@ -890,16 +1081,20 @@ const O = {
   sub_mao: document.getElementById('sub_mao'),
   sub_analises: document.getElementById('sub_analises'),
   sub_var: document.getElementById('sub_var'),
+
   r_transporte: document.getElementById('r_transporte'),
   r_mao: document.getElementById('r_mao'),
   r_analises: document.getElementById('r_analises'),
   r_var: document.getElementById('r_var'),
+
   sub_base: document.getElementById('sub_base'),
   base_x_fator: document.getElementById('base_x_fator'),
   base_calc: document.getElementById('base_calc'),
   total_acresc: document.getElementById('total_acresc'),
+
   total_final: document.getElementById('total_final'),
   total_footer: document.getElementById('total_footer'),
+
   status: document.getElementById('status'),
   status2: document.getElementById('status2')
 };
@@ -917,6 +1112,9 @@ function applySnapshot(s){
   });
 }
 
+/* ==========================
+   Cálculos
+========================== */
 function recalc(){
   // Transporte
   const litros = n(I.autonomia.value) > 0
@@ -945,23 +1143,23 @@ function recalc(){
     totalDiarias + totalAloj + totalAlim +
     totalART + totalDrone + totalAssin;
 
-  // Base
+  // Base de cálculo
   const subBase = subTransporte + subMao + subAnalises + subVar;
   const fatorVal = n(I.fator.value)||1;
   const baseMultiplicada = subBase * fatorVal;
 
-  // Acréscimos
+  // Acréscimos percentuais
   const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
   const outrosVal = n(I.outros.value);
   const acrescimos = baseMultiplicada * pSoma;
 
-  // Margem
+  // Margem de lucro
   const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
 
   // Total final
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // Output visual
+  // Saída visual
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
@@ -974,7 +1172,11 @@ function recalc(){
 
   O.sub_base.textContent       = fmt(subBase);
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
+
+  // base_calc é exatamente a Base × Fator usada para os percentuais
   O.base_calc.textContent      = fmt(baseMultiplicada);
+
+  // total_acresc = baseMultiplicada + acrescimos (sem margem e sem "outros")
   O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
 
   O.total_final.textContent    = fmt(total);
@@ -1033,6 +1235,7 @@ btnSalvar.addEventListener('click', async ()=>{
       return;
     }
 
+    // atualiza URL com slug
     const url = new URL(window.location.href);
     url.searchParams.set('o', row.slug);
     history.replaceState(null,'', url);
@@ -1075,7 +1278,7 @@ btnSalvar.addEventListener('click', async ()=>{
 })();
 
 /* ==========================
-   Compartilhar
+   Compartilhar link
 ========================== */
 const btnShare = document.getElementById('btnShare');
 btnShare.addEventListener('click', ()=>{
@@ -1084,6 +1287,9 @@ btnShare.addEventListener('click', ()=>{
   alert('Link copiado.');
 });
 
+/* ==========================
+   WhatsApp
+========================== */
 const btnWhats = document.getElementById('btnWhats');
 btnWhats.addEventListener('click', ()=>{
   const t = document.getElementById('total_final').textContent || '';
