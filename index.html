@@ -797,7 +797,6 @@
                 <small>aplicado só ao custo de drone</small>
               </label>
               <div class="input-shell">
-                <!-- ATUALIZADO: opções do fator -->
                 <select id="fator">
                   <option value="1">Sem fator</option>
                   <option value="1.2">1,2 - Média complexidade</option>
@@ -1023,13 +1022,26 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
 const fmt = v => BRL.format(v||0);
 
-// parser numérico que aceita vírgula e ponto brasileiro
+/* Conversor numérico BR:
+   - aceita "100"
+   - aceita "100,5"
+   - aceita "1.234,56" -> 1234.56
+   - não transforma "100" em "1000"
+*/
 function n(v){
   if (typeof v === 'number') return v;
-  const s = String(v || '0')
-    .trim()
-    .replace(/\./g, '')   // remove separador de milhar
-    .replace(/,/g, '.');  // vírgula decimal -> ponto
+
+  let s = String(v || '0').trim();
+
+  if (s.includes(',')) {
+    // Formato brasileiro com vírgula decimal
+    s = s.replace(/\./g, ''); // remove separador de milhar
+    s = s.replace(/,/g, '.'); // vírgula decimal -> ponto
+  } else {
+    // Sem vírgula: mantemos ponto decimal se houver
+    s = s.replace(/ /g, '');
+  }
+
   const out = parseFloat(s);
   return isNaN(out) ? 0 : out;
 }
@@ -1102,9 +1114,7 @@ const O = {
   status2: document.getElementById('status2')
 };
 
-/* ==========================
-   Snapshot
-========================== */
+/* Snapshot atual dos inputs */
 function snapshot(){
   const s = {};
   Object.keys(I).forEach(k=> s[k] = I[k].value);
@@ -1122,62 +1132,87 @@ function applySnapshot(s){
    Recalcular tudo
 ========================== */
 function recalc(){
-  // TRANSPORTE
-  const combustivel = n(I.combustivel_preco.value);
-  const autonomia   = n(I.autonomia.value);
-  const distancia   = n(I.dist_total.value);
+  // --- TRANSPORTE ---
+  const combustivel = n(I.combustivel_preco.value); // R$/L
+  const autonomia   = n(I.autonomia.value);         // km/L
+  const distancia   = n(I.dist_total.value);        // km
 
+  // litros consumidos = distância / autonomia
   const litros = autonomia > 0 ? (distancia / autonomia) : 0;
   const subTransporte = litros * combustivel;
 
-  // MÃO DE OBRA
+  // --- MÃO DE OBRA ---
   const subMao =
-    n(I.vh_campo.value)*n(I.h_campo.value) +
-    n(I.vh_escr.value)*n(I.h_escr.value);
+    n(I.vh_campo.value) * n(I.h_campo.value) +
+    n(I.vh_escr.value)  * n(I.h_escr.value);
 
-  // ANÁLISES
+  // --- ANÁLISES ---
   const subAnalises =
-    n(I.v_amostra.value)*n(I.n_amostras.value);
+    n(I.v_amostra.value) * n(I.n_amostras.value);
 
-  // FATOR DE COMPLEXIDADE (aplicado somente ao DRONE)
+  // --- FATOR DE COMPLEXIDADE (só afeta DRONE) ---
   const fatorVal = n(I.fator.value) || 1;
 
-  // VARIÁVEIS ADICIONAIS
-  const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
+  // --- VARIÁVEIS ADICIONAIS ---
+  const totalDiarias =
+    n(I.diaria.value) * n(I.dias.value) * n(I.pessoas.value);
 
-  // custo de drone = hectares * preço_por_hectare * fator de complexidade
-  const totalDroneRaw = n(I.drone_ha.value)*n(I.preco_ha.value);
-  const totalDrone    = totalDroneRaw * fatorVal;
+  const totalAloj =
+    n(I.aloj.value)   * n(I.dias.value) * n(I.pessoas.value);
 
-  // assinatura é mensal *12 (anual)
-  const totalAssin   = n(I.assin_mensal.value)*12;
+  const totalAlim =
+    n(I.alim.value)   * n(I.dias.value) * n(I.pessoas.value);
 
+  const totalART =
+    n(I.art_valor.value) * n(I.art_qtd.value);
+
+  // custo bruto de drone = hectares * preço/ha
+  const droneHa   = n(I.drone_ha.value);
+  const precoHa   = n(I.preco_ha.value);
+  const totalDroneSemFator = droneHa * precoHa;
+
+  // aplica fator SOMENTE aqui
+  const totalDrone = totalDroneSemFator * fatorVal;
+
+  // assinatura anual = mensal * 12
+  const totalAssin = n(I.assin_mensal.value) * 12;
+
+  // soma das variáveis adicionais
   const subVar =
-    totalDiarias + totalAloj + totalAlim +
-    totalART + totalDrone + totalAssin;
+    totalDiarias +
+    totalAloj +
+    totalAlim +
+    totalART +
+    totalDrone +
+    totalAssin;
 
-  // BASE (agora o fator já foi aplicado só no drone, então a base final já está corrigida)
+  // --- BASE ---
+  // O fator já está incluído no custo do drone, então não multiplicamos
+  // a base inteira de novo.
   const subBase = subTransporte + subMao + subAnalises + subVar;
 
-  // baseMultiplicada agora NÃO multiplica de novo pelo fator,
-  // porque o fator já foi incluso no custo do drone.
-  const baseMultiplicada = subBase;
+  const baseMultiplicada = subBase; // já final, sem novo fator
 
-  // ACRÉSCIMOS (%)
-  const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
+  // --- ACRÉSCIMOS / IMPOSTOS / TAXAS ---
+  const pSoma =
+    ( n(I.p_nf.value)
+    + n(I.p_serv.value)
+    + n(I.p_tax.value)
+    + n(I.p_admin.value)
+    ) / 100;
+
   const outrosVal = n(I.outros.value);
+
   const acrescimos = baseMultiplicada * pSoma;
 
-  // MARGEM DE LUCRO
-  const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
+  // --- MARGEM DE LUCRO ---
+  const margem = (baseMultiplicada + acrescimos + outrosVal) *
+                 (n(I.p_margem.value)/100);
 
-  // TOTAL FINAL
+  // --- TOTAL FINAL ---
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // OUTPUT VISUAL
+  // --- SAÍDA VISUAL ---
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
@@ -1190,11 +1225,10 @@ function recalc(){
 
   O.sub_base.textContent       = fmt(subBase);
 
-  // "Base × Fator" agora é só a base já com fator aplicado ao drone,
-  // então mostramos a mesma coisa.
+  // "Base × Fator": agora é a mesma base, pois o fator já foi aplicado só no drone
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
 
-  // base_calc é a base usada para impostos
+  // base_calc é a base usada pra impostos
   O.base_calc.textContent      = fmt(baseMultiplicada);
 
   // total_acresc = baseMultiplicada + acrescimos (sem margem e sem outros)
@@ -1203,6 +1237,7 @@ function recalc(){
   O.total_final.textContent    = fmt(total);
   O.total_footer.textContent   = fmt(total);
 
+  // salvar snapshot local
   saveLS('calc.ecosmart.v2', snapshot());
 
   return {
@@ -1219,6 +1254,7 @@ function recalc(){
   };
 }
 
+/* dispara recálculo ao digitar em qualquer campo */
 Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
 
 /* ==========================
