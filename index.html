@@ -15,9 +15,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <style>
-    /* -------------------------------------------------
-      TOKENS GERAIS (independentes de tema)
-    ------------------------------------------------- */
     :root{
       --radius-lg:20px;
       --radius-md:12px;
@@ -33,9 +30,7 @@
       --card-padding:16px;
     }
 
-    /* -------------------------------------------------
-      THEME: DARK
-    ------------------------------------------------- */
+    /* Tema escuro */
     body.theme-dark{
       --bg-body:#0b0d10;
       --bg-grad-start:#0b0d10;
@@ -87,9 +82,7 @@
       --shadow-card:var(--shadow-card-dark);
     }
 
-    /* -------------------------------------------------
-      THEME: LIGHT
-    ------------------------------------------------- */
+    /* Tema claro */
     body.theme-light{
       --bg-body:#f5f7fa;
       --bg-grad-start:#f5f7fa;
@@ -141,9 +134,6 @@
       --shadow-card:var(--shadow-card-light);
     }
 
-    /* -------------------------------------------------
-      BASE / GLOBAL
-    ------------------------------------------------- */
     *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
 
     body{
@@ -159,7 +149,7 @@
       color:var(--txt-primary);
     }
 
-    /* ---------- HEADER ---------- */
+    /* HEADER */
     header{
       position:sticky;
       top:0;
@@ -280,7 +270,7 @@
       box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4);
     }
 
-    /* ---------- LAYOUT GRID ---------- */
+    /* GRID PRINCIPAL */
     .page{
       width:100%;
       max-width:1280px;
@@ -303,7 +293,7 @@
       gap:var(--section-gap);
     }
 
-    /* ---------- CARD / PAINEL ---------- */
+    /* CARD */
     .card{
       position:relative;
       background:var(--card-bg-gradient);
@@ -381,7 +371,7 @@
       gap:16px;
     }
 
-    /* ---------- GRID DE INPUTS ---------- */
+    /* GRID DE CAMPOS */
     .row{
       display:grid;
       gap:12px;
@@ -393,9 +383,8 @@
       .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
     }
 
-    /* ---------- INPUT GROUP ---------- */
+    /* INPUTS */
     .field{
-      position:relative;
       display:flex;
       flex-direction:column;
     }
@@ -441,12 +430,12 @@
       font-weight:500;
       border:0;
       outline:none;
-      padding:10px 12px 10px 12px;
+      padding:10px 12px;
       border-radius:var(--radius-md);
       appearance:none;
     }
 
-    /* ---------- STAT / VALORES ---------- */
+    /* BLOCOS DE VALOR */
     .stat-box{
       background:var(--input-bg);
       border:1px solid var(--border);
@@ -479,11 +468,8 @@
       color:var(--good);
       text-shadow:0 0 8px rgba(107,226,138,.4);
     }
-    .stat-value.warn{
-      color:var(--warn);
-    }
 
-    /* nota menor */
+    /* NOTAS */
     .note{
       font-size:12px;
       line-height:1.4;
@@ -498,7 +484,7 @@
       color:var(--txt-primary);
     }
 
-    /* ---------- RESUMO / AÇÕES ---------- */
+    /* AÇÕES */
     .actions-row{
       display:flex;
       flex-wrap:wrap;
@@ -536,15 +522,13 @@
       box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5);
     }
 
-    /* ícones simples via data-attr */
     .btn[data-icon="save"]::before{content:"💾";}
     .btn[data-icon="pdf"]::before{content:"📄";}
     .btn[data-icon="link"]::before{content:"🔗";}
     .btn[data-icon="wa"]::before{content:"📲";}
 
-    /* ---------- ASIDE / AJUDA ---------- */
+    /* ASIDE */
     aside{
-      position:relative;
       display:grid;
       gap:var(--section-gap);
     }
@@ -556,7 +540,7 @@
       }
     }
 
-    /* ---------- FOOTER TOTAL BAR ---------- */
+    /* FOOTER TOTAL */
     .footerbar{
       position:fixed;
       bottom:0;
@@ -640,7 +624,7 @@
     </div>
   </header>
 
-  <!-- PAGE MAIN GRID -->
+  <!-- CONTEÚDO -->
   <main class="page">
     <div class="main-col">
 
@@ -650,22 +634,30 @@
           <div class="card-title-wrap">
             <span class="card-eyebrow">Etapa 1</span>
             <div class="card-title">Transporte</div>
-            <div class="card-desc">Combustível, autonomia do veículo e distância total percorrida no deslocamento de campo.</div>
+            <div class="card-desc">
+              Combustível, autonomia do veículo e distância total percorrida no deslocamento de campo.
+            </div>
           </div>
         </div>
         <div class="card-body">
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">Custo do combustível por litro (R$)</label>
-              <div class="input-shell"><input id="combustivel_preco" type="number" step="0.01" value="0"></div>
+              <div class="input-shell">
+                <input id="combustivel_preco" type="text" value="0">
+              </div>
             </div>
             <div class="field">
               <label class="field-label">Autonomia (km/l)</label>
-              <div class="input-shell"><input id="autonomia" type="number" step="0.1" value="0"></div>
+              <div class="input-shell">
+                <input id="autonomia" type="text" value="0">
+              </div>
             </div>
             <div class="field">
               <label class="field-label">Distância total (km)</label>
-              <div class="input-shell"><input id="dist_total" type="number" step="1" value="0"></div>
+              <div class="input-shell">
+                <input id="dist_total" type="text" value="0">
+              </div>
             </div>
           </div>
 
@@ -689,22 +681,22 @@
           <div class="row cols-2">
             <div class="field">
               <label class="field-label">Valor por hora de campo (R$)</label>
-              <div class="input-shell"><input id="vh_campo" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="vh_campo" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Horas de campo</label>
-              <div class="input-shell"><input id="h_campo" type="number" step="0.5" value="0"></div>
+              <div class="input-shell"><input id="h_campo" type="text" value="0"></div>
             </div>
           </div>
 
           <div class="row cols-2">
             <div class="field">
               <label class="field-label">Valor por hora de escritório (R$)</label>
-              <div class="input-shell"><input id="vh_escr" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="vh_escr" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Horas de escritório</label>
-              <div class="input-shell"><input id="h_escr" type="number" step="0.5" value="0"></div>
+              <div class="input-shell"><input id="h_escr" type="text" value="0"></div>
             </div>
           </div>
 
@@ -728,11 +720,11 @@
           <div class="row cols-2">
             <div class="field">
               <label class="field-label">Valor por amostra (R$)</label>
-              <div class="input-shell"><input id="v_amostra" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="v_amostra" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Número de amostras</label>
-              <div class="input-shell"><input id="n_amostras" type="number" step="1" value="0"></div>
+              <div class="input-shell"><input id="n_amostras" type="text" value="0"></div>
             </div>
           </div>
 
@@ -756,51 +748,52 @@
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">💰 Diárias de campo (R$)</label>
-              <div class="input-shell"><input id="diaria" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="diaria" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">📅 Quantidade de dias</label>
-              <div class="input-shell"><input id="dias" type="number" step="1" value="0"></div>
+              <div class="input-shell"><input id="dias" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">👥 Número de pessoas</label>
-              <div class="input-shell"><input id="pessoas" type="number" step="1" value="0"></div>
+              <div class="input-shell"><input id="pessoas" type="text" value="0"></div>
             </div>
           </div>
 
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">🏨 Alojamento por pessoa (R$)</label>
-              <div class="input-shell"><input id="aloj" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="aloj" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">🍽 Alimentação por pessoa (R$)</label>
-              <div class="input-shell"><input id="alim" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="alim" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">📋 ART - valor (R$)</label>
-              <div class="input-shell"><input id="art_valor" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="art_valor" type="text" value="0"></div>
             </div>
           </div>
 
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">📋 ART - quantidade</label>
-              <div class="input-shell"><input id="art_qtd" type="number" step="1" value="0"></div>
+              <div class="input-shell"><input id="art_qtd" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">📡 Drone LIDAR/Multiespectral/RGB - hectares</label>
-              <div class="input-shell"><input id="drone_ha" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="drone_ha" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">💵 Preço por hectare (R$)</label>
-              <div class="input-shell"><input id="preco_ha" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="preco_ha" type="text" value="0"></div>
             </div>
           </div>
 
           <div class="row cols-2">
             <div class="field">
-              <label class="field-label">⚙ Fator de complexidade do terreno
+              <label class="field-label">
+                ⚙ Fator de complexidade do terreno
                 <small>1 = fácil / 1,5 = difícil</small>
               </label>
               <div class="input-shell">
@@ -813,10 +806,11 @@
             </div>
 
             <div class="field">
-              <label class="field-label">📝 Assinatura de 1 ano — preço mensal (R$)
+              <label class="field-label">
+                📝 Assinatura de 1 ano — preço mensal (R$)
                 <small>Plataforma / monitoramento</small>
               </label>
-              <div class="input-shell"><input id="assin_mensal" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="assin_mensal" type="text" value="0"></div>
             </div>
           </div>
 
@@ -840,30 +834,30 @@
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">Emissão de Nota Fiscal (%)</label>
-              <div class="input-shell"><input id="p_nf" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="p_nf" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Prestação de Serviços (%)</label>
-              <div class="input-shell"><input id="p_serv" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="p_serv" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Impostos e Taxas (%)</label>
-              <div class="input-shell"><input id="p_tax" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="p_tax" type="text" value="0"></div>
             </div>
           </div>
 
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">Taxa Administrativa (%)</label>
-              <div class="input-shell"><input id="p_admin" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="p_admin" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Outros Custos (R$)</label>
-              <div class="input-shell"><input id="outros" type="number" step="0.01" value="0"></div>
+              <div class="input-shell"><input id="outros" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Margem de Lucro (%)</label>
-              <div class="input-shell"><input id="p_margem" type="number" step="0.1" value="0"></div>
+              <div class="input-shell"><input id="p_margem" type="text" value="0"></div>
             </div>
           </div>
 
@@ -880,7 +874,7 @@
         </div>
       </section>
 
-      <!-- RESUMO GERAL -->
+      <!-- RESUMO -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap">
@@ -963,7 +957,7 @@
     </aside>
   </main>
 
-  <!-- FOOTER TOTAL BAR -->
+  <!-- FOOTER TOTAL -->
   <footer class="footerbar">
     <div class="footer-inner">
       <div class="footer-total">
@@ -1002,7 +996,6 @@ function initTheme(){
     applyTheme(saved);
     return;
   }
-  // fallback: respeita prefers-color-scheme
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(prefersDark ? 'theme-dark' : 'theme-light');
 }
@@ -1015,7 +1008,7 @@ themeBtn.addEventListener('click', ()=>{
 initTheme();
 
 /* ==========================
-   Supabase: client pronto
+   Supabase client
 ========================== */
 const supabaseUrl = 'https://lyzjznvxxvnpgwyyxcyw.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5emp6bnZ4eHZucGd3eXl4Y3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NjAzNjcsImV4cCI6MjA3MjQzNjM2N30.rRK4h5bVMNe7toXLh83KaYYtum01q9I0hIzHXlFHd78';
@@ -1026,10 +1019,17 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 ========================== */
 const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
 const fmt = v => BRL.format(v||0);
-const n = v => {
-  if(typeof v==='number') return v;
-  return parseFloat(String(v||'0').replace(/\./g,'').replace(',', '.'))||0
-};
+
+// parser numérico que aceita vírgula e ponto brasileiro
+function n(v){
+  if (typeof v === 'number') return v;
+  const s = String(v || '0')
+    .trim()
+    .replace(/\./g, '')   // remove separador de milhar
+    .replace(/,/g, '.');  // converte vírgula decimal para ponto
+  const out = parseFloat(s);
+  return isNaN(out) ? 0 : out;
+}
 
 function saveLS(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
 function loadLS(key, def){
@@ -1099,6 +1099,9 @@ const O = {
   status2: document.getElementById('status2')
 };
 
+/* ==========================
+   Snapshot para salvar/local
+========================== */
 function snapshot(){
   const s = {};
   Object.keys(I).forEach(k=> s[k] = I[k].value);
@@ -1113,53 +1116,55 @@ function applySnapshot(s){
 }
 
 /* ==========================
-   Cálculos
+   Recalcular tudo
 ========================== */
 function recalc(){
-  // Transporte
-  const litros = n(I.autonomia.value) > 0
-    ? n(I.dist_total.value)/n(I.autonomia.value)
-    : 0;
-  const subTransporte = litros * n(I.combustivel_preco.value);
+  // TRANSPORTE
+  const combustivel = n(I.combustivel_preco.value);
+  const autonomia   = n(I.autonomia.value);
+  const distancia   = n(I.dist_total.value);
 
-  // Mão de obra
+  const litros = autonomia > 0 ? (distancia / autonomia) : 0;
+  const subTransporte = litros * combustivel;
+
+  // MÃO DE OBRA
   const subMao =
     n(I.vh_campo.value)*n(I.h_campo.value) +
     n(I.vh_escr.value)*n(I.h_escr.value);
 
-  // Análises
+  // ANÁLISES
   const subAnalises =
     n(I.v_amostra.value)*n(I.n_amostras.value);
 
-  // Variáveis adicionais
+  // VARIÁVEIS ADICIONAIS
   const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
   const totalDrone   = n(I.drone_ha.value)*n(I.preco_ha.value);
-  const totalAssin   = n(I.assin_mensal.value)*12; // anual
+  const totalAssin   = n(I.assin_mensal.value)*12; // assinatura anual
 
   const subVar =
     totalDiarias + totalAloj + totalAlim +
     totalART + totalDrone + totalAssin;
 
-  // Base de cálculo
+  // BASE
   const subBase = subTransporte + subMao + subAnalises + subVar;
   const fatorVal = n(I.fator.value)||1;
   const baseMultiplicada = subBase * fatorVal;
 
-  // Acréscimos percentuais
+  // ACRÉSCIMOS (%)
   const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
   const outrosVal = n(I.outros.value);
   const acrescimos = baseMultiplicada * pSoma;
 
-  // Margem de lucro
+  // MARGEM DE LUCRO
   const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
 
-  // Total final
+  // TOTAL FINAL
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // Saída visual
+  // OUTPUT VISUAL
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
@@ -1172,11 +1177,9 @@ function recalc(){
 
   O.sub_base.textContent       = fmt(subBase);
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
-
-  // base_calc é exatamente a Base × Fator usada para os percentuais
   O.base_calc.textContent      = fmt(baseMultiplicada);
 
-  // total_acresc = baseMultiplicada + acrescimos (sem margem e sem "outros")
+  // total_acresc = baseMultiplicada + acrescimos (ainda sem margem e sem "outros")
   O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
 
   O.total_final.textContent    = fmt(total);
@@ -1218,8 +1221,8 @@ btnSalvar.addEventListener('click', async ()=>{
       {categoria:'variaveis_adicionais', total:r.subVar}
     ],
     subtotal: r.subBase,
-    impostos: r.acrescimos, // acréscimos percentuais
-    markup: r.margem,       // margem de lucro
+    impostos: r.acrescimos,
+    markup: r.margem,
     total: r.total,
     observacoes: null
   };
@@ -1235,7 +1238,6 @@ btnSalvar.addEventListener('click', async ()=>{
       return;
     }
 
-    // atualiza URL com slug
     const url = new URL(window.location.href);
     url.searchParams.set('o', row.slug);
     history.replaceState(null,'', url);
@@ -1324,7 +1326,7 @@ btnPDF.addEventListener('click', ()=>{
   doc.save('orcamento_ecosmart.pdf');
 });
 
-/* primeira renderização */
+/* Primeira renderização */
 recalc();
 </script>
 </body>
