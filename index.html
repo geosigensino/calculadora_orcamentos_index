@@ -188,410 +188,97 @@
       text-shadow:0 1px 2px rgba(0,0,0,.4);
     }
 
-    .head-texts{
-      display:flex;
-      flex-direction:column;
-      min-width:0;
-    }
-    .app-name{
-      font-size:15px;
-      font-weight:600;
-      color:var(--txt-primary);
-      line-height:1.25;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      gap:8px;
-    }
-    .app-name .dot{
-      display:inline-block;
-      width:4px;
-      height:4px;
-      background:var(--txt-secondary);
-      border-radius:999px;
-      opacity:.4;
-    }
-    .subtitle{
-      font-size:12px;
-      line-height:1.3;
-      color:var(--txt-secondary);
-      font-weight:400;
-    }
+    .head-texts{display:flex;flex-direction:column;min-width:0}
+    .app-name{font-size:15px;font-weight:600;color:var(--txt-primary);line-height:1.25;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .app-name .dot{display:inline-block;width:4px;height:4px;background:var(--txt-secondary);border-radius:999px;opacity:.4}
+    .subtitle{font-size:12px;line-height:1.3;color:var(--txt-secondary);font-weight:400}
 
-    .header-right{
-      margin-left:auto;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      gap:10px;
-    }
+    .header-right{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+    .chip-status{background:var(--input-bg);border:1px solid var(--border);color:var(--txt-primary);font-size:12px;line-height:1.2;padding:8px 10px;border-radius:var(--radius-md);display:flex;align-items:center;gap:6px;font-weight:500;box-shadow:var(--shadow-card)}
+    .chip-status .dot-online{width:8px;height:8px;border-radius:999px;background:var(--good);box-shadow:0 0 8px var(--good)}
 
-    .chip-status{
-      background:var(--input-bg);
-      border:1px solid var(--border);
-      color:var(--txt-primary);
-      font-size:12px;
-      line-height:1.2;
-      padding:8px 10px;
-      border-radius:var(--radius-md);
-      display:flex;
-      align-items:center;
-      gap:6px;
-      font-weight:500;
-      box-shadow:var(--shadow-card);
-    }
-    .chip-status .dot-online{
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:var(--good);
-      box-shadow:0 0 8px var(--good);
-    }
-
-    .theme-toggle-btn{
-      background:var(--input-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius-md);
-      box-shadow:var(--shadow-card);
-      color:var(--txt-primary);
-      font-size:12px;
-      font-weight:600;
-      line-height:1.2;
-      padding:8px 10px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      min-width:max-content;
-    }
-    .theme-toggle-btn:hover{
-      background:var(--surface-hover);
-      border-color:var(--accent-main);
-      box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4);
-    }
+    .theme-toggle-btn{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);color:var(--txt-primary);font-size:12px;font-weight:600;line-height:1.2;padding:8px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;min-width:max-content}
+    .theme-toggle-btn:hover{background:var(--surface-hover);border-color:var(--accent-main);box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
 
     /* GRID PRINCIPAL */
-    .page{
-      width:100%;
-      max-width:1280px;
-      margin:24px auto 96px auto;
-      padding:0 20px 80px;
-      flex:1;
-      display:grid;
-      gap:var(--section-gap);
-    }
-
+    .page{width:100%;max-width:1280px;margin:24px auto 96px auto;padding:0 20px 80px;flex:1;display:grid;gap:var(--section-gap)}
     @media(min-width:1080px){
-      .page{
-        grid-template-columns:minmax(0,1fr) 320px;
-        align-items:start;
-      }
+      .page{grid-template-columns:minmax(0,1fr) 320px;align-items:start}
     }
-
-    .main-col{
-      display:grid;
-      gap:var(--section-gap);
-    }
+    .main-col{display:grid;gap:var(--section-gap)}
 
     /* CARD */
-    .card{
-      position:relative;
-      background:var(--card-bg-gradient);
-      border:1px solid var(--border);
-      border-radius:var(--radius-lg);
-      box-shadow:var(--shadow-big);
-      overflow:hidden;
-    }
-
+    .card{position:relative;background:var(--card-bg-gradient);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-big);overflow:hidden}
     .card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      padding:1px;
-      background:var(--card-border-glow);
-      -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-              mask-composite: exclude;
-      pointer-events:none;
+      content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--card-border-glow);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none
     }
-
-    .card-header{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:8px 12px;
-      padding:16px var(--card-padding) 12px;
-      border-bottom:1px solid var(--border);
-      background:var(--card-header-bg);
-    }
-    .card-title-wrap{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-width:0;
-    }
-    .card-eyebrow{
-      display:inline-flex;
-      align-items:center;
-      font-size:10px;
-      line-height:1.2;
-      font-weight:600;
-      color:var(--accent-main);
-      background:var(--accent-soft);
-      border:1px solid rgba(27,110,42,.4);
-      border-radius:var(--radius-sm);
-      padding:3px 6px;
-      width:max-content;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    .card-title{
-      font-size:14px;
-      font-weight:600;
-      line-height:1.4;
-      color:var(--txt-secondary);
-      text-transform:uppercase;
-      letter-spacing:.12em;
-    }
-    .card-desc{
-      font-size:12px;
-      line-height:1.4;
-      color:var(--txt-secondary);
-      font-weight:400;
-      max-width:560px;
-    }
-
-    .card-body{
-      padding:16px var(--card-padding) 20px;
-      display:grid;
-      gap:16px;
-    }
+    .card-header{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px 12px;padding:16px var(--card-padding) 12px;border-bottom:1px solid var(--border);background:var(--card-header-bg)}
+    .card-title-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .card-eyebrow{display:inline-flex;align-items:center;font-size:10px;line-height:1.2;font-weight:600;color:var(--accent-main);background:var(--accent-soft);border:1px solid rgba(27,110,42,.4);border-radius:var(--radius-sm);padding:3px 6px;width:max-content;text-transform:uppercase;letter-spacing:.08em}
+    .card-title{font-size:14px;font-weight:600;line-height:1.4;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.12em}
+    .card-desc{font-size:12px;line-height:1.4;color:var(--txt-secondary);font-weight:400;max-width:560px}
+    .card-body{padding:16px var(--card-padding) 20px;display:grid;gap:16px}
 
     /* GRID DE CAMPOS */
-    .row{
-      display:grid;
-      gap:12px;
-    }
+    .row{display:grid;gap:12px}
     .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-    @media(max-width:760px){
-      .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
-    }
+    @media(max-width:760px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
 
     /* INPUTS */
-    .field{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .field-label{
-      font-size:12px;
-      font-weight:500;
-      color:var(--txt-secondary);
-      margin-bottom:6px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-    .field-label small{
-      color:var(--txt-muted);
-      font-weight:400;
-      font-size:11px;
-      line-height:1.2;
-    }
-
-    .input-shell{
-      position:relative;
-      display:flex;
-      align-items:center;
-      background:var(--input-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius-md);
-      box-shadow:var(--shadow-card);
-      transition:border .15s, box-shadow .15s, background .15s;
-    }
-    .input-shell:focus-within{
-      border-color:var(--accent-main);
-      box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15);
-    }
-
-    .input-shell input,
-    .input-shell select{
-      width:100%;
-      background:transparent;
-      color:var(--txt-primary);
-      font-size:14px;
-      line-height:1.4;
-      font-weight:500;
-      border:0;
-      outline:none;
-      padding:10px 12px;
-      border-radius:var(--radius-md);
-      appearance:none;
-    }
+    .field{display:flex;flex-direction:column}
+    .field-label{font-size:12px;font-weight:500;color:var(--txt-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+    .field-label small{color:var(--txt-muted);font-weight:400;font-size:11px;line-height:1.2}
+    .input-shell{position:relative;display:flex;align-items:center;background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);transition:border .15s, box-shadow .15s, background .15s}
+    .input-shell:focus-within{border-color:var(--accent-main);box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15)}
+    .input-shell input,.input-shell select{width:100%;background:transparent;color:var(--txt-primary);font-size:14px;line-height:1.4;font-weight:500;border:0;outline:none;padding:10px 12px;border-radius:var(--radius-md);appearance:none}
 
     /* BLOCOS DE VALOR */
-    .stat-box{
-      background:var(--input-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius-md);
-      padding:10px 12px;
-      font-size:13px;
-      line-height:1.4;
-      color:var(--txt-primary);
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-height:56px;
-      box-shadow:var(--shadow-card);
-    }
-    .stat-label{
-      color:var(--txt-muted);
-      font-size:11px;
-      line-height:1.3;
-      font-weight:400;
-    }
-    .stat-value{
-      font-size:14px;
-      font-weight:600;
-      line-height:1.3;
-      word-break:break-word;
-      color:var(--txt-primary);
-      text-shadow:none;
-    }
-    .stat-value.good{
-      color:var(--good);
-      text-shadow:0 0 8px rgba(107,226,138,.4);
-    }
+    .stat-box{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;font-size:13px;line-height:1.4;color:var(--txt-primary);display:flex;flex-direction:column;gap:4px;min-height:56px;box-shadow:var(--shadow-card)}
+    .stat-label{color:var(--txt-muted);font-size:11px;line-height:1.3;font-weight:400}
+    .stat-value{font-size:14px;font-weight:600;line-height:1.3;word-break:break-word;color:var(--txt-primary);text-shadow:none}
+    .stat-value.good{color:var(--good);text-shadow:0 0 8px rgba(107,226,138,.4)}
 
     /* NOTAS */
-    .note{
-      font-size:12px;
-      line-height:1.4;
-      color:var(--txt-secondary);
-      font-weight:400;
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-    }
-    .note strong{
-      font-weight:600;
-      color:var(--txt-primary);
-    }
+    .note{font-size:12px;line-height:1.4;color:var(--txt-secondary);font-weight:400;display:flex;flex-wrap:wrap;gap:6px}
+    .note strong{font-weight:600;color:var(--txt-primary)}
 
     /* AÇÕES */
-    .actions-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid var(--border);
-      background:var(--input-bg);
-      color:var(--txt-primary);
-      padding:10px 12px;
-      border-radius:var(--radius-md);
-      cursor:pointer;
-      font-weight:600;
-      font-size:13px;
-      line-height:1.3;
-      box-shadow:var(--shadow-card);
-      transition:all .15s;
-    }
-    .btn:hover{
-      background:var(--surface-hover);
-      border-color:var(--accent-main);
-      box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4);
-    }
-    .btn.primary{
-      background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%);
-      border-color:#1e6d2b;
-      color:var(--txt-soft-on-accent);
-      text-shadow:0 1px 2px rgba(0,0,0,.6);
-    }
-    .btn.primary:hover{
-      box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5);
-    }
-
-    .btn[data-icon="save"]::before{content:"💾";}
-    .btn[data-icon="pdf"]::before{content:"📄";}
-    .btn[data-icon="link"]::before{content:"🔗";}
-    .btn[data-icon="wa"]::before{content:"📲";}
+    .actions-row{display:flex;flex-wrap:wrap;gap:8px}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--input-bg);color:var(--txt-primary);padding:10px 12px;border-radius:var(--radius-md);cursor:pointer;font-weight:600;font-size:13px;line-height:1.3;box-shadow:var(--shadow-card);transition:all .15s}
+    .btn:hover{background:var(--surface-hover);border-color:var(--accent-main);box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
+    .btn.primary{background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%);border-color:#1e6d2b;color:var(--txt-soft-on-accent);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+    .btn.primary:hover{box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5)}
+    .btn[data-icon="save"]::before{content:"💾";}.btn[data-icon="pdf"]::before{content:"📄";}.btn[data-icon="link"]::before{content:"🔗";}.btn[data-icon="wa"]::before{content:"📲"}
 
     /* ASIDE */
-    aside{
-      display:grid;
-      gap:var(--section-gap);
-    }
-    @media(min-width:1080px){
-      aside{
-        position:sticky;
-        top:88px;
-        align-self:start;
-      }
-    }
+    aside{display:grid;gap:var(--section-gap)}
+    @media(min-width:1080px){aside{position:sticky;top:88px;align-self:start}}
 
     /* FOOTER TOTAL */
-    .footerbar{
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      background:var(--footer-bg);
-      backdrop-filter:blur(10px) saturate(140%);
-      -webkit-backdrop-filter:blur(10px) saturate(140%);
-      border-top:1px solid var(--border);
-      box-shadow:0 -24px 48px rgba(0,0,0,.4);
-      z-index:60;
-    }
-    body.theme-light .footerbar{
-      box-shadow:0 -24px 48px rgba(0,0,0,.07);
-    }
+    .footerbar{position:fixed;bottom:0;left:0;right:0;background:var(--footer-bg);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-top:1px solid var(--border);box-shadow:0 -24px 48px rgba(0,0,0,.4);z-index:60}
+    body.theme-light .footerbar{box-shadow:0 -24px 48px rgba(0,0,0,.07)}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;justify-content:flex-end}
+    .footer-total{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;box-shadow:var(--shadow-card);font-size:13px;line-height:1.4;color:var(--txt-primary);display:flex;flex-direction:column;min-width:200px}
+    .footer-total-label{font-size:11px;color:var(--txt-muted);line-height:1.3;font-weight:400}
+    .footer-total-value{font-size:14px;font-weight:600;line-height:1.3;color:var(--good);text-shadow:0 0 8px rgba(107,226,138,.4);word-break:break-word}
 
-    .footer-inner{
-      max-width:1280px;
-      margin:0 auto;
-      padding:12px 20px;
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+    /* ===== Lista de custos adicionais (Etapa 6) ===== */
+    .extra-costs-list{display:grid;gap:8px}
+    .cost-item{
+      display:grid;
+      grid-template-columns:1fr 160px 120px 36px;
+      gap:8px;align-items:center;
+      background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);
+      padding:8px 10px;box-shadow:var(--shadow-card)
     }
-    .footer-total{
-      background:var(--input-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius-md);
-      padding:10px 12px;
-      box-shadow:var(--shadow-card);
-      font-size:13px;
-      line-height:1.4;
-      color:var(--txt-primary);
-      display:flex;
-      flex-direction:column;
-      min-width:200px;
-    }
-    .footer-total-label{
-      font-size:11px;
-      color:var(--txt-muted);
-      line-height:1.3;
-      font-weight:400;
-    }
-    .footer-total-value{
-      font-size:14px;
-      font-weight:600;
-      line-height:1.3;
-      color:var(--good);
-      text-shadow:0 0 8px rgba(107,226,138,.4);
-      word-break:break-word;
-    }
+    .cost-item .c-desc{color:var(--txt-primary);font-size:13px;font-weight:500;word-break:break-word}
+    .cost-item .c-obs{color:var(--txt-muted);font-size:12px;word-break:break-word}
+    .cost-item .c-price{font-weight:700;font-size:13px;text-align:right}
+    .del-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
+    .del-btn:hover{background:var(--surface-hover);border-color:var(--danger)}
   </style>
 </head>
 
@@ -643,28 +330,19 @@
           <div class="row cols-3">
             <div class="field">
               <label class="field-label">Custo do combustível por litro (R$)</label>
-              <div class="input-shell">
-                <input id="combustivel_preco" type="text" value="0">
-              </div>
+              <div class="input-shell"><input id="combustivel_preco" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Autonomia (km/l)</label>
-              <div class="input-shell">
-                <input id="autonomia" type="text" value="0">
-              </div>
+              <div class="input-shell"><input id="autonomia" type="text" value="0"></div>
             </div>
             <div class="field">
               <label class="field-label">Distância total (km)</label>
-              <div class="input-shell">
-                <input id="dist_total" type="text" value="0">
-              </div>
+              <div class="input-shell"><input id="dist_total" type="text" value="0"></div>
             </div>
           </div>
 
-          <div class="note">
-            Subtotal Transporte:
-            <strong id="sub_transporte">R$ 0,00</strong>
-          </div>
+          <div class="note">Subtotal Transporte: <strong id="sub_transporte">R$ 0,00</strong></div>
         </div>
       </section>
 
@@ -700,10 +378,7 @@
             </div>
           </div>
 
-          <div class="note">
-            Subtotal Mão de Obra:
-            <strong id="sub_mao">R$ 0,00</strong>
-          </div>
+          <div class="note">Subtotal Mão de Obra: <strong id="sub_mao">R$ 0,00</strong></div>
         </div>
       </section>
 
@@ -728,10 +403,7 @@
             </div>
           </div>
 
-          <div class="note">
-            Subtotal Análises:
-            <strong id="sub_analises">R$ 0,00</strong>
-          </div>
+          <div class="note">Subtotal Análises: <strong id="sub_analises">R$ 0,00</strong></div>
         </div>
       </section>
 
@@ -815,10 +487,7 @@
             </div>
           </div>
 
-          <div class="note">
-            Subtotal Variáveis Adicionais:
-            <strong id="sub_var">R$ 0,00</strong>
-          </div>
+          <div class="note">Subtotal Variáveis Adicionais: <strong id="sub_var">R$ 0,00</strong></div>
         </div>
       </section>
 
@@ -828,7 +497,7 @@
           <div class="card-title-wrap">
             <span class="card-eyebrow">Etapa 5</span>
             <div class="card-title">Acréscimos / Impostos / Margem</div>
-            <div class="card-desc">Percentuais que incidem sobre a base multiplicada pelo fator de complexidade.</div>
+            <div class="card-desc">Percentuais que incidem sobre a base.</div>
           </div>
         </div>
         <div class="card-body">
@@ -864,7 +533,7 @@
 
           <div class="row cols-2">
             <div class="stat-box">
-              <div class="stat-label">Base de Cálculo (Base × Fator)</div>
+              <div class="stat-label">Base de Cálculo (Base × Fator aplicado no drone)</div>
               <div class="stat-value" id="base_calc">R$ 0,00</div>
             </div>
             <div class="stat-box">
@@ -875,48 +544,61 @@
         </div>
       </section>
 
+      <!-- CUSTOS ADICIONAIS (ETAPA 6) -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <span class="card-eyebrow">Etapa 6</span>
+            <div class="card-title">Custos Adicionais</div>
+            <div class="card-desc">Adicione custos extra (diárias, aluguel, taxas etc.).</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row cols-3">
+            <div class="field">
+              <label class="field-label">Descrever o custo</label>
+              <div class="input-shell"><input id="ec_desc" type="text" placeholder="Ex.: Aluguel de caminhonete"></div>
+            </div>
+            <div class="field">
+              <label class="field-label">Preço (R$)</label>
+              <div class="input-shell"><input id="ec_preco" type="text" placeholder="Ex.: 1.200,00"></div>
+            </div>
+            <div class="field">
+              <label class="field-label">Observações</label>
+              <div class="input-shell"><input id="ec_obs" type="text" placeholder="Ex.: 3 diárias"></div>
+            </div>
+          </div>
+          <div class="actions-row">
+            <button class="btn" id="btnAddCost" data-icon="save">Adicionar custo</button>
+          </div>
+
+          <div id="extraCostsList" class="extra-costs-list" aria-live="polite"></div>
+
+          <div class="note">Subtotal Custos Adicionais: <strong id="sub_extra">R$ 0,00</strong></div>
+        </div>
+      </section>
+
       <!-- RESUMO -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap">
             <span class="card-eyebrow">Resumo</span>
             <div class="card-title">Visão Geral do Orçamento</div>
-            <div class="card-desc">Totais por etapa, fator de complexidade e valor final apresentado ao cliente.</div>
+            <div class="card-desc">Totais por etapa e valor final.</div>
           </div>
         </div>
         <div class="card-body">
           <div class="row cols-4">
-            <div class="stat-box">
-              <div class="stat-label">🚗 Transporte</div>
-              <div class="stat-value" id="r_transporte">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">👷‍♂️ Mão de Obra</div>
-              <div class="stat-value" id="r_mao">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">🧪 Análises</div>
-              <div class="stat-value" id="r_analises">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">⚙ Variáveis Adicionais</div>
-              <div class="stat-value" id="r_var">R$ 0,00</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">🚗 Transporte</div><div class="stat-value" id="r_transporte">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">👷‍♂️ Mão de Obra</div><div class="stat-value" id="r_mao">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">🧪 Análises</div><div class="stat-value" id="r_analises">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">⚙ Variáveis Adicionais</div><div class="stat-value" id="r_var">R$ 0,00</div></div>
           </div>
 
           <div class="row cols-3">
-            <div class="stat-box">
-              <div class="stat-label">Subtotal Base</div>
-              <div class="stat-value" id="sub_base">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Base × Fator</div>
-              <div class="stat-value" id="base_x_fator">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">TOTAL DO ORÇAMENTO</div>
-              <div class="stat-value good" id="total_final">R$ 0,00</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">Subtotal Base</div><div class="stat-value" id="sub_base">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">Base × Fator</div><div class="stat-value" id="base_x_fator">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">TOTAL DO ORÇAMENTO</div><div class="stat-value good" id="total_final">R$ 0,00</div></div>
           </div>
 
           <div class="actions-row">
@@ -937,23 +619,14 @@
           <div class="card-title-wrap">
             <span class="card-eyebrow">Ajuda</span>
             <div class="card-title">Como funciona</div>
-            <div class="card-desc">Estrutura completa do orçamento e status da sincronização.</div>
+            <div class="card-desc">Estrutura do orçamento e status.</div>
           </div>
         </div>
         <div class="card-body">
           <div class="note">
-            Esta calculadora segue os mesmos blocos do orçamento técnico:
-            Transporte, Mão de Obra, Análises, Variáveis Adicionais,
-            Fator de Complexidade (aplicado ao custo de drone),
-            Acréscimos (%), Base de Cálculo e Total Final.
-            Os valores ficam salvos no navegador e também podem ser enviados ao Supabase.
-            Para carregar um orçamento salvo, abra o link com <code>?o=SEU_SLUG</code>.
+            A base considera Transporte, Mão de Obra, Análises, Variáveis Adicionais (com fator aplicado apenas ao custo de drone) e Custos Adicionais. Depois aplica acréscimos e margem.
           </div>
-
-          <div class="stat-box">
-            <div class="stat-label">Status</div>
-            <div class="stat-value" id="status2">online</div>
-          </div>
+          <div class="stat-box"><div class="stat-label">Status</div><div class="stat-value" id="status2">online</div></div>
         </div>
       </section>
     </aside>
@@ -982,31 +655,17 @@ const themeLabel = document.getElementById('themeLabel');
 function applyTheme(theme){
   bodyEl.classList.remove('theme-dark','theme-light');
   bodyEl.classList.add(theme);
-  if(theme === 'theme-light'){
-    themeIcon.textContent = '☀️';
-    themeLabel.textContent = 'Claro';
-  }else{
-    themeIcon.textContent = '🌙';
-    themeLabel.textContent = 'Escuro';
-  }
+  if(theme === 'theme-light'){ themeIcon.textContent = '☀️'; themeLabel.textContent = 'Claro'; }
+  else { themeIcon.textContent = '🌙'; themeLabel.textContent = 'Escuro'; }
   localStorage.setItem(THEME_KEY, theme);
 }
-
 function initTheme(){
   const saved = localStorage.getItem(THEME_KEY);
-  if(saved === 'theme-light' || saved === 'theme-dark'){
-    applyTheme(saved);
-    return;
-  }
+  if(saved === 'theme-light' || saved === 'theme-dark'){ applyTheme(saved); return; }
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(prefersDark ? 'theme-dark' : 'theme-light');
 }
-
-themeBtn.addEventListener('click', ()=>{
-  const isDark = bodyEl.classList.contains('theme-dark');
-  applyTheme(isDark ? 'theme-light' : 'theme-dark');
-});
-
+themeBtn.addEventListener('click', ()=>{ applyTheme(bodyEl.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark'); });
 initTheme();
 
 /* ==========================
@@ -1022,35 +681,18 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
 const fmt = v => BRL.format(v||0);
 
-/* Conversor numérico BR:
-   - aceita "100"
-   - aceita "100,5"
-   - aceita "1.234,56" -> 1234.56
-   - não transforma "100" em "1000"
-*/
+// Conversor numérico BR (aceita vírgula decimal)
 function n(v){
   if (typeof v === 'number') return v;
-
   let s = String(v || '0').trim();
-
-  if (s.includes(',')) {
-    // Formato brasileiro com vírgula decimal
-    s = s.replace(/\./g, ''); // remove separador de milhar
-    s = s.replace(/,/g, '.'); // vírgula decimal -> ponto
-  } else {
-    // Sem vírgula: mantemos ponto decimal se houver
-    s = s.replace(/ /g, '');
-  }
-
+  if (s.includes(',')) { s = s.replace(/\./g, ''); s = s.replace(/,/g, '.'); }
+  else { s = s.replace(/ /g, ''); }
   const out = parseFloat(s);
   return isNaN(out) ? 0 : out;
 }
 
 function saveLS(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-function loadLS(key, def){
-  try{ return JSON.parse(localStorage.getItem(key)) ?? def }
-  catch{ return def }
-}
+function loadLS(key, def){ try{ return JSON.parse(localStorage.getItem(key)) ?? def } catch{ return def } }
 
 const I = {
   combustivel_preco: document.getElementById('combustivel_preco'),
@@ -1114,105 +756,135 @@ const O = {
   status2: document.getElementById('status2')
 };
 
-/* Snapshot atual dos inputs */
+/* ====== Etapa 6: Custos Adicionais ====== */
+let EXTRA_COSTS = []; // {desc, preco, obs}
+
+const EI = {
+  desc: document.getElementById('ec_desc'),
+  preco: document.getElementById('ec_preco'),
+  obs:  document.getElementById('ec_obs'),
+  btnAdd: document.getElementById('btnAddCost'),
+  list: document.getElementById('extraCostsList'),
+  sub:  document.getElementById('sub_extra')
+};
+
+function renderExtraCosts(){
+  if(!EI.list) return 0;
+  EI.list.innerHTML = '';
+  let total = 0;
+
+  EXTRA_COSTS.forEach((item, idx)=>{
+    const price = n(item.preco);
+    total += price;
+    const row = document.createElement('div');
+    row.className = 'cost-item';
+    row.innerHTML = `
+      <div class="c-desc">${item.desc || '-'}</div>
+      <div class="c-obs">${item.obs || '-'}</div>
+      <div class="c-price">${fmt(price)}</div>
+      <button class="del-btn" title="Excluir" data-del="${idx}">✕</button>
+    `;
+    EI.list.appendChild(row);
+  });
+
+  if(EI.sub) EI.sub.textContent = fmt(total);
+  return total;
+}
+
+if (EI.btnAdd){
+  EI.btnAdd.addEventListener('click', ()=>{
+    const desc = (EI.desc.value || '').trim();
+    const preco = n(EI.preco.value);
+    const obs   = (EI.obs.value || '').trim();
+    if(!desc){ alert('Descreva o custo.'); return; }
+    if(preco <= 0){ alert('Informe um preço válido.'); return; }
+    EXTRA_COSTS.push({desc, preco, obs});
+    EI.desc.value = ''; EI.preco.value = ''; EI.obs.value = '';
+    saveLS('calc.extraCosts.v1', EXTRA_COSTS);
+    recalc();
+  });
+}
+if (EI.list){
+  EI.list.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-del]');
+    if(!btn) return;
+    const i = parseInt(btn.getAttribute('data-del'),10);
+    if(isNaN(i)) return;
+    EXTRA_COSTS.splice(i,1);
+    saveLS('calc.extraCosts.v1', EXTRA_COSTS);
+    recalc();
+  });
+}
+
+/* ==========================
+   Snapshot
+========================== */
 function snapshot(){
   const s = {};
   Object.keys(I).forEach(k=> s[k] = I[k].value);
+  s.extra_costs = EXTRA_COSTS;
   return s;
 }
-
 function applySnapshot(s){
   if(!s) return;
-  Object.keys(I).forEach(k=>{
-    if(s[k]!==undefined) I[k].value = s[k];
-  });
+  Object.keys(I).forEach(k=>{ if(s[k]!==undefined) I[k].value = s[k]; });
+  EXTRA_COSTS = Array.isArray(s.extra_costs) ? s.extra_costs : [];
+  renderExtraCosts();
 }
 
 /* ==========================
    Recalcular tudo
 ========================== */
 function recalc(){
-  // --- TRANSPORTE ---
-  const combustivel = n(I.combustivel_preco.value); // R$/L
-  const autonomia   = n(I.autonomia.value);         // km/L
-  const distancia   = n(I.dist_total.value);        // km
-
-  // litros consumidos = distância / autonomia
+  // TRANSPORTE
+  const combustivel = n(I.combustivel_preco.value);
+  const autonomia   = n(I.autonomia.value);
+  const distancia   = n(I.dist_total.value);
   const litros = autonomia > 0 ? (distancia / autonomia) : 0;
   const subTransporte = litros * combustivel;
 
-  // --- MÃO DE OBRA ---
+  // MÃO DE OBRA
   const subMao =
-    n(I.vh_campo.value) * n(I.h_campo.value) +
-    n(I.vh_escr.value)  * n(I.h_escr.value);
+    n(I.vh_campo.value)*n(I.h_campo.value) +
+    n(I.vh_escr.value)*n(I.h_escr.value);
 
-  // --- ANÁLISES ---
-  const subAnalises =
-    n(I.v_amostra.value) * n(I.n_amostras.value);
+  // ANÁLISES
+  const subAnalises = n(I.v_amostra.value)*n(I.n_amostras.value);
 
-  // --- FATOR DE COMPLEXIDADE (só afeta DRONE) ---
+  // VARIÁVEIS ADICIONAIS
   const fatorVal = n(I.fator.value) || 1;
+  const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
 
-  // --- VARIÁVEIS ADICIONAIS ---
-  const totalDiarias =
-    n(I.diaria.value) * n(I.dias.value) * n(I.pessoas.value);
+  const droneHa = n(I.drone_ha.value);
+  const precoHa = n(I.preco_ha.value);
+  const totalDrone = (droneHa * precoHa) * fatorVal; // fator só no drone
 
-  const totalAloj =
-    n(I.aloj.value)   * n(I.dias.value) * n(I.pessoas.value);
+  const totalAssin   = n(I.assin_mensal.value)*12;
 
-  const totalAlim =
-    n(I.alim.value)   * n(I.dias.value) * n(I.pessoas.value);
+  const subVar = totalDiarias + totalAloj + totalAlim + totalART + totalDrone + totalAssin;
 
-  const totalART =
-    n(I.art_valor.value) * n(I.art_qtd.value);
+  // ETAPA 6
+  const totalExtra = renderExtraCosts();
 
-  // custo bruto de drone = hectares * preço/ha
-  const droneHa   = n(I.drone_ha.value);
-  const precoHa   = n(I.preco_ha.value);
-  const totalDroneSemFator = droneHa * precoHa;
+  // BASE (fator já aplicado ao drone)
+  const subBase = subTransporte + subMao + subAnalises + subVar + totalExtra;
+  const baseMultiplicada = subBase;
 
-  // aplica fator SOMENTE aqui
-  const totalDrone = totalDroneSemFator * fatorVal;
-
-  // assinatura anual = mensal * 12
-  const totalAssin = n(I.assin_mensal.value) * 12;
-
-  // soma das variáveis adicionais
-  const subVar =
-    totalDiarias +
-    totalAloj +
-    totalAlim +
-    totalART +
-    totalDrone +
-    totalAssin;
-
-  // --- BASE ---
-  // O fator já está incluído no custo do drone, então não multiplicamos
-  // a base inteira de novo.
-  const subBase = subTransporte + subMao + subAnalises + subVar;
-
-  const baseMultiplicada = subBase; // já final, sem novo fator
-
-  // --- ACRÉSCIMOS / IMPOSTOS / TAXAS ---
-  const pSoma =
-    ( n(I.p_nf.value)
-    + n(I.p_serv.value)
-    + n(I.p_tax.value)
-    + n(I.p_admin.value)
-    ) / 100;
-
+  // ACRÉSCIMOS
+  const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
   const outrosVal = n(I.outros.value);
-
   const acrescimos = baseMultiplicada * pSoma;
 
-  // --- MARGEM DE LUCRO ---
-  const margem = (baseMultiplicada + acrescimos + outrosVal) *
-                 (n(I.p_margem.value)/100);
+  // MARGEM
+  const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
 
-  // --- TOTAL FINAL ---
+  // TOTAL
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // --- SAÍDA VISUAL ---
+  // OUTPUT
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
@@ -1224,37 +896,24 @@ function recalc(){
   O.r_var.textContent          = fmt(subVar);
 
   O.sub_base.textContent       = fmt(subBase);
-
-  // "Base × Fator": agora é a mesma base, pois o fator já foi aplicado só no drone
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
-
-  // base_calc é a base usada pra impostos
   O.base_calc.textContent      = fmt(baseMultiplicada);
-
-  // total_acresc = baseMultiplicada + acrescimos (sem margem e sem outros)
   O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
 
   O.total_final.textContent    = fmt(total);
   O.total_footer.textContent   = fmt(total);
 
-  // salvar snapshot local
   saveLS('calc.ecosmart.v2', snapshot());
 
   return {
-    subTransporte,
-    subMao,
-    subAnalises,
-    subVar,
-    subBase,
-    baseMultiplicada,
-    acrescimos,
-    outros: outrosVal,
-    margem,
-    total
+    subTransporte, subMao, subAnalises, subVar,
+    totalExtra,
+    subBase, baseMultiplicada, acrescimos,
+    outros: outrosVal, margem, total
   };
 }
 
-/* dispara recálculo ao digitar em qualquer campo */
+// Recalcular em qualquer input
 Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
 
 /* ==========================
@@ -1272,7 +931,8 @@ btnSalvar.addEventListener('click', async ()=>{
       {categoria:'transporte', total:r.subTransporte},
       {categoria:'mao_de_obra', total:r.subMao},
       {categoria:'analises', total:r.subAnalises},
-      {categoria:'variaveis_adicionais', total:r.subVar}
+      {categoria:'variaveis_adicionais', total:r.subVar},
+      {categoria:'custos_adicionais', total:r.totalExtra}
     ],
     subtotal: r.subBase,
     impostos: r.acrescimos,
@@ -1282,16 +942,8 @@ btnSalvar.addEventListener('click', async ()=>{
   };
 
   try{
-    const { error } = await supabaseClient
-      .from('orcamentos')
-      .insert(row);
-
-    if(error){
-      console.error(error);
-      alert('Erro ao salvar: '+error.message);
-      return;
-    }
-
+    const { error } = await supabaseClient.from('orcamentos').insert(row);
+    if(error){ console.error(error); alert('Erro ao salvar: '+error.message); return; }
     const url = new URL(window.location.href);
     url.searchParams.set('o', row.slug);
     history.replaceState(null,'', url);
@@ -1304,12 +956,14 @@ btnSalvar.addEventListener('click', async ()=>{
 
 /* ==========================
    Carregar por slug (?o=xxxx)
-   Mantém inicial zerado se não houver slug
 ========================== */
 (async function loadBySlug(){
   const slug = new URLSearchParams(location.search).get('o');
 
   if(!slug) {
+    // inicia zerado mas tenta recuperar extras do navegador
+    EXTRA_COSTS = loadLS('calc.extraCosts.v1', []);
+    renderExtraCosts();
     recalc();
     return;
   }
@@ -1321,14 +975,8 @@ btnSalvar.addEventListener('click', async ()=>{
       .eq('slug', slug)
       .single();
 
-    if(error){
-      console.warn('Não foi possível carregar o orçamento:', error.message);
-      recalc();
-      return;
-    }
-    if(data && data.parametros){
-      applySnapshot(data.parametros);
-    }
+    if(error){ console.warn('Não foi possível carregar o orçamento:', error.message); }
+    if(data && data.parametros){ applySnapshot(data.parametros); }
     recalc();
   }catch(e){
     console.warn(e);
@@ -1339,8 +987,7 @@ btnSalvar.addEventListener('click', async ()=>{
 /* ==========================
    Compartilhar link
 ========================== */
-const btnShare = document.getElementById('btnShare');
-btnShare.addEventListener('click', ()=>{
+document.getElementById('btnShare').addEventListener('click', ()=>{
   const url = location.href;
   if(navigator.clipboard) navigator.clipboard.writeText(url);
   alert('Link copiado.');
@@ -1349,8 +996,7 @@ btnShare.addEventListener('click', ()=>{
 /* ==========================
    WhatsApp
 ========================== */
-const btnWhats = document.getElementById('btnWhats');
-btnWhats.addEventListener('click', ()=>{
+document.getElementById('btnWhats').addEventListener('click', ()=>{
   const t = document.getElementById('total_final').textContent || '';
   const msg = encodeURIComponent(`Olá! Segue o orçamento: ${t}. Link: ${location.href}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
@@ -1359,23 +1005,18 @@ btnWhats.addEventListener('click', ()=>{
 /* ==========================
    Exportar PDF
 ========================== */
-const btnPDF = document.getElementById('btnPDF');
-btnPDF.addEventListener('click', ()=>{
+document.getElementById('btnPDF').addEventListener('click', ()=>{
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:'pt', format:'a4'});
 
-  const pad=36;
-  let y=pad;
-  const r = recalc();
+  const pad=36; let y=pad; const r = recalc();
 
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
+  doc.setFont('helvetica','bold'); doc.setFontSize(13);
   doc.text('EcoSmart Group — Orçamento', pad, y); y+=18;
 
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(10);
-  doc.text(`Transporte: ${fmt(r.subTransporte)}  |  Mão de Obra: ${fmt(r.subMao)}  |  Análises: ${fmt(r.subAnalises)}  |  Variáveis: ${fmt(r.subVar)}`, pad, y); y+=16;
-  doc.text(`Subtotal Base: ${fmt(r.subBase)}  |  Base × Fator: ${fmt(r.baseMultiplicada)}`, pad, y); y+=16;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  doc.text(`Transporte: ${fmt(r.subTransporte)}  |  Mão de Obra: ${fmt(r.subMao)}  |  Análises: ${fmt(r.subAnalises)}  |  Variáveis: ${fmt(r.subVar)}  |  Extras: ${fmt(r.totalExtra)}`, pad, y); y+=16;
+  doc.text(`Subtotal Base: ${fmt(r.subBase)}  |  Base × Fator (drone aplicado): ${fmt(r.baseMultiplicada)}`, pad, y); y+=16;
 
   doc.setFont('helvetica','bold');
   doc.text(`TOTAL DO ORÇAMENTO: ${fmt(r.total)}`, pad, y); y+=24;
