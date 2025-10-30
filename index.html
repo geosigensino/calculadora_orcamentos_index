@@ -13,272 +13,167 @@
   <!-- Libs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2"></script>
 
   <style>
     :root{
-      --radius-lg:20px;
-      --radius-md:12px;
-      --radius-sm:8px;
-
+      --radius-lg:20px; --radius-md:12px; --radius-sm:8px;
       --shadow-big-dark:0 24px 64px rgba(0,0,0,.6);
       --shadow-big-light:0 32px 64px rgba(0,0,0,.07);
-
       --shadow-card-dark:0 12px 32px rgba(0,0,0,.4);
       --shadow-card-light:0 8px 24px rgba(0,0,0,.08);
-
-      --section-gap:16px;
-      --card-padding:16px;
+      --section-gap:16px; --card-padding:16px;
     }
 
     /* Tema escuro */
     body.theme-dark{
-      --bg-body:#0b0d10;
-      --bg-grad-start:#0b0d10;
-      --bg-grad-end:#0c1014;
-
-      --panel:#0f1317;
-      --surface:#141922;
-      --surface-hover:#1a212e;
-      --input-bg:#0e1218;
-
-      --txt-primary:#dde6ee;
-      --txt-secondary:#9aa4b2;
-      --txt-muted:#6b7380;
-      --txt-soft-on-accent:#eafff0;
-
-      --accent-main:#1b6e2a;
-      --accent-alt:#13541f;
-      --accent-soft:rgba(43,138,62,.15);
-
-      --good:#6be28a;
-      --warn:#ffd36b;
-      --danger:#ef6b6b;
-
-      --border:#1f2430;
-      --border-strong:#2f384a;
-
+      --bg-body:#0b0d10; --bg-grad-start:#0b0d10; --bg-grad-end:#0c1014;
+      --panel:#0f1317; --surface:#141922; --surface-hover:#1a212e; --input-bg:#0e1218;
+      --txt-primary:#dde6ee; --txt-secondary:#9aa4b2; --txt-muted:#6b7380; --txt-soft-on-accent:#eafff0;
+      --accent-main:#1b6e2a; --accent-alt:#13541f; --accent-soft:rgba(43,138,62,.15);
+      --good:#6be28a; --warn:#ffd36b; --danger:#ef6b6b;
+      --border:#1f2430; --border-strong:#2f384a;
       --brand-badge-bg:radial-gradient(circle at 20% 20%,#2b8a3e 0%,#1b6e2a 40%,#13541f 100%);
       --brand-badge-shadow:0 12px 32px rgba(38,108,52,.5);
-
-      --header-bg:rgba(11,13,16,.7);
-      --header-shadow:0 24px 48px rgba(0,0,0,.8);
-
-      --card-bg-gradient:linear-gradient(
-        160deg,
-        rgba(20,25,34,.9) 0%,
-        rgba(15,19,23,.6) 100%
-      );
+      --header-bg:rgba(11,13,16,.7); --header-shadow:0 24px 48px rgba(0,0,0,.8);
+      --card-bg-gradient:linear-gradient(160deg, rgba(20,25,34,.9) 0%, rgba(15,19,23,.6) 100%);
       --card-border-glow:radial-gradient(circle at 0% 0%,rgba(43,138,62,.35) 0%,rgba(0,0,0,0) 70%);
-
-      --card-header-bg:linear-gradient(
-        to right,
-        rgba(27,110,42,.08) 0%,
-        rgba(19,24,29,0) 60%
-      );
-
+      --card-header-bg:linear-gradient(to right, rgba(27,110,42,.08) 0%, rgba(19,24,29,0) 60%);
       --footer-bg:rgba(15,19,23,.75);
-
-      --shadow-big:var(--shadow-big-dark);
-      --shadow-card:var(--shadow-card-dark);
+      --shadow-big:var(--shadow-big-dark); --shadow-card:var(--shadow-card-dark);
     }
 
     /* Tema claro */
     body.theme-light{
-      --bg-body:#f5f7fa;
-      --bg-grad-start:#f5f7fa;
-      --bg-grad-end:#eef2f6;
-
-      --panel:#ffffff;
-      --surface:#ffffff;
-      --surface-hover:#f5f9f4;
-      --input-bg:#ffffff;
-
-      --txt-primary:#1a1f2a;
-      --txt-secondary:#4a5568;
-      --txt-muted:#7b8498;
-      --txt-soft-on-accent:#ffffff;
-
-      --accent-main:#1b6e2a;
-      --accent-alt:#145323;
-      --accent-soft:rgba(43,138,62,.12);
-
-      --good:#1b6e2a;
-      --warn:#b37a00;
-      --danger:#c0392b;
-
-      --border:#d4d9e3;
-      --border-strong:#aeb7c9;
-
+      --bg-body:#f5f7fa; --bg-grad-start:#f5f7fa; --bg-grad-end:#eef2f6;
+      --panel:#ffffff; --surface:#ffffff; --surface-hover:#f5f9f4; --input-bg:#ffffff;
+      --txt-primary:#1a1f2a; --txt-secondary:#4a5568; --txt-muted:#7b8498; --txt-soft-on-accent:#ffffff;
+      --accent-main:#1b6e2a; --accent-alt:#145323; --accent-soft:rgba(43,138,62,.12);
+      --good:#1b6e2a; --warn:#b37a00; --danger:#c0392b;
+      --border:#d4d9e3; --border-strong:#aeb7c9;
       --brand-badge-bg:radial-gradient(circle at 20% 20%,#2b8a3e 0%,#1b6e2a 40%,#13541f 100%);
       --brand-badge-shadow:0 8px 20px rgba(27,110,42,.25);
-
-      --header-bg:rgba(255,255,255,.7);
-      --header-shadow:0 24px 48px rgba(0,0,0,.06);
-
-      --card-bg-gradient:linear-gradient(
-        160deg,
-        rgba(255,255,255,1) 0%,
-        rgba(245,247,250,.8) 100%
-      );
+      --header-bg:rgba(255,255,255,.7); --header-shadow:0 24px 48px rgba(0,0,0,.06);
+      --card-bg-gradient:linear-gradient(160deg, rgba(255,255,255,1) 0%, rgba(245,247,250,.8) 100%);
       --card-border-glow:radial-gradient(circle at 0% 0%,rgba(43,138,62,.18) 0%,rgba(255,255,255,0) 70%);
-
-      --card-header-bg:linear-gradient(
-        to right,
-        rgba(27,110,42,.06) 0%,
-        rgba(255,255,255,0) 60%
-      );
-
+      --card-header-bg:linear-gradient(to right, rgba(27,110,42,.06) 0%, rgba(255,255,255,0) 60%);
       --footer-bg:rgba(255,255,255,.9);
-
-      --shadow-big:var(--shadow-big-light);
-      --shadow-card:var(--shadow-card-light);
+      --shadow-big:var(--shadow-big-light); --shadow-card:var(--shadow-card-light);
     }
 
     *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
 
     body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100vh; display:flex; flex-direction:column;
       background:
         radial-gradient(circle at 20% 10%,rgba(34,120,52,.18) 0%,rgba(0,0,0,0) 60%),
         linear-gradient(180deg,var(--bg-grad-start) 0%,var(--bg-grad-end) 100%);
-      background-color:var(--bg-body);
-      color:var(--txt-primary);
+      background-color:var(--bg-body); color:var(--txt-primary);
     }
 
     /* HEADER */
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      background:var(--header-bg);
-      backdrop-filter:blur(10px) saturate(140%);
-      -webkit-backdrop-filter:blur(10px) saturate(140%);
-      border-bottom:1px solid var(--border);
-      box-shadow:var(--header-shadow);
-    }
-
-    .wrap-header{
-      max-width:1280px;
-      margin:0 auto;
-      padding:16px 20px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .brand-badge{
-      min-width:40px;
-      min-height:40px;
-      border-radius:12px;
-      background:var(--brand-badge-bg);
-      box-shadow:var(--brand-badge-shadow);
-      border:1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:10px;
-      font-weight:600;
-      color:var(--txt-soft-on-accent);
-      letter-spacing:.04em;
-      text-shadow:0 1px 2px rgba(0,0,0,.4);
-    }
-
-    .head-texts{display:flex;flex-direction:column;min-width:0}
-    .app-name{font-size:15px;font-weight:600;color:var(--txt-primary);line-height:1.25;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-    .app-name .dot{display:inline-block;width:4px;height:4px;background:var(--txt-secondary);border-radius:999px;opacity:.4}
-    .subtitle{font-size:12px;line-height:1.3;color:var(--txt-secondary);font-weight:400}
-
-    .header-right{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-    .chip-status{background:var(--input-bg);border:1px solid var(--border);color:var(--txt-primary);font-size:12px;line-height:1.2;padding:8px 10px;border-radius:var(--radius-md);display:flex;align-items:center;gap:6px;font-weight:500;box-shadow:var(--shadow-card)}
-    .chip-status .dot-online{width:8px;height:8px;border-radius:999px;background:var(--good);box-shadow:0 0 8px var(--good)}
-
-    .theme-toggle-btn{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);color:var(--txt-primary);font-size:12px;font-weight:600;line-height:1.2;padding:8px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;min-width:max-content}
-    .theme-toggle-btn:hover{background:var(--surface-hover);border-color:var(--accent-main);box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
+    header{position:sticky; top:0; z-index:50; background:var(--header-bg);
+      backdrop-filter:blur(10px) saturate(140%); -webkit-backdrop-filter:blur(10px) saturate(140%);
+      border-bottom:1px solid var(--border); box-shadow:var(--header-shadow)}
+    .wrap-header{max-width:1280px; margin:0 auto; padding:16px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+    .brand-badge{min-width:40px; min-height:40px; border-radius:12px; background:var(--brand-badge-bg); box-shadow:var(--brand-badge-shadow);
+      border:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:var(--txt-soft-on-accent); letter-spacing:.04em; text-shadow:0 1px 2px rgba(0,0,0,.4)}
+    .head-texts{display:flex; flex-direction:column; min-width:0}
+    .app-name{font-size:15px; font-weight:600; color:var(--txt-primary); line-height:1.25; display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+    .app-name .dot{display:inline-block; width:4px; height:4px; background:var(--txt-secondary); border-radius:999px; opacity:.4}
+    .subtitle{font-size:12px; line-height:1.3; color:var(--txt-secondary); font-weight:400}
+    .header-right{margin-left:auto; display:flex; flex-wrap:wrap; align-items:center; gap:10px}
+    .chip-status{background:var(--input-bg); border:1px solid var(--border); color:var(--txt-primary); font-size:12px; line-height:1.2; padding:8px 10px;
+      border-radius:var(--radius-md); display:flex; align-items:center; gap:6px; font-weight:500; box-shadow:var(--shadow-card)}
+    .chip-status .dot-online{width:8px; height:8px; border-radius:999px; background:var(--good); box-shadow:0 0 8px var(--good)}
+    .theme-toggle-btn{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-card);
+      color:var(--txt-primary); font-size:12px; font-weight:600; line-height:1.2; padding:8px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; min-width:max-content}
+    .theme-toggle-btn:hover{background:var(--surface-hover); border-color:var(--accent-main); box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
 
     /* GRID PRINCIPAL */
-    .page{width:100%;max-width:1280px;margin:24px auto 96px auto;padding:0 20px 80px;flex:1;display:grid;gap:var(--section-gap)}
-    @media(min-width:1080px){
-      .page{grid-template-columns:minmax(0,1fr) 320px;align-items:start}
-    }
-    .main-col{display:grid;gap:var(--section-gap)}
+    .page{width:100%; max-width:1280px; margin:24px auto 96px auto; padding:0 20px 80px; flex:1; display:grid; gap:var(--section-gap)}
+    @media(min-width:1080px){ .page{grid-template-columns:minmax(0,1fr) 320px; align-items:start} }
+    .main-col{display:grid; gap:var(--section-gap)}
 
     /* CARD */
-    .card{position:relative;background:var(--card-bg-gradient);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-big);overflow:hidden}
-    .card::before{
-      content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--card-border-glow);
-      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none
-    }
-    .card-header{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px 12px;padding:16px var(--card-padding) 12px;border-bottom:1px solid var(--border);background:var(--card-header-bg)}
-    .card-title-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
-    .card-eyebrow{display:inline-flex;align-items:center;font-size:10px;line-height:1.2;font-weight:600;color:var(--accent-main);background:var(--accent-soft);border:1px solid rgba(27,110,42,.4);border-radius:var(--radius-sm);padding:3px 6px;width:max-content;text-transform:uppercase;letter-spacing:.08em}
-    .card-title{font-size:14px;font-weight:600;line-height:1.4;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.12em}
-    .card-desc{font-size:12px;line-height:1.4;color:var(--txt-secondary);font-weight:400;max-width:560px}
-    .card-body{padding:16px var(--card-padding) 20px;display:grid;gap:16px}
+    .card{position:relative; background:var(--card-bg-gradient); border:1px solid var(--border); border-radius:var(--radius-lg);
+      box-shadow:var(--shadow-big); overflow:hidden}
+    .card::before{content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; background:var(--card-border-glow);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none}
+    .card-header{display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:8px 12px; padding:16px var(--card-padding) 12px;
+      border-bottom:1px solid var(--border); background:var(--card-header-bg)}
+    .card-title-wrap{display:flex; flex-direction:column; gap:4px; min-width:0}
+    .card-eyebrow{display:inline-flex; align-items:center; font-size:10px; line-height:1.2; font-weight:600; color:var(--accent-main); background:var(--accent-soft);
+      border:1px solid rgba(27,110,42,.4); border-radius:var(--radius-sm); padding:3px 6px; width:max-content; text-transform:uppercase; letter-spacing:.08em}
+    .card-title{font-size:14px; font-weight:600; line-height:1.4; color:var(--txt-secondary); text-transform:uppercase; letter-spacing:.12em}
+    .card-desc{font-size:12px; line-height:1.4; color:var(--txt-secondary); font-weight:400; max-width:560px}
+    .card-body{padding:16px var(--card-padding) 20px; display:grid; gap:16px}
 
     /* GRID DE CAMPOS */
-    .row{display:grid;gap:12px}
+    .row{display:grid; gap:12px}
     .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
     @media(max-width:760px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
 
     /* INPUTS */
-    .field{display:flex;flex-direction:column}
-    .field-label{font-size:12px;font-weight:500;color:var(--txt-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
-    .field-label small{color:var(--txt-muted);font-weight:400;font-size:11px;line-height:1.2}
-    .input-shell{position:relative;display:flex;align-items:center;background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);transition:border .15s, box-shadow .15s, background .15s}
-    .input-shell:focus-within{border-color:var(--accent-main);box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15)}
-    .input-shell input,.input-shell select{width:100%;background:transparent;color:var(--txt-primary);font-size:14px;line-height:1.4;font-weight:500;border:0;outline:none;padding:10px 12px;border-radius:var(--radius-md);appearance:none}
+    .field{display:flex; flex-direction:column}
+    .field-label{font-size:12px; font-weight:500; color:var(--txt-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px}
+    .field-label small{color:var(--txt-muted); font-weight:400; font-size:11px; line-height:1.2}
+    .input-shell{position:relative; display:flex; align-items:center; background:var(--input-bg); border:1px solid var(--border);
+      border-radius:var(--radius-md); box-shadow:var(--shadow-card); transition:border .15s, box-shadow .15s, background .15s}
+    .input-shell:focus-within{border-color:var(--accent-main); box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15)}
+    .input-shell input,.input-shell select{width:100%; background:transparent; color:var(--txt-primary); font-size:14px; line-height:1.4;
+      font-weight:500; border:0; outline:none; padding:10px 12px; border-radius:var(--radius-md); appearance:none}
 
     /* BLOCOS DE VALOR */
-    .stat-box{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;font-size:13px;line-height:1.4;color:var(--txt-primary);display:flex;flex-direction:column;gap:4px;min-height:56px;box-shadow:var(--shadow-card)}
-    .stat-label{color:var(--txt-muted);font-size:11px;line-height:1.3;font-weight:400}
-    .stat-value{font-size:14px;font-weight:600;line-height:1.3;word-break:break-word;color:var(--txt-primary);text-shadow:none}
-    .stat-value.good{color:var(--good);text-shadow:0 0 8px rgba(107,226,138,.4)}
+    .stat-box{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px 12px;
+      font-size:13px; line-height:1.4; color:var(--txt-primary); display:flex; flex-direction:column; gap:4px; min-height:56px; box-shadow:var(--shadow-card)}
+    .stat-label{color:var(--txt-muted); font-size:11px; line-height:1.3; font-weight:400}
+    .stat-value{font-size:14px; font-weight:600; line-height:1.3; word-break:break-word; color:var(--txt-primary); text-shadow:none}
+    .stat-value.good{color:var(--good); text-shadow:0 0 8px rgba(107,226,138,.4)}
 
     /* NOTAS */
-    .note{font-size:12px;line-height:1.4;color:var(--txt-secondary);font-weight:400;display:flex;flex-wrap:wrap;gap:6px}
-    .note strong{font-weight:600;color:var(--txt-primary)}
+    .note{font-size:12px; line-height:1.4; color:var(--txt-secondary); font-weight:400; display:flex; flex-wrap:wrap; gap:6px}
+    .note strong{font-weight:600; color:var(--txt-primary)}
 
     /* AÇÕES */
-    .actions-row{display:flex;flex-wrap:wrap;gap:8px}
-    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--input-bg);color:var(--txt-primary);padding:10px 12px;border-radius:var(--radius-md);cursor:pointer;font-weight:600;font-size:13px;line-height:1.3;box-shadow:var(--shadow-card);transition:all .15s}
-    .btn:hover{background:var(--surface-hover);border-color:var(--accent-main);box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
-    .btn.primary{background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%);border-color:#1e6d2b;color:var(--txt-soft-on-accent);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+    .actions-row{display:flex; flex-wrap:wrap; gap:8px}
+    .btn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); background:var(--input-bg); color:var(--txt-primary); padding:10px 12px;
+      border-radius:var(--radius-md); cursor:pointer; font-weight:600; font-size:13px; line-height:1.3; box-shadow:var(--shadow-card); transition:all .15s}
+    .btn:hover{background:var(--surface-hover); border-color:var(--accent-main); box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
+    .btn.primary{background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%); border-color:#1e6d2b; color:var(--txt-soft-on-accent); text-shadow:0 1px 2px rgba(0,0,0,.6)}
     .btn.primary:hover{box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5)}
-    .btn[data-icon="save"]::before{content:"💾";}.btn[data-icon="pdf"]::before{content:"📄";}.btn[data-icon="link"]::before{content:"🔗";}.btn[data-icon="wa"]::before{content:"📲"}
+    .btn[data-icon="save"]::before{content:"💾";} .btn[data-icon="pdf"]::before{content:"📄";} .btn[data-icon="link"]::before{content:"🔗";} .btn[data-icon="wa"]::before{content:"📲"}
 
     /* ASIDE */
-    aside{display:grid;gap:var(--section-gap)}
-    @media(min-width:1080px){aside{position:sticky;top:88px;align-self:start}}
+    aside{display:grid; gap:var(--section-gap)}
+    @media(min-width:1080px){aside{position:sticky; top:88px; align-self:start}}
 
     /* FOOTER TOTAL */
-    .footerbar{position:fixed;bottom:0;left:0;right:0;background:var(--footer-bg);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-top:1px solid var(--border);box-shadow:0 -24px 48px rgba(0,0,0,.4);z-index:60}
+    .footerbar{position:fixed; bottom:0; left:0; right:0; background:var(--footer-bg);
+      backdrop-filter:blur(10px) saturate(140%); -webkit-backdrop-filter:blur(10px) saturate(140%);
+      border-top:1px solid var(--border); box-shadow:0 -24px 48px rgba(0,0,0,.4); z-index:60}
     body.theme-light .footerbar{box-shadow:0 -24px 48px rgba(0,0,0,.07)}
-    .footer-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;justify-content:flex-end}
-    .footer-total{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;box-shadow:var(--shadow-card);font-size:13px;line-height:1.4;color:var(--txt-primary);display:flex;flex-direction:column;min-width:200px}
-    .footer-total-label{font-size:11px;color:var(--txt-muted);line-height:1.3;font-weight:400}
-    .footer-total-value{font-size:14px;font-weight:600;line-height:1.3;color:var(--good);text-shadow:0 0 8px rgba(107,226,138,.4);word-break:break-word}
+    .footer-inner{max-width:1280px; margin:0 auto; padding:12px 20px; display:flex; flex-wrap:wrap; justify-content:flex-end}
+    .footer-total{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px 12px; box-shadow:var(--shadow-card);
+      font-size:13px; line-height:1.4; color:var(--txt-primary); display:flex; flex-direction:column; min-width:200px}
+    .footer-total-label{font-size:11px; color:var(--txt-muted); line-height:1.3; font-weight:400}
+    .footer-total-value{font-size:14px; font-weight:600; line-height:1.3; color:var(--good); text-shadow:0 0 8px rgba(107,226,138,.4); word-break:break-word}
 
-    /* ===== Lista de custos adicionais (Etapa 6) ===== */
-    .extra-costs-list{display:grid;gap:8px}
+    /* Lista de custos adicionais (Etapa 6) */
+    .extra-costs-list{display:grid; gap:8px}
     .cost-item{
-      display:grid;
-      grid-template-columns:1fr 160px 120px 36px;
-      gap:8px;align-items:center;
-      background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius-md);
-      padding:8px 10px;box-shadow:var(--shadow-card)
+      display:grid; grid-template-columns:1fr 160px 120px 36px; gap:8px; align-items:center;
+      background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md);
+      padding:8px 10px; box-shadow:var(--shadow-card)
     }
-    .cost-item .c-desc{color:var(--txt-primary);font-size:13px;font-weight:500;word-break:break-word}
-    .cost-item .c-obs{color:var(--txt-muted);font-size:12px;word-break:break-word}
-    .cost-item .c-price{font-weight:700;font-size:13px;text-align:right}
-    .del-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
-    .del-btn:hover{background:var(--surface-hover);border-color:var(--danger)}
+    .cost-item .c-desc{color:var(--txt-primary); font-size:13px; font-weight:500; word-break:break-word}
+    .cost-item .c-obs{color:var(--txt-muted); font-size:12px; word-break:break-word}
+    .cost-item .c-price{font-weight:700; font-size:13px; text-align:right}
+    .del-btn{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:var(--surface); cursor:pointer}
+    .del-btn:hover{background:var(--surface-hover); border-color:var(--danger)}
   </style>
 </head>
 
@@ -287,26 +182,15 @@
   <header>
     <div class="wrap-header">
       <div class="brand-badge" aria-hidden>Eco</div>
-
       <div class="head-texts">
         <div class="app-name">
-          <span>Calculadora de Orçamentos</span>
-          <span class="dot"></span>
-          <span>EcoSmart Group</span>
+          <span>Calculadora de Orçamentos</span><span class="dot"></span><span>EcoSmart Group</span>
         </div>
         <div class="subtitle">Custos técnicos, taxa de serviço, margem e total final — tudo em um só lugar.</div>
       </div>
-
       <div class="header-right">
-        <div class="chip-status">
-          <span class="dot-online"></span>
-          <span id="status">Conectado ao Supabase</span>
-        </div>
-
-        <button class="theme-toggle-btn" id="themeToggleBtn">
-          <span id="themeIcon">🌙</span>
-          <span id="themeLabel">Escuro</span>
-        </button>
+        <div class="chip-status"><span class="dot-online"></span><span id="status">Conectado ao Supabase</span></div>
+        <button class="theme-toggle-btn" id="themeToggleBtn"><span id="themeIcon">🌙</span><span id="themeLabel">Escuro</span></button>
       </div>
     </div>
   </header>
@@ -315,159 +199,81 @@
   <main class="page">
     <div class="main-col">
 
-      <!-- TRANSPORTE -->
+      <!-- ETAPA 1: TRANSPORTE -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 1</span>
-            <div class="card-title">Transporte</div>
-            <div class="card-desc">
-              Combustível, autonomia do veículo e distância total percorrida no deslocamento de campo.
-            </div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 1</span><div class="card-title">Transporte</div>
+            <div class="card-desc">Combustível, autonomia do veículo e distância total percorrida.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">Custo do combustível por litro (R$)</label>
-              <div class="input-shell"><input id="combustivel_preco" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Autonomia (km/l)</label>
-              <div class="input-shell"><input id="autonomia" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Distância total (km)</label>
-              <div class="input-shell"><input id="dist_total" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Custo do combustível por litro (R$)</label><div class="input-shell"><input id="combustivel_preco" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Autonomia (km/l)</label><div class="input-shell"><input id="autonomia" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Distância total (km)</label><div class="input-shell"><input id="dist_total" type="text" value="0"></div></div>
           </div>
-
           <div class="note">Subtotal Transporte: <strong id="sub_transporte">R$ 0,00</strong></div>
         </div>
       </section>
 
-      <!-- MÃO DE OBRA -->
+      <!-- ETAPA 2: MÃO DE OBRA -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 2</span>
-            <div class="card-title">Mão de Obra</div>
-            <div class="card-desc">Horas de campo e de escritório necessárias para executar e consolidar o trabalho.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 2</span><div class="card-title">Mão de Obra</div>
+            <div class="card-desc">Horas de campo e de escritório.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-2">
-            <div class="field">
-              <label class="field-label">Valor por hora de campo (R$)</label>
-              <div class="input-shell"><input id="vh_campo" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Horas de campo</label>
-              <div class="input-shell"><input id="h_campo" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Valor por hora de campo (R$)</label><div class="input-shell"><input id="vh_campo" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Horas de campo</label><div class="input-shell"><input id="h_campo" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-2">
-            <div class="field">
-              <label class="field-label">Valor por hora de escritório (R$)</label>
-              <div class="input-shell"><input id="vh_escr" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Horas de escritório</label>
-              <div class="input-shell"><input id="h_escr" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Valor por hora de escritório (R$)</label><div class="input-shell"><input id="vh_escr" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Horas de escritório</label><div class="input-shell"><input id="h_escr" type="text" value="0"></div></div>
           </div>
-
           <div class="note">Subtotal Mão de Obra: <strong id="sub_mao">R$ 0,00</strong></div>
         </div>
       </section>
 
-      <!-- ANÁLISES -->
+      <!-- ETAPA 3: ANÁLISES -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 3</span>
-            <div class="card-title">Análises</div>
-            <div class="card-desc">Custos laboratoriais por amostra e total de amostras previstas.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 3</span><div class="card-title">Análises</div>
+            <div class="card-desc">Custos laboratoriais por amostra.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-2">
-            <div class="field">
-              <label class="field-label">Valor por amostra (R$)</label>
-              <div class="input-shell"><input id="v_amostra" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Número de amostras</label>
-              <div class="input-shell"><input id="n_amostras" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Valor por amostra (R$)</label><div class="input-shell"><input id="v_amostra" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Número de amostras</label><div class="input-shell"><input id="n_amostras" type="text" value="0"></div></div>
           </div>
-
           <div class="note">Subtotal Análises: <strong id="sub_analises">R$ 0,00</strong></div>
         </div>
       </section>
 
-      <!-- VARIÁVEIS ADICIONAIS -->
+      <!-- ETAPA 4: VARIÁVEIS ADICIONAIS -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 4</span>
-            <div class="card-title">Variáveis Adicionais</div>
-            <div class="card-desc">Custos de diária, alojamento, alimentação, ART, voo de drone e assinatura anual.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 4</span><div class="card-title">Variáveis Adicionais</div>
+            <div class="card-desc">Diárias, alojamento, alimentação, ART, drone e assinatura anual.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">💰 Diárias de campo (R$)</label>
-              <div class="input-shell"><input id="diaria" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">📅 Quantidade de dias</label>
-              <div class="input-shell"><input id="dias" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">👥 Número de pessoas</label>
-              <div class="input-shell"><input id="pessoas" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">💰 Diárias de campo (R$)</label><div class="input-shell"><input id="diaria" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">📅 Quantidade de dias</label><div class="input-shell"><input id="dias" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">👥 Número de pessoas</label><div class="input-shell"><input id="pessoas" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">🏨 Alojamento por pessoa (R$)</label>
-              <div class="input-shell"><input id="aloj" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">🍽 Alimentação por pessoa (R$)</label>
-              <div class="input-shell"><input id="alim" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">📋 ART - valor (R$)</label>
-              <div class="input-shell"><input id="art_valor" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">🏨 Alojamento por pessoa (R$)</label><div class="input-shell"><input id="aloj" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">🍽 Alimentação por pessoa (R$)</label><div class="input-shell"><input id="alim" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">📋 ART - valor (R$)</label><div class="input-shell"><input id="art_valor" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">📋 ART - quantidade</label>
-              <div class="input-shell"><input id="art_qtd" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">📡 Drone LIDAR/Multiespectral/RGB - hectares</label>
-              <div class="input-shell"><input id="drone_ha" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">💵 Preço por hectare (R$)</label>
-              <div class="input-shell"><input id="preco_ha" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">📋 ART - quantidade</label><div class="input-shell"><input id="art_qtd" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">📡 Drone — hectares</label><div class="input-shell"><input id="drone_ha" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">💵 Preço por hectare (R$)</label><div class="input-shell"><input id="preco_ha" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-2">
             <div class="field">
-              <label class="field-label">
-                ⚙ Fator de complexidade do terreno
-                <small>aplicado só ao custo de drone</small>
-              </label>
+              <label class="field-label">⚙ Fator de complexidade (aplicado só ao drone)</label>
               <div class="input-shell">
                 <select id="fator">
                   <option value="1">Sem fator</option>
@@ -477,103 +283,50 @@
                 </select>
               </div>
             </div>
-
-            <div class="field">
-              <label class="field-label">
-                📝 Assinatura de 1 ano — preço mensal (R$)
-                <small>Plataforma / monitoramento</small>
-              </label>
-              <div class="input-shell"><input id="assin_mensal" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">📝 Assinatura (preço mensal, R$)</label><div class="input-shell"><input id="assin_mensal" type="text" value="0"></div></div>
           </div>
-
           <div class="note">Subtotal Variáveis Adicionais: <strong id="sub_var">R$ 0,00</strong></div>
         </div>
       </section>
 
-      <!-- ACRÉSCIMOS / IMPOSTOS / MARGEM -->
+      <!-- ETAPA 5: ACRÉSCIMOS / IMPOSTOS / MARGEM -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 5</span>
-            <div class="card-title">Acréscimos / Impostos / Margem</div>
-            <div class="card-desc">Percentuais que incidem sobre a base.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 5</span><div class="card-title">Acréscimos / Impostos / Margem</div>
+            <div class="card-desc">Percentuais que incidem sobre a base.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">Emissão de Nota Fiscal (%)</label>
-              <div class="input-shell"><input id="p_nf" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Prestação de Serviços (%)</label>
-              <div class="input-shell"><input id="p_serv" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Impostos e Taxas (%)</label>
-              <div class="input-shell"><input id="p_tax" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Emissão de Nota Fiscal (%)</label><div class="input-shell"><input id="p_nf" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Prestação de Serviços (%)</label><div class="input-shell"><input id="p_serv" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Impostos e Taxas (%)</label><div class="input-shell"><input id="p_tax" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">Taxa Administrativa (%)</label>
-              <div class="input-shell"><input id="p_admin" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Outros Custos (R$)</label>
-              <div class="input-shell"><input id="outros" type="text" value="0"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Margem de Lucro (%)</label>
-              <div class="input-shell"><input id="p_margem" type="text" value="0"></div>
-            </div>
+            <div class="field"><label class="field-label">Taxa Administrativa (%)</label><div class="input-shell"><input id="p_admin" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Outros Custos (R$)</label><div class="input-shell"><input id="outros" type="text" value="0"></div></div>
+            <div class="field"><label class="field-label">Margem de Lucro (%)</label><div class="input-shell"><input id="p_margem" type="text" value="0"></div></div>
           </div>
-
           <div class="row cols-2">
-            <div class="stat-box">
-              <div class="stat-label">Base de Cálculo (Base × Fator aplicado no drone)</div>
-              <div class="stat-value" id="base_calc">R$ 0,00</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Total com Acréscimos (antes da margem)</div>
-              <div class="stat-value" id="total_acresc">R$ 0,00</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">Base de Cálculo</div><div class="stat-value" id="base_calc">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">Total com Acréscimos (antes da margem)</div><div class="stat-value" id="total_acresc">R$ 0,00</div></div>
           </div>
         </div>
       </section>
 
-      <!-- CUSTOS ADICIONAIS (ETAPA 6) -->
+      <!-- ETAPA 6: CUSTOS ADICIONAIS -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Etapa 6</span>
-            <div class="card-title">Custos Adicionais</div>
-            <div class="card-desc">Adicione custos extra (diárias, aluguel, taxas etc.).</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Etapa 6</span><div class="card-title">Custos Adicionais</div>
+            <div class="card-desc">Adicione custos extras (diárias, aluguel, taxas etc.).</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-3">
-            <div class="field">
-              <label class="field-label">Descrever o custo</label>
-              <div class="input-shell"><input id="ec_desc" type="text" placeholder="Ex.: Aluguel de caminhonete"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Preço (R$)</label>
-              <div class="input-shell"><input id="ec_preco" type="text" placeholder="Ex.: 1.200,00"></div>
-            </div>
-            <div class="field">
-              <label class="field-label">Observações</label>
-              <div class="input-shell"><input id="ec_obs" type="text" placeholder="Ex.: 3 diárias"></div>
-            </div>
+            <div class="field"><label class="field-label">Descrever o custo</label><div class="input-shell"><input id="ec_desc" type="text" placeholder="Ex.: Aluguel de caminhonete"></div></div>
+            <div class="field"><label class="field-label">Preço (R$)</label><div class="input-shell"><input id="ec_preco" type="text" placeholder="Ex.: 1.200,00"></div></div>
+            <div class="field"><label class="field-label">Observações</label><div class="input-shell"><input id="ec_obs" type="text" placeholder="Ex.: 3 diárias"></div></div>
           </div>
-          <div class="actions-row">
-            <button class="btn" id="btnAddCost" data-icon="save">Adicionar custo</button>
-          </div>
-
+          <div class="actions-row"><button class="btn" id="btnAddCost" data-icon="save">Adicionar custo</button></div>
           <div id="extraCostsList" class="extra-costs-list" aria-live="polite"></div>
-
           <div class="note">Subtotal Custos Adicionais: <strong id="sub_extra">R$ 0,00</strong></div>
         </div>
       </section>
@@ -581,11 +334,8 @@
       <!-- RESUMO -->
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Resumo</span>
-            <div class="card-title">Visão Geral do Orçamento</div>
-            <div class="card-desc">Totais por etapa e valor final.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Resumo</span><div class="card-title">Visão Geral do Orçamento</div>
+            <div class="card-desc">Totais por etapa e valor final.</div></div>
         </div>
         <div class="card-body">
           <div class="row cols-4">
@@ -594,13 +344,11 @@
             <div class="stat-box"><div class="stat-label">🧪 Análises</div><div class="stat-value" id="r_analises">R$ 0,00</div></div>
             <div class="stat-box"><div class="stat-label">⚙ Variáveis Adicionais</div><div class="stat-value" id="r_var">R$ 0,00</div></div>
           </div>
-
           <div class="row cols-3">
             <div class="stat-box"><div class="stat-label">Subtotal Base</div><div class="stat-value" id="sub_base">R$ 0,00</div></div>
             <div class="stat-box"><div class="stat-label">Base × Fator</div><div class="stat-value" id="base_x_fator">R$ 0,00</div></div>
             <div class="stat-box"><div class="stat-label">TOTAL DO ORÇAMENTO</div><div class="stat-value good" id="total_final">R$ 0,00</div></div>
           </div>
-
           <div class="actions-row">
             <button class="btn primary" id="btnSalvar" data-icon="save">Salvar</button>
             <button class="btn" id="btnPDF" data-icon="pdf">PDF</button>
@@ -616,15 +364,13 @@
     <aside>
       <section class="card">
         <div class="card-header">
-          <div class="card-title-wrap">
-            <span class="card-eyebrow">Ajuda</span>
-            <div class="card-title">Como funciona</div>
-            <div class="card-desc">Estrutura do orçamento e status.</div>
-          </div>
+          <div class="card-title-wrap"><span class="card-eyebrow">Ajuda</span><div class="card-title">Como funciona</div>
+            <div class="card-desc">Estrutura do orçamento e status.</div></div>
         </div>
         <div class="card-body">
           <div class="note">
-            A base considera Transporte, Mão de Obra, Análises, Variáveis Adicionais (com fator aplicado apenas ao custo de drone) e Custos Adicionais. Depois aplica acréscimos e margem.
+            A base considera Transporte, Mão de Obra, Análises, Variáveis Adicionais (com fator aplicado apenas ao drone) e Custos Adicionais.
+            Depois aplica Acréscimos/Impostos/Taxa Adm., “Outros” e Margem.
           </div>
           <div class="stat-box"><div class="stat-label">Status</div><div class="stat-value" id="status2">online</div></div>
         </div>
@@ -860,7 +606,7 @@ function recalc(){
 
   const droneHa = n(I.drone_ha.value);
   const precoHa = n(I.preco_ha.value);
-  const totalDrone = (droneHa * precoHa) * fatorVal; // fator só no drone
+  const totalDrone = (droneHa * precoHa) * fatorVal; // fator apenas no drone
 
   const totalAssin   = n(I.assin_mensal.value)*12;
 
@@ -869,7 +615,7 @@ function recalc(){
   // ETAPA 6
   const totalExtra = renderExtraCosts();
 
-  // BASE (fator já aplicado ao drone)
+  // BASE
   const subBase = subTransporte + subMao + subAnalises + subVar + totalExtra;
   const baseMultiplicada = subBase;
 
@@ -884,7 +630,7 @@ function recalc(){
   // TOTAL
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // OUTPUT
+  // OUTPUTS
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
@@ -907,9 +653,12 @@ function recalc(){
 
   return {
     subTransporte, subMao, subAnalises, subVar,
-    totalExtra,
-    subBase, baseMultiplicada, acrescimos,
-    outros: outrosVal, margem, total
+    totalExtra, subBase, baseMultiplicada,
+    acrescimos, outros: outrosVal, margem, total,
+    detalhamento: {
+      totalDiarias, totalAloj, totalAlim, totalART,
+      droneHa, precoHa, fatorVal, totalDrone, totalAssin
+    }
   };
 }
 
@@ -919,8 +668,7 @@ Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
 /* ==========================
    Salvar no Supabase
 ========================== */
-const btnSalvar = document.getElementById('btnSalvar');
-btnSalvar.addEventListener('click', async ()=>{
+document.getElementById('btnSalvar').addEventListener('click', async ()=>{
   const r = recalc();
   const row = {
     slug: crypto.randomUUID().slice(0,8),
@@ -961,7 +709,6 @@ btnSalvar.addEventListener('click', async ()=>{
   const slug = new URLSearchParams(location.search).get('o');
 
   if(!slug) {
-    // inicia zerado mas tenta recuperar extras do navegador
     EXTRA_COSTS = loadLS('calc.extraCosts.v1', []);
     renderExtraCosts();
     recalc();
@@ -1003,24 +750,108 @@ document.getElementById('btnWhats').addEventListener('click', ()=>{
 });
 
 /* ==========================
-   Exportar PDF
+   Exportar PDF (FORMATADO)
 ========================== */
 document.getElementById('btnPDF').addEventListener('click', ()=>{
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:'pt', format:'a4'});
+  const margin = {top: 72, right: 36, bottom: 60, left: 36}; // 1" sup/inf, 0.5" laterais
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
 
-  const pad=36; let y=pad; const r = recalc();
+  const r = recalc();
+  const dataStr = new Date().toLocaleDateString('pt-BR');
 
-  doc.setFont('helvetica','bold'); doc.setFontSize(13);
-  doc.text('EcoSmart Group — Orçamento', pad, y); y+=18;
+  // Cabeçalho
+  function header(){
+    doc.setFont('helvetica','bold'); doc.setFontSize(14);
+    doc.text('EcoSmart Group — Orçamento', margin.left, margin.top - 28);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text(`Emitido em ${dataStr}`, margin.left, margin.top - 12);
+    doc.setFont('helvetica','italic'); doc.setFontSize(9);
+    doc.text('Calculadora de Orçamentos • Eco Smart Group', pageW - margin.right, margin.top - 12, {align:'right'});
+  }
+  // Rodapé com paginação
+  function footer(){
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      doc.text(`Página ${i} de ${pageCount}`, margin.left, pageH - 24);
+      doc.text('ecosmart.group', pageW - margin.right, pageH - 24, {align:'right'});
+    }
+  }
 
-  doc.setFont('helvetica','normal'); doc.setFontSize(10);
-  doc.text(`Transporte: ${fmt(r.subTransporte)}  |  Mão de Obra: ${fmt(r.subMao)}  |  Análises: ${fmt(r.subAnalises)}  |  Variáveis: ${fmt(r.subVar)}  |  Extras: ${fmt(r.totalExtra)}`, pad, y); y+=16;
-  doc.text(`Subtotal Base: ${fmt(r.subBase)}  |  Base × Fator (drone aplicado): ${fmt(r.baseMultiplicada)}`, pad, y); y+=16;
+  // Tabela: Totais por etapa
+  header();
+  doc.autoTable({
+    startY: margin.top,
+    head: [['Seção', 'Valor']],
+    body: [
+      ['Transporte', r.subTransporte ? fmt(r.subTransporte) : 'R$ 0,00'],
+      ['Mão de Obra', r.subMao ? fmt(r.subMao) : 'R$ 0,00'],
+      ['Análises', r.subAnalises ? fmt(r.subAnalises) : 'R$ 0,00'],
+      ['Variáveis Adicionais', r.subVar ? fmt(r.subVar) : 'R$ 0,00'],
+      ['Custos Adicionais (Etapa 6)', r.totalExtra ? fmt(r.totalExtra) : 'R$ 0,00'],
+    ],
+    theme: 'striped',
+    styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
+    headStyles: {fillColor: [27,110,42], textColor: 255},
+    margin
+  });
 
-  doc.setFont('helvetica','bold');
-  doc.text(`TOTAL DO ORÇAMENTO: ${fmt(r.total)}`, pad, y); y+=24;
+  // Tabela: Custos adicionais (detalhamento)
+  if ((EXTRA_COSTS||[]).length){
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 16,
+      head: [['Descrição', 'Observações', 'Preço (R$)']],
+      body: EXTRA_COSTS.map(c => [c.desc || '-', c.obs || '-', fmt(n(c.preco))]),
+      theme: 'striped',
+      styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
+      headStyles: {fillColor: [20,83,35], textColor: 255},
+      margin
+    });
+  }
 
+  // Tabela: Acréscimos / Margem (percentuais e valores)
+  const p_nf = n(I.p_nf.value), p_serv = n(I.p_serv.value), p_tax = n(I.p_tax.value), p_admin = n(I.p_admin.value);
+  const outrosVal = n(I.outros.value), p_margem = n(I.p_margem.value);
+  const totalAcrescimos = r.baseMultiplicada * ((p_nf+p_serv+p_tax+p_admin)/100);
+
+  doc.autoTable({
+    startY: (doc.lastAutoTable?.finalY || margin.top) + 16,
+    head: [['Item', 'Base', 'Percentual/Valor', 'Resultado']],
+    body: [
+      ['Base de Cálculo', '', '', fmt(r.baseMultiplicada)],
+      ['Acréscimos (NF + Serviços + Impostos + Adm.)', fmt(r.baseMultiplicada), `${(p_nf+p_serv+p_tax+p_admin).toFixed(2)}%`, fmt(totalAcrescimos)],
+      ['Outros Custos (fixo)', '', fmt(outrosVal), fmt(outrosVal)],
+      ['Margem de Lucro', fmt(r.baseMultiplicada + totalAcrescimos + outrosVal), `${p_margem.toFixed(2)}%`, fmt(r.margem)]
+    ],
+    theme: 'striped',
+    styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
+    headStyles: {fillColor: [27,110,42], textColor: 255},
+    margin
+  });
+
+  // Tabela: Resumo Final
+  doc.autoTable({
+    startY: doc.lastAutoTable.finalY + 16,
+    head: [['Resumo', 'Valor']],
+    body: [
+      ['Subtotal Base', fmt(r.subBase)],
+      ['Base × Fator (fator aplicado apenas no drone)', fmt(r.baseMultiplicada)],
+      ['Total com Acréscimos (antes da margem)', fmt(r.baseMultiplicada + r.acrescimos)],
+      ['TOTAL DO ORÇAMENTO', fmt(r.total)]
+    ],
+    theme: 'grid',
+    styles: {font: 'helvetica', fontSize: 11, cellPadding: 7},
+    headStyles: {fillColor: [0,0,0], textColor: 255},
+    bodyStyles: {},
+    columnStyles: {0: {fontStyle:'bold'}},
+    margin
+  });
+
+  footer();
   doc.save('orcamento_ecosmart.pdf');
 });
 </script>
