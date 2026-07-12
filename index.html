@@ -22,7 +22,6 @@
       --shadow-card-light:0 8px 24px rgba(0,0,0,.08);
       --section-gap:16px; --card-padding:16px;
     }
-
     body.theme-dark{
       --bg-body:#0b0d10; --bg-grad-start:#0b0d10; --bg-grad-end:#0c1014;
       --panel:#0f1317; --surface:#141922; --surface-hover:#1a212e; --input-bg:#0e1218;
@@ -38,8 +37,8 @@
       --card-header-bg:linear-gradient(to right, rgba(27,110,42,.08) 0%, rgba(19,24,29,0) 60%);
       --footer-bg:rgba(15,19,23,.75);
       --shadow-big:var(--shadow-big-dark); --shadow-card:var(--shadow-card-dark);
+      --modal-bg:rgba(0,0,0,.7);
     }
-
     body.theme-light{
       --bg-body:#f5f7fa; --bg-grad-start:#f5f7fa; --bg-grad-end:#eef2f6;
       --panel:#ffffff; --surface:#ffffff; --surface-hover:#f5f9f4; --input-bg:#ffffff;
@@ -55,10 +54,10 @@
       --card-header-bg:linear-gradient(to right, rgba(27,110,42,.06) 0%, rgba(255,255,255,0) 60%);
       --footer-bg:rgba(255,255,255,.9);
       --shadow-big:var(--shadow-big-light); --shadow-card:var(--shadow-card-light);
+      --modal-bg:rgba(0,0,0,.35);
     }
 
     *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
-
     body{
       margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       min-height:100vh; display:flex; flex-direction:column;
@@ -85,7 +84,7 @@
     .chip-status .dot-online{width:8px; height:8px; border-radius:999px; background:var(--good); box-shadow:0 0 8px var(--good)}
     .theme-toggle-btn{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-card);
       color:var(--txt-primary); font-size:12px; font-weight:600; line-height:1.2; padding:8px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; min-width:max-content}
-    .theme-toggle-btn:hover{background:var(--surface-hover); border-color:var(--accent-main); box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
+    .theme-toggle-btn:hover{background:var(--surface-hover); border-color:var(--accent-main)}
 
     /* GRID PRINCIPAL */
     .page{width:100%; max-width:1280px; margin:24px auto 96px auto; padding:0 20px 80px; flex:1; display:grid; gap:var(--section-gap)}
@@ -116,9 +115,8 @@
     /* INPUTS */
     .field{display:flex; flex-direction:column}
     .field-label{font-size:12px; font-weight:500; color:var(--txt-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px}
-    .field-label small{color:var(--txt-muted); font-weight:400; font-size:11px; line-height:1.2}
     .input-shell{position:relative; display:flex; align-items:center; background:var(--input-bg); border:1px solid var(--border);
-      border-radius:var(--radius-md); box-shadow:var(--shadow-card); transition:border .15s, box-shadow .15s, background .15s}
+      border-radius:var(--radius-md); box-shadow:var(--shadow-card); transition:border .15s, box-shadow .15s}
     .input-shell:focus-within{border-color:var(--accent-main); box-shadow:0 0 0 4px var(--accent-soft),0 20px 32px rgba(0,0,0,.15)}
     .input-shell input,.input-shell select{width:100%; background:transparent; color:var(--txt-primary); font-size:14px; line-height:1.4;
       font-weight:500; border:0; outline:none; padding:10px 12px; border-radius:var(--radius-md); appearance:none}
@@ -127,21 +125,32 @@
     .stat-box{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px 12px;
       font-size:13px; line-height:1.4; color:var(--txt-primary); display:flex; flex-direction:column; gap:4px; min-height:56px; box-shadow:var(--shadow-card)}
     .stat-label{color:var(--txt-muted); font-size:11px; line-height:1.3; font-weight:400}
-    .stat-value{font-size:14px; font-weight:600; line-height:1.3; word-break:break-word; color:var(--txt-primary); text-shadow:none}
+    .stat-value{font-size:14px; font-weight:600; line-height:1.3; word-break:break-word; color:var(--txt-primary)}
     .stat-value.good{color:var(--good); text-shadow:0 0 8px rgba(107,226,138,.4)}
 
     /* NOTAS */
     .note{font-size:12px; line-height:1.4; color:var(--txt-secondary); font-weight:400; display:flex; flex-wrap:wrap; gap:6px}
     .note strong{font-weight:600; color:var(--txt-primary)}
 
-    /* AÇÕES */
+    /* BOTÕES */
     .actions-row{display:flex; flex-wrap:wrap; gap:8px}
     .btn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); background:var(--input-bg); color:var(--txt-primary); padding:10px 12px;
       border-radius:var(--radius-md); cursor:pointer; font-weight:600; font-size:13px; line-height:1.3; box-shadow:var(--shadow-card); transition:all .15s}
     .btn:hover{background:var(--surface-hover); border-color:var(--accent-main); box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
     .btn.primary{background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%); border-color:#1e6d2b; color:var(--txt-soft-on-accent); text-shadow:0 1px 2px rgba(0,0,0,.6)}
     .btn.primary:hover{box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5)}
-    .btn[data-icon="save"]::before{content:"💾";} .btn[data-icon="pdf"]::before{content:"📄";} .btn[data-icon="word"]::before{content:"📝";} .btn[data-icon="link"]::before{content:"🔗";} .btn[data-icon="wa"]::before{content:"📲"}
+    .btn.danger{background:rgba(239,107,107,.12); border-color:var(--danger); color:var(--danger)}
+    .btn.danger:hover{background:rgba(239,107,107,.22)}
+    .btn[data-icon="save"]::before{content:"💾";}
+    .btn[data-icon="pdf"]::before{content:"📄";}
+    .btn[data-icon="word"]::before{content:"📝";}
+    .btn[data-icon="link"]::before{content:"🔗";}
+    .btn[data-icon="wa"]::before{content:"📲";}
+    .btn[data-icon="list"]::before{content:"📋";}
+    .btn[data-icon="new"]::before{content:"➕";}
+    .btn[data-icon="edit"]::before{content:"✏️";}
+    .btn[data-icon="del"]::before{content:"🗑️";}
+    .btn[data-icon="back"]::before{content:"←";}
 
     /* ASIDE */
     aside{display:grid; gap:var(--section-gap)}
@@ -152,13 +161,13 @@
       backdrop-filter:blur(10px) saturate(140%); -webkit-backdrop-filter:blur(10px) saturate(140%);
       border-top:1px solid var(--border); box-shadow:0 -24px 48px rgba(0,0,0,.4); z-index:60}
     body.theme-light .footerbar{box-shadow:0 -24px 48px rgba(0,0,0,.07)}
-    .footer-inner{max-width:1280px; margin:0 auto; padding:12px 20px; display:flex; flex-wrap:wrap; justify-content:flex-end}
+    .footer-inner{max-width:1280px; margin:0 auto; padding:12px 20px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px}
     .footer-total{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:10px 12px; box-shadow:var(--shadow-card);
       font-size:13px; line-height:1.4; color:var(--txt-primary); display:flex; flex-direction:column; min-width:200px}
     .footer-total-label{font-size:11px; color:var(--txt-muted); line-height:1.3; font-weight:400}
     .footer-total-value{font-size:14px; font-weight:600; line-height:1.3; color:var(--good); text-shadow:0 0 8px rgba(107,226,138,.4); word-break:break-word}
 
-    /* Lista de custos adicionais */
+    /* CUSTOS ADICIONAIS */
     .extra-costs-list{display:grid; gap:8px}
     .cost-item{
       display:grid; grid-template-columns:1fr 160px 120px 36px; gap:8px; align-items:center;
@@ -170,10 +179,113 @@
     .cost-item .c-price{font-weight:700; font-size:13px; text-align:right}
     .del-btn{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:var(--surface); cursor:pointer}
     .del-btn:hover{background:var(--surface-hover); border-color:var(--danger)}
+
+    /* ==============================
+       MODAL — VER SALVOS
+    ============================== */
+    .modal-overlay{
+      display:none; position:fixed; inset:0; z-index:200;
+      background:var(--modal-bg);
+      backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+      align-items:flex-start; justify-content:center;
+      padding:24px 16px 80px;
+      overflow-y:auto;
+    }
+    .modal-overlay.open{ display:flex; }
+
+    .modal-box{
+      background:var(--card-bg-gradient);
+      border:1px solid var(--border-strong);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow-big);
+      width:100%; max-width:920px;
+      display:flex; flex-direction:column;
+      overflow:hidden;
+      animation: slideUp .22s ease;
+    }
+    @keyframes slideUp{
+      from{opacity:0; transform:translateY(24px)}
+      to  {opacity:1; transform:translateY(0)}
+    }
+
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:18px 20px;
+      border-bottom:1px solid var(--border);
+      background:var(--card-header-bg);
+    }
+    .modal-head-title{font-size:15px; font-weight:700; color:var(--txt-primary); display:flex; align-items:center; gap:8px}
+    .modal-close{background:transparent; border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--txt-secondary);
+      width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px}
+    .modal-close:hover{border-color:var(--danger); color:var(--danger)}
+
+    .modal-body{padding:20px; display:flex; flex-direction:column; gap:12px}
+
+    /* Barra de busca no modal */
+    .modal-search{
+      display:flex; gap:8px; align-items:center;
+    }
+    .modal-search .input-shell{flex:1}
+
+    /* Tabela de salvos */
+    .saved-table{width:100%; border-collapse:collapse; font-size:13px}
+    .saved-table th{
+      text-align:left; padding:10px 12px; font-size:11px; font-weight:600;
+      color:var(--txt-muted); text-transform:uppercase; letter-spacing:.08em;
+      border-bottom:1px solid var(--border); background:var(--surface);
+    }
+    .saved-table td{
+      padding:12px; border-bottom:1px solid var(--border);
+      color:var(--txt-primary); vertical-align:middle;
+    }
+    .saved-table tr:last-child td{border-bottom:none}
+    .saved-table tr:hover td{background:var(--surface-hover)}
+    .saved-table .td-slug{font-family:monospace; font-size:11px; color:var(--txt-muted)}
+    .saved-table .td-total{font-weight:700; color:var(--good)}
+    .saved-table .td-status .badge{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600;
+    }
+    .badge-rascunho{background:rgba(107,115,128,.15); color:var(--txt-secondary)}
+    .badge-enviado {background:rgba(255,211,107,.15); color:var(--warn)}
+    .badge-aprovado{background:rgba(43,138,62,.15);  color:var(--good)}
+    .badge-cancelado{background:rgba(239,107,107,.15); color:var(--danger)}
+    .td-actions{display:flex; gap:6px; flex-wrap:wrap}
+
+    /* Estado vazio */
+    .empty-state{
+      text-align:center; padding:48px 20px; color:var(--txt-muted); font-size:13px;
+      display:flex; flex-direction:column; align-items:center; gap:12px;
+    }
+    .empty-state .empty-icon{font-size:40px; opacity:.4}
+
+    /* Loading spinner */
+    .spinner{
+      width:28px; height:28px; border:3px solid var(--border);
+      border-top-color:var(--accent-main); border-radius:50%;
+      animation:spin .7s linear infinite; margin:auto;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Badge de modo edição no header */
+    .edit-mode-badge{
+      background:rgba(255,211,107,.15); border:1px solid var(--warn);
+      color:var(--warn); font-size:12px; font-weight:600; padding:6px 10px;
+      border-radius:var(--radius-md); display:none; align-items:center; gap:6px;
+    }
+    .edit-mode-badge.visible{display:flex}
+
+    /* Paginação */
+    .pagination{display:flex; align-items:center; gap:6px; justify-content:flex-end; flex-wrap:wrap}
+    .page-btn{background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-sm);
+      color:var(--txt-primary); font-size:12px; font-weight:600; padding:6px 10px; cursor:pointer}
+    .page-btn:hover{border-color:var(--accent-main)}
+    .page-btn.active{background:var(--accent-main); border-color:var(--accent-main); color:#fff}
+    .page-info{font-size:12px; color:var(--txt-muted)}
   </style>
 </head>
 
 <body class="theme-dark">
+
   <!-- HEADER -->
   <header>
     <div class="wrap-header">
@@ -185,17 +297,19 @@
         <div class="subtitle">Custos técnicos, taxa de serviço, margem e total final — tudo em um só lugar.</div>
       </div>
       <div class="header-right">
+        <!-- Badge de modo edição -->
+        <div class="edit-mode-badge" id="editModeBadge">✏️ <span id="editModeSlug"></span></div>
         <div class="chip-status"><span class="dot-online"></span><span id="status">Conectado ao Supabase</span></div>
         <button class="theme-toggle-btn" id="themeToggleBtn"><span id="themeIcon">🌙</span><span id="themeLabel">Escuro</span></button>
       </div>
     </div>
   </header>
 
-  <!-- CONTEÚDO -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <main class="page">
     <div class="main-col">
 
-      <!-- ETAPA 1: TRANSPORTE -->
+      <!-- ETAPA 1 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 1</span><div class="card-title">Transporte</div>
@@ -211,7 +325,7 @@
         </div>
       </section>
 
-      <!-- ETAPA 2: MÃO DE OBRA -->
+      <!-- ETAPA 2 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 2</span><div class="card-title">Mão de Obra</div>
@@ -230,7 +344,7 @@
         </div>
       </section>
 
-      <!-- ETAPA 3: ANÁLISES -->
+      <!-- ETAPA 3 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 3</span><div class="card-title">Análises</div>
@@ -245,7 +359,7 @@
         </div>
       </section>
 
-      <!-- ETAPA 4: VARIÁVEIS ADICIONAIS -->
+      <!-- ETAPA 4 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 4</span><div class="card-title">Variáveis Adicionais</div>
@@ -285,7 +399,7 @@
         </div>
       </section>
 
-      <!-- ETAPA 5: ACRÉSCIMOS / IMPOSTOS / MARGEM -->
+      <!-- ETAPA 5 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 5</span><div class="card-title">Acréscimos / Impostos / Margem</div>
@@ -309,7 +423,7 @@
         </div>
       </section>
 
-      <!-- ETAPA 6: CUSTOS ADICIONAIS -->
+      <!-- ETAPA 6 -->
       <section class="card">
         <div class="card-header">
           <div class="card-title-wrap"><span class="card-eyebrow">Etapa 6</span><div class="card-title">Custos Adicionais</div>
@@ -336,7 +450,7 @@
         <div class="card-body">
           <div class="row cols-4">
             <div class="stat-box"><div class="stat-label">🚗 Transporte</div><div class="stat-value" id="r_transporte">R$ 0,00</div></div>
-            <div class="stat-box"><div class="stat-label">👷‍♂️ Mão de Obra</div><div class="stat-value" id="r_mao">R$ 0,00</div></div>
+            <div class="stat-box"><div class="stat-label">👷 Mão de Obra</div><div class="stat-value" id="r_mao">R$ 0,00</div></div>
             <div class="stat-box"><div class="stat-label">🧪 Análises</div><div class="stat-value" id="r_analises">R$ 0,00</div></div>
             <div class="stat-box"><div class="stat-label">⚙ Variáveis Adicionais</div><div class="stat-value" id="r_var">R$ 0,00</div></div>
           </div>
@@ -347,6 +461,8 @@
           </div>
           <div class="actions-row">
             <button class="btn primary" id="btnSalvar" data-icon="save">Salvar</button>
+            <button class="btn" id="btnVerSalvos" data-icon="list">Ver Salvos</button>
+            <button class="btn" id="btnNovo" data-icon="new" style="display:none">Novo Orçamento</button>
             <button class="btn" id="btnPDF" data-icon="pdf">PDF</button>
             <button class="btn" id="btnWord" data-icon="word">Word</button>
             <button class="btn" id="btnShare" data-icon="link">Copiar link</button>
@@ -378,6 +494,9 @@
   <!-- FOOTER TOTAL -->
   <footer class="footerbar">
     <div class="footer-inner">
+      <div style="font-size:12px; color:var(--txt-muted); display:flex; align-items:center; gap:6px">
+        <span id="modeLabel">Novo orçamento</span>
+      </div>
       <div class="footer-total">
         <div class="footer-total-label">Total atual</div>
         <div class="footer-total-value" id="total_footer">R$ 0,00</div>
@@ -385,280 +504,370 @@
     </div>
   </footer>
 
+  <!-- ==============================
+       MODAL VER SALVOS
+  ============================== -->
+  <div class="modal-overlay" id="modalSalvos" role="dialog" aria-modal="true" aria-label="Orçamentos salvos">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div class="modal-head-title">📋 Orçamentos Salvos</div>
+        <button class="modal-close" id="modalClose" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Busca -->
+        <div class="modal-search">
+          <div class="input-shell">
+            <input type="text" id="searchSalvos" placeholder="Buscar por slug, projeto ou cliente…">
+          </div>
+          <button class="btn" id="btnReloadSalvos" title="Recarregar">🔄 Atualizar</button>
+        </div>
+
+        <!-- Conteúdo da lista -->
+        <div id="savedContent">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Paginação -->
+        <div class="pagination" id="paginationBar"></div>
+      </div>
+    </div>
+  </div>
+
 <script>
 /* ==========================
-   Tema claro/escuro
+   Tema
 ========================== */
 const THEME_KEY = 'calc.theme.v1';
-const bodyEl = document.body;
-const themeBtn = document.getElementById('themeToggleBtn');
+const bodyEl    = document.body;
+const themeBtn  = document.getElementById('themeToggleBtn');
 const themeIcon = document.getElementById('themeIcon');
-const themeLabel = document.getElementById('themeLabel');
+const themeLbl  = document.getElementById('themeLabel');
 
-function applyTheme(theme){
+function applyTheme(t){
   bodyEl.classList.remove('theme-dark','theme-light');
-  bodyEl.classList.add(theme);
-  if(theme === 'theme-light'){ themeIcon.textContent = '☀️'; themeLabel.textContent = 'Claro'; }
-  else { themeIcon.textContent = '🌙'; themeLabel.textContent = 'Escuro'; }
-  localStorage.setItem(THEME_KEY, theme);
+  bodyEl.classList.add(t);
+  if(t==='theme-light'){themeIcon.textContent='☀️';themeLbl.textContent='Claro';}
+  else{themeIcon.textContent='🌙';themeLbl.textContent='Escuro';}
+  localStorage.setItem(THEME_KEY,t);
 }
 function initTheme(){
-  const saved = localStorage.getItem(THEME_KEY);
-  if(saved === 'theme-light' || saved === 'theme-dark'){ applyTheme(saved); return; }
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(prefersDark ? 'theme-dark' : 'theme-light');
+  const s=localStorage.getItem(THEME_KEY);
+  if(s==='theme-light'||s==='theme-dark'){applyTheme(s);return;}
+  applyTheme(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'theme-dark':'theme-light');
 }
-themeBtn.addEventListener('click', ()=>{ applyTheme(bodyEl.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark'); });
+themeBtn.addEventListener('click',()=>applyTheme(bodyEl.classList.contains('theme-dark')?'theme-light':'theme-dark'));
 initTheme();
 
 /* ==========================
-   Supabase client
+   Supabase
 ========================== */
-const supabaseUrl = 'https://ptwnnjjeojeyvrwmnewl.supabase.co';
-const supabaseKey = 'sb_publishable_C31nfmfTuSX7qpD_lMncKQ_mZXR9d_X';
+const supabaseUrl    = 'https://ptwnnjjeojeyvrwmnewl.supabase.co';
+const supabaseKey    = 'sb_publishable_C31nfmfTuSX7qpD_lMncKQ_mZXR9d_X';
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 /* ==========================
-   Estado e utilidades
+   Utilitários
 ========================== */
-const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
+const BRL = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
 const fmt = v => BRL.format(v||0);
 
 function n(v){
-  if (typeof v === 'number') return v;
-  let s = String(v || '0').trim();
-  if (s.includes(',')) { s = s.replace(/\./g, ''); s = s.replace(/,/g, '.'); }
-  else { s = s.replace(/ /g, ''); }
-  const out = parseFloat(s);
-  return isNaN(out) ? 0 : out;
+  if(typeof v==='number') return v;
+  let s=String(v||'0').trim();
+  if(s.includes(',')){ s=s.replace(/\./g,''); s=s.replace(/,/g,'.'); }
+  else{ s=s.replace(/ /g,''); }
+  const o=parseFloat(s); return isNaN(o)?0:o;
 }
+function saveLS(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+function loadLS(k,d){ try{ return JSON.parse(localStorage.getItem(k))??d }catch{ return d } }
 
-function saveLS(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-function loadLS(key, def){ try{ return JSON.parse(localStorage.getItem(key)) ?? def } catch{ return def } }
-
-const I = {
-  combustivel_preco: document.getElementById('combustivel_preco'),
-  autonomia: document.getElementById('autonomia'),
-  dist_total: document.getElementById('dist_total'),
-  vh_campo: document.getElementById('vh_campo'),
-  h_campo: document.getElementById('h_campo'),
-  vh_escr: document.getElementById('vh_escr'),
-  h_escr: document.getElementById('h_escr'),
-  v_amostra: document.getElementById('v_amostra'),
-  n_amostras: document.getElementById('n_amostras'),
-  diaria: document.getElementById('diaria'),
-  dias: document.getElementById('dias'),
-  pessoas: document.getElementById('pessoas'),
-  aloj: document.getElementById('aloj'),
-  alim: document.getElementById('alim'),
-  art_valor: document.getElementById('art_valor'),
-  art_qtd: document.getElementById('art_qtd'),
-  drone_ha: document.getElementById('drone_ha'),
-  preco_ha: document.getElementById('preco_ha'),
-  fator: document.getElementById('fator'),
-  assin_mensal: document.getElementById('assin_mensal'),
-  p_nf: document.getElementById('p_nf'),
-  p_serv: document.getElementById('p_serv'),
-  p_tax: document.getElementById('p_tax'),
-  p_admin: document.getElementById('p_admin'),
-  outros: document.getElementById('outros'),
-  p_margem: document.getElementById('p_margem')
+/* ==========================
+   Inputs / Outputs
+========================== */
+const I={
+  combustivel_preco:document.getElementById('combustivel_preco'),
+  autonomia:document.getElementById('autonomia'),
+  dist_total:document.getElementById('dist_total'),
+  vh_campo:document.getElementById('vh_campo'),
+  h_campo:document.getElementById('h_campo'),
+  vh_escr:document.getElementById('vh_escr'),
+  h_escr:document.getElementById('h_escr'),
+  v_amostra:document.getElementById('v_amostra'),
+  n_amostras:document.getElementById('n_amostras'),
+  diaria:document.getElementById('diaria'),
+  dias:document.getElementById('dias'),
+  pessoas:document.getElementById('pessoas'),
+  aloj:document.getElementById('aloj'),
+  alim:document.getElementById('alim'),
+  art_valor:document.getElementById('art_valor'),
+  art_qtd:document.getElementById('art_qtd'),
+  drone_ha:document.getElementById('drone_ha'),
+  preco_ha:document.getElementById('preco_ha'),
+  fator:document.getElementById('fator'),
+  assin_mensal:document.getElementById('assin_mensal'),
+  p_nf:document.getElementById('p_nf'),
+  p_serv:document.getElementById('p_serv'),
+  p_tax:document.getElementById('p_tax'),
+  p_admin:document.getElementById('p_admin'),
+  outros:document.getElementById('outros'),
+  p_margem:document.getElementById('p_margem')
+};
+const O={
+  sub_transporte:document.getElementById('sub_transporte'),
+  sub_mao:document.getElementById('sub_mao'),
+  sub_analises:document.getElementById('sub_analises'),
+  sub_var:document.getElementById('sub_var'),
+  r_transporte:document.getElementById('r_transporte'),
+  r_mao:document.getElementById('r_mao'),
+  r_analises:document.getElementById('r_analises'),
+  r_var:document.getElementById('r_var'),
+  sub_base:document.getElementById('sub_base'),
+  base_x_fator:document.getElementById('base_x_fator'),
+  base_calc:document.getElementById('base_calc'),
+  total_acresc:document.getElementById('total_acresc'),
+  total_final:document.getElementById('total_final'),
+  total_footer:document.getElementById('total_footer'),
+  status:document.getElementById('status'),
+  status2:document.getElementById('status2')
 };
 
-const O = {
-  sub_transporte: document.getElementById('sub_transporte'),
-  sub_mao: document.getElementById('sub_mao'),
-  sub_analises: document.getElementById('sub_analises'),
-  sub_var: document.getElementById('sub_var'),
-  r_transporte: document.getElementById('r_transporte'),
-  r_mao: document.getElementById('r_mao'),
-  r_analises: document.getElementById('r_analises'),
-  r_var: document.getElementById('r_var'),
-  sub_base: document.getElementById('sub_base'),
-  base_x_fator: document.getElementById('base_x_fator'),
-  base_calc: document.getElementById('base_calc'),
-  total_acresc: document.getElementById('total_acresc'),
-  total_final: document.getElementById('total_final'),
-  total_footer: document.getElementById('total_footer'),
-  status: document.getElementById('status'),
-  status2: document.getElementById('status2')
-};
-
-/* ====== Etapa 6: Custos Adicionais ====== */
-let EXTRA_COSTS = [];
-
-const EI = {
-  desc: document.getElementById('ec_desc'),
-  preco: document.getElementById('ec_preco'),
-  obs:  document.getElementById('ec_obs'),
-  btnAdd: document.getElementById('btnAddCost'),
-  list: document.getElementById('extraCostsList'),
-  sub:  document.getElementById('sub_extra')
+/* ==========================
+   Etapa 6 — Custos adicionais
+========================== */
+let EXTRA_COSTS=[];
+const EI={
+  desc:document.getElementById('ec_desc'),
+  preco:document.getElementById('ec_preco'),
+  obs:document.getElementById('ec_obs'),
+  btnAdd:document.getElementById('btnAddCost'),
+  list:document.getElementById('extraCostsList'),
+  sub:document.getElementById('sub_extra')
 };
 
 function renderExtraCosts(){
   if(!EI.list) return 0;
-  EI.list.innerHTML = '';
-  let total = 0;
-  EXTRA_COSTS.forEach((item, idx)=>{
-    const price = n(item.preco);
-    total += price;
-    const row = document.createElement('div');
-    row.className = 'cost-item';
-    row.innerHTML = `
-      <div class="c-desc">${item.desc || '-'}</div>
-      <div class="c-obs">${item.obs || '-'}</div>
+  EI.list.innerHTML='';
+  let total=0;
+  EXTRA_COSTS.forEach((item,idx)=>{
+    const price=n(item.preco); total+=price;
+    const row=document.createElement('div');
+    row.className='cost-item';
+    row.innerHTML=`
+      <div class="c-desc">${item.desc||'-'}</div>
+      <div class="c-obs">${item.obs||'-'}</div>
       <div class="c-price">${fmt(price)}</div>
-      <button class="del-btn" title="Excluir" data-del="${idx}">✕</button>
-    `;
+      <button class="del-btn" title="Excluir" data-del="${idx}">✕</button>`;
     EI.list.appendChild(row);
   });
-  if(EI.sub) EI.sub.textContent = fmt(total);
+  if(EI.sub) EI.sub.textContent=fmt(total);
   return total;
 }
 
-if (EI.btnAdd){
-  EI.btnAdd.addEventListener('click', ()=>{
-    const desc = (EI.desc.value || '').trim();
-    const preco = n(EI.preco.value);
-    const obs   = (EI.obs.value || '').trim();
-    if(!desc){ alert('Descreva o custo.'); return; }
-    if(preco <= 0){ alert('Informe um preço válido.'); return; }
-    EXTRA_COSTS.push({desc, preco, obs});
-    EI.desc.value = ''; EI.preco.value = ''; EI.obs.value = '';
-    saveLS('calc.extraCosts.v1', EXTRA_COSTS);
-    recalc();
-  });
-}
-if (EI.list){
-  EI.list.addEventListener('click', (e)=>{
-    const btn = e.target.closest('[data-del]');
-    if(!btn) return;
-    const i = parseInt(btn.getAttribute('data-del'),10);
-    if(isNaN(i)) return;
-    EXTRA_COSTS.splice(i,1);
-    saveLS('calc.extraCosts.v1', EXTRA_COSTS);
-    recalc();
-  });
-}
+EI.btnAdd&&EI.btnAdd.addEventListener('click',()=>{
+  const desc=(EI.desc.value||'').trim();
+  const preco=n(EI.preco.value);
+  const obs=(EI.obs.value||'').trim();
+  if(!desc){alert('Descreva o custo.');return;}
+  if(preco<=0){alert('Informe um preço válido.');return;}
+  EXTRA_COSTS.push({desc,preco,obs});
+  EI.desc.value='';EI.preco.value='';EI.obs.value='';
+  saveLS('calc.extraCosts.v1',EXTRA_COSTS);
+  recalc();
+});
+EI.list&&EI.list.addEventListener('click',e=>{
+  const btn=e.target.closest('[data-del]');
+  if(!btn) return;
+  const i=parseInt(btn.getAttribute('data-del'),10);
+  if(isNaN(i)) return;
+  EXTRA_COSTS.splice(i,1);
+  saveLS('calc.extraCosts.v1',EXTRA_COSTS);
+  recalc();
+});
 
 /* ==========================
    Snapshot
 ========================== */
 function snapshot(){
-  const s = {};
-  Object.keys(I).forEach(k=> s[k] = I[k].value);
-  s.extra_costs = EXTRA_COSTS;
+  const s={};
+  Object.keys(I).forEach(k=> s[k]=I[k].value);
+  s.extra_costs=EXTRA_COSTS;
   return s;
 }
 function applySnapshot(s){
   if(!s) return;
-  Object.keys(I).forEach(k=>{ if(s[k]!==undefined) I[k].value = s[k]; });
-  EXTRA_COSTS = Array.isArray(s.extra_costs) ? s.extra_costs : [];
+  Object.keys(I).forEach(k=>{ if(s[k]!==undefined) I[k].value=s[k]; });
+  EXTRA_COSTS=Array.isArray(s.extra_costs)?s.extra_costs:[];
   renderExtraCosts();
 }
 
 /* ==========================
-   Recalcular tudo
+   Recalcular
 ========================== */
 function recalc(){
-  const combustivel = n(I.combustivel_preco.value);
-  const autonomia   = n(I.autonomia.value);
-  const distancia   = n(I.dist_total.value);
-  const litros = autonomia > 0 ? (distancia / autonomia) : 0;
-  const subTransporte = litros * combustivel;
+  const combustivel=n(I.combustivel_preco.value);
+  const autonomia=n(I.autonomia.value);
+  const distancia=n(I.dist_total.value);
+  const litros=autonomia>0?(distancia/autonomia):0;
+  const subTransporte=litros*combustivel;
 
-  const subMao =
-    n(I.vh_campo.value)*n(I.h_campo.value) +
-    n(I.vh_escr.value)*n(I.h_escr.value);
+  const subMao=n(I.vh_campo.value)*n(I.h_campo.value)+n(I.vh_escr.value)*n(I.h_escr.value);
+  const subAnalises=n(I.v_amostra.value)*n(I.n_amostras.value);
 
-  const subAnalises = n(I.v_amostra.value)*n(I.n_amostras.value);
+  const fatorVal=n(I.fator.value)||1;
+  const totalDiarias=n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAloj=n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalAlim=n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
+  const totalART=n(I.art_valor.value)*n(I.art_qtd.value);
+  const droneHa=n(I.drone_ha.value);
+  const precoHa=n(I.preco_ha.value);
+  const totalDrone=(droneHa*precoHa)*fatorVal;
+  const totalAssin=n(I.assin_mensal.value)*12;
+  const subVar=totalDiarias+totalAloj+totalAlim+totalART+totalDrone+totalAssin;
 
-  const fatorVal = n(I.fator.value) || 1;
-  const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
-  const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
-  const droneHa = n(I.drone_ha.value);
-  const precoHa = n(I.preco_ha.value);
-  const totalDrone = (droneHa * precoHa) * fatorVal;
-  const totalAssin   = n(I.assin_mensal.value)*12;
-  const subVar = totalDiarias + totalAloj + totalAlim + totalART + totalDrone + totalAssin;
+  const totalExtra=renderExtraCosts();
+  const subBase=subTransporte+subMao+subAnalises+subVar+totalExtra;
+  const baseMultiplicada=subBase;
+  const pSoma=(n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
+  const outrosVal=n(I.outros.value);
+  const acrescimos=baseMultiplicada*pSoma;
+  const margem=(baseMultiplicada+acrescimos+outrosVal)*(n(I.p_margem.value)/100);
+  const total=baseMultiplicada+acrescimos+outrosVal+margem;
 
-  const totalExtra = renderExtraCosts();
+  O.sub_transporte.textContent=fmt(subTransporte);
+  O.sub_mao.textContent=fmt(subMao);
+  O.sub_analises.textContent=fmt(subAnalises);
+  O.sub_var.textContent=fmt(subVar);
+  O.r_transporte.textContent=fmt(subTransporte);
+  O.r_mao.textContent=fmt(subMao);
+  O.r_analises.textContent=fmt(subAnalises);
+  O.r_var.textContent=fmt(subVar);
+  O.sub_base.textContent=fmt(subBase);
+  O.base_x_fator.textContent=fmt(baseMultiplicada);
+  O.base_calc.textContent=fmt(baseMultiplicada);
+  O.total_acresc.textContent=fmt(baseMultiplicada+acrescimos);
+  O.total_final.textContent=fmt(total);
+  O.total_footer.textContent=fmt(total);
 
-  const subBase = subTransporte + subMao + subAnalises + subVar + totalExtra;
-  const baseMultiplicada = subBase;
-
-  const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
-  const outrosVal = n(I.outros.value);
-  const acrescimos = baseMultiplicada * pSoma;
-  const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
-  const total = baseMultiplicada + acrescimos + outrosVal + margem;
-
-  O.sub_transporte.textContent = fmt(subTransporte);
-  O.sub_mao.textContent        = fmt(subMao);
-  O.sub_analises.textContent   = fmt(subAnalises);
-  O.sub_var.textContent        = fmt(subVar);
-  O.r_transporte.textContent   = fmt(subTransporte);
-  O.r_mao.textContent          = fmt(subMao);
-  O.r_analises.textContent     = fmt(subAnalises);
-  O.r_var.textContent          = fmt(subVar);
-  O.sub_base.textContent       = fmt(subBase);
-  O.base_x_fator.textContent   = fmt(baseMultiplicada);
-  O.base_calc.textContent      = fmt(baseMultiplicada);
-  O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
-  O.total_final.textContent    = fmt(total);
-  O.total_footer.textContent   = fmt(total);
-
-  saveLS('calc.ecosmart.v2', snapshot());
+  saveLS('calc.ecosmart.v2',snapshot());
 
   return {
-    subTransporte, subMao, subAnalises, subVar,
-    totalExtra, subBase, baseMultiplicada,
-    acrescimos, outros: outrosVal, margem, total,
-    detalhamento: {
-      totalDiarias, totalAloj, totalAlim, totalART,
-      droneHa, precoHa, fatorVal, totalDrone, totalAssin
-    }
+    subTransporte,subMao,subAnalises,subVar,
+    totalExtra,subBase,baseMultiplicada,
+    acrescimos,outros:outrosVal,margem,total,
+    detalhamento:{totalDiarias,totalAloj,totalAlim,totalART,droneHa,precoHa,fatorVal,totalDrone,totalAssin}
   };
 }
-
-Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
+Object.values(I).forEach(inp=>inp.addEventListener('input',recalc));
 
 /* ==========================
-   Salvar no Supabase
+   Estado de edição
 ========================== */
-document.getElementById('btnSalvar').addEventListener('click', async ()=>{
-  const r = recalc();
-  const row = {
-    slug: crypto.randomUUID().slice(0,8),
-    cliente: null, contato: null, telefone: null, email: null,
-    projeto: null, local: null, data_ref: null,
-    parametros: snapshot(),
-    itens: [
-      {categoria:'transporte', total:r.subTransporte},
-      {categoria:'mao_de_obra', total:r.subMao},
-      {categoria:'analises', total:r.subAnalises},
-      {categoria:'variaveis_adicionais', total:r.subVar},
-      {categoria:'custos_adicionais', total:r.totalExtra}
-    ],
-    subtotal: r.subBase,
-    impostos: r.acrescimos,
-    markup: r.margem,
-    total: r.total,
-    observacoes: null
-  };
+let CURRENT_SLUG = null; // null = novo orçamento
+
+function setEditMode(slug){
+  CURRENT_SLUG=slug;
+  const badge=document.getElementById('editModeBadge');
+  const slugEl=document.getElementById('editModeSlug');
+  const btnNovo=document.getElementById('btnNovo');
+  const modeLabel=document.getElementById('modeLabel');
+  if(slug){
+    badge.classList.add('visible');
+    slugEl.textContent='Editando #'+slug;
+    btnNovo.style.display='inline-flex';
+    modeLabel.textContent='Editando orçamento #'+slug;
+  } else {
+    badge.classList.remove('visible');
+    slugEl.textContent='';
+    btnNovo.style.display='none';
+    modeLabel.textContent='Novo orçamento';
+  }
+}
+
+function clearForm(){
+  Object.values(I).forEach(inp=>{ inp.value='0'; });
+  I.fator.value='1';
+  EXTRA_COSTS=[];
+  renderExtraCosts();
+  saveLS('calc.extraCosts.v1',[]);
+  recalc();
+  setEditMode(null);
+  const url=new URL(window.location.href);
+  url.searchParams.delete('o');
+  history.replaceState(null,'',url);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.getElementById('btnNovo').addEventListener('click',()=>{
+  if(confirm('Descartar o orçamento atual e começar um novo?')) clearForm();
+});
+
+/* ==========================
+   Salvar / Atualizar
+========================== */
+document.getElementById('btnSalvar').addEventListener('click', async()=>{
+  const r=recalc();
+  const btnSalvar=document.getElementById('btnSalvar');
+  btnSalvar.disabled=true;
+  btnSalvar.textContent='Salvando…';
+
   try{
-    const { error } = await supabaseClient.from('orcamentos').insert(row);
-    if(error){ console.error(error); alert('Erro ao salvar: '+error.message); return; }
-    const url = new URL(window.location.href);
-    url.searchParams.set('o', row.slug);
-    history.replaceState(null,'', url);
-    alert('Orçamento salvo! Link atualizado na barra do navegador.');
+    if(CURRENT_SLUG){
+      // ATUALIZAR orçamento existente
+      const {error}=await supabaseClient
+        .from('orcamentos')
+        .update({
+          parametros:snapshot(),
+          itens:[
+            {categoria:'transporte',total:r.subTransporte},
+            {categoria:'mao_de_obra',total:r.subMao},
+            {categoria:'analises',total:r.subAnalises},
+            {categoria:'variaveis_adicionais',total:r.subVar},
+            {categoria:'custos_adicionais',total:r.totalExtra}
+          ],
+          subtotal:r.subBase,
+          impostos:r.acrescimos,
+          markup:r.margem,
+          total:r.total,
+          atualizado_em:new Date().toISOString()
+        })
+        .eq('slug',CURRENT_SLUG);
+      if(error){alert('Erro ao atualizar: '+error.message);return;}
+      alert('Orçamento #'+CURRENT_SLUG+' atualizado com sucesso!');
+    } else {
+      // INSERIR novo orçamento
+      const slug=crypto.randomUUID().slice(0,8);
+      const row={
+        slug,
+        cliente:null,contato:null,telefone:null,email:null,
+        projeto:null,local:null,data_ref:null,
+        parametros:snapshot(),
+        itens:[
+          {categoria:'transporte',total:r.subTransporte},
+          {categoria:'mao_de_obra',total:r.subMao},
+          {categoria:'analises',total:r.subAnalises},
+          {categoria:'variaveis_adicionais',total:r.subVar},
+          {categoria:'custos_adicionais',total:r.totalExtra}
+        ],
+        subtotal:r.subBase,
+        impostos:r.acrescimos,
+        markup:r.margem,
+        total:r.total,
+        observacoes:null
+      };
+      const {error}=await supabaseClient.from('orcamentos').insert(row);
+      if(error){alert('Erro ao salvar: '+error.message);return;}
+      const url=new URL(window.location.href);
+      url.searchParams.set('o',slug);
+      history.replaceState(null,'',url);
+      setEditMode(slug);
+      alert('Orçamento salvo! ID: #'+slug);
+    }
   }catch(err){
     console.error(err);
-    alert('Erro inesperado ao salvar. Veja o console.');
+    alert('Erro inesperado. Veja o console.');
+  }finally{
+    btnSalvar.disabled=false;
+    btnSalvar.innerHTML='💾 Salvar';
   }
 });
 
@@ -667,40 +876,53 @@ document.getElementById('btnSalvar').addEventListener('click', async ()=>{
 ========================== */
 (async function loadBySlug(){
   const slug = new URLSearchParams(location.search).get('o');
-  if(!slug) {
+
+  if (!slug) {
     EXTRA_COSTS = loadLS('calc.extraCosts.v1', []);
     renderExtraCosts();
     recalc();
     return;
   }
-  try{
+
+  try {
     const { data, error } = await supabaseClient
       .from('orcamentos')
       .select('*')
       .eq('slug', slug)
       .single();
-    if(error){ console.warn('Não foi possível carregar o orçamento:', error.message); }
-    if(data && data.parametros){ applySnapshot(data.parametros); }
+
+    if (error) {
+      console.warn('Não foi possível carregar o orçamento:', error.message);
+    }
+
+    if (data && data.parametros) {
+      applySnapshot(data.parametros);
+      CURRENT_SLUG = slug;
+      setEditMode(slug);
+      const url = new URL(window.location.href);
+      url.searchParams.set('o', slug);
+      history.replaceState(null, '', url);
+    }
+
     recalc();
-  }catch(e){
+  } catch (e) {
     console.warn(e);
     recalc();
   }
 })();
-
 /* ==========================
    Compartilhar link
 ========================== */
-document.getElementById('btnShare').addEventListener('click', ()=>{
+document.getElementById('btnShare').addEventListener('click', () => {
   const url = location.href;
-  if(navigator.clipboard) navigator.clipboard.writeText(url);
+  if (navigator.clipboard) navigator.clipboard.writeText(url);
   alert('Link copiado.');
 });
 
 /* ==========================
    WhatsApp
 ========================== */
-document.getElementById('btnWhats').addEventListener('click', ()=>{
+document.getElementById('btnWhats').addEventListener('click', () => {
   const t = document.getElementById('total_final').textContent || '';
   const msg = encodeURIComponent(`Olá! Segue o orçamento: ${t}. Link: ${location.href}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
@@ -709,145 +931,149 @@ document.getElementById('btnWhats').addEventListener('click', ()=>{
 /* ==========================
    Helpers PDF/Word compartilhados
 ========================== */
-function buildDocData(){
+function buildDocData() {
   const r = recalc();
   const dataStr = new Date().toLocaleDateString('pt-BR');
-  const horaStr = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-  const p_nf    = n(I.p_nf.value),   p_serv  = n(I.p_serv.value);
-  const p_tax   = n(I.p_tax.value),  p_admin = n(I.p_admin.value);
-  const outrosVal  = n(I.outros.value), p_margem = n(I.p_margem.value);
-  const totalAcrescimos = r.baseMultiplicada * ((p_nf+p_serv+p_tax+p_admin)/100);
+  const horaStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const p_nf = n(I.p_nf.value), p_serv = n(I.p_serv.value);
+  const p_tax = n(I.p_tax.value), p_admin = n(I.p_admin.value);
+  const outrosVal = n(I.outros.value), p_margem = n(I.p_margem.value);
+  const totalAcrescimos = r.baseMultiplicada * ((p_nf + p_serv + p_tax + p_admin) / 100);
+
   return { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos };
 }
 
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* ==========================
-   Exportar PDF (design reformulado)
+   Exportar PDF
 ========================== */
-document.getElementById('btnPDF').addEventListener('click', ()=>{
+document.getElementById('btnPDF').addEventListener('click', () => {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({unit:'pt', format:'a4'});
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
-  const margin = {top:100, right:36, bottom:56, left:36};
+  const margin = { top: 100, right: 36, bottom: 56, left: 36 };
 
   const { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos } = buildDocData();
 
-  // ── Cabeçalho visual ──
-  function drawHeader(){
-    // Faixa verde topo
+  function drawHeader() {
     doc.setFillColor(27, 110, 42);
     doc.rect(0, 0, pageW, 52, 'F');
 
-    // Badge quadrado arredondado (simulado com rect + texto)
     doc.setFillColor(19, 84, 31);
     doc.roundedRect(28, 10, 32, 32, 4, 4, 'F');
-    doc.setFont('helvetica','bold');
+
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
     doc.setTextColor(234, 255, 240);
-    doc.text('ECO', 44, 30, {align:'center'});
+    doc.text('ECO', 44, 30, { align: 'center' });
 
-    // Nome da empresa
-    doc.setFont('helvetica','bold');
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(15);
     doc.setTextColor(255, 255, 255);
     doc.text('Eco Smart Group', 70, 24);
 
-    // Subtítulo
-    doc.setFont('helvetica','normal');
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(200, 235, 205);
     doc.text('Calculadora de Orçamentos', 70, 38);
 
-    // Data/hora alinhada à direita
-    doc.setFont('helvetica','normal');
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(220, 245, 222);
-    doc.text(`Emitido em ${dataStr} às ${horaStr}`, pageW - margin.right, 22, {align:'right'});
-    doc.text('ecosmart.group', pageW - margin.right, 36, {align:'right'});
+    doc.text(`Emitido em ${dataStr} às ${horaStr}`, pageW - margin.right, 22, { align: 'right' });
+    doc.text('ecosmart.group', pageW - margin.right, 36, { align: 'right' });
 
-    // Linha separadora abaixo da faixa
     doc.setDrawColor(27, 110, 42);
     doc.setLineWidth(0.5);
     doc.line(margin.left, 56, pageW - margin.right, 56);
 
-    // Título do documento
-    doc.setFont('helvetica','bold');
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(13);
     doc.setTextColor(30, 40, 30);
     doc.text('Orçamento — Estimativa de Custos Operacionais', margin.left, 80);
 
-    // Linha fina abaixo do título
     doc.setDrawColor(200, 220, 200);
     doc.setLineWidth(0.3);
     doc.line(margin.left, 87, pageW - margin.right, 87);
   }
 
-  // ── Rodapé paginado ──
-  function drawFooter(){
+  function drawFooter() {
     const pageCount = doc.internal.getNumberOfPages();
-    for(let i = 1; i <= pageCount; i++){
+    for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
       doc.setFillColor(245, 248, 245);
       doc.rect(0, pageH - 36, pageW, 36, 'F');
-      doc.setDrawColor(200,220,200);
+      doc.setDrawColor(200, 220, 200);
       doc.setLineWidth(0.3);
       doc.line(margin.left, pageH - 36, pageW - margin.right, pageH - 36);
-      doc.setFont('helvetica','normal');
+      doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.setTextColor(100, 120, 100);
       doc.text(`Página ${i} de ${pageCount}`, margin.left, pageH - 16);
-      doc.text('ecosmart.group  •  Documento gerado automaticamente', pageW - margin.right, pageH - 16, {align:'right'});
+      doc.text('ecosmart.group • Documento gerado automaticamente', pageW - margin.right, pageH - 16, { align: 'right' });
     }
   }
 
   drawHeader();
 
-  // Tabela 1 — Totais por seção
   doc.autoTable({
     startY: margin.top,
     head: [['Seção', 'Valor (R$)']],
     body: [
-      ['Transporte',                  fmt(r.subTransporte)],
-      ['Mão de Obra',                 fmt(r.subMao)],
-      ['Análises',                    fmt(r.subAnalises)],
-      ['Variáveis Adicionais',        fmt(r.subVar)],
+      ['Transporte', fmt(r.subTransporte)],
+      ['Mão de Obra', fmt(r.subMao)],
+      ['Análises', fmt(r.subAnalises)],
+      ['Variáveis Adicionais', fmt(r.subVar)],
       ['Custos Adicionais (Etapa 6)', fmt(r.totalExtra)],
     ],
     theme: 'striped',
-    styles:     {font:'helvetica', fontSize:10, cellPadding:7, textColor:[30,40,30]},
-    headStyles: {fillColor:[27,110,42], textColor:255, fontStyle:'bold', fontSize:10},
-    alternateRowStyles: {fillColor:[242,250,243]},
-    columnStyles: {1:{halign:'right', fontStyle:'bold'}},
+    styles: { font: 'helvetica', fontSize: 10, cellPadding: 7, textColor: [30, 40, 30] },
+    headStyles: { fillColor: [27, 110, 42], textColor: 255, fontStyle: 'bold', fontSize: 10 },
+    alternateRowStyles: { fillColor: [242, 250, 243] },
+    columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } },
     margin
   });
 
-  // Tabela 2 — Custos adicionais detalhados
-  if((EXTRA_COSTS||[]).length){
+  if ((EXTRA_COSTS || []).length) {
     const yAfter = doc.lastAutoTable.finalY + 18;
-    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(27,110,42);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(27, 110, 42);
     doc.text('Detalhamento — Custos Adicionais', margin.left, yAfter - 4);
+
     doc.autoTable({
       startY: yAfter,
       head: [['Descrição', 'Observações', 'Preço (R$)']],
-      body: EXTRA_COSTS.map(c => [c.desc||'-', c.obs||'-', fmt(n(c.preco))]),
+      body: EXTRA_COSTS.map(c => [c.desc || '-', c.obs || '-', fmt(n(c.preco))]),
       theme: 'striped',
-      styles:     {font:'helvetica', fontSize:10, cellPadding:7, textColor:[30,40,30]},
-      headStyles: {fillColor:[20,83,35], textColor:255, fontStyle:'bold'},
-      alternateRowStyles: {fillColor:[242,250,243]},
-      columnStyles: {2:{halign:'right', fontStyle:'bold'}},
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 7, textColor: [30, 40, 30] },
+      headStyles: { fillColor: [20, 83, 35], textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [242, 250, 243] },
+      columnStyles: { 2: { halign: 'right', fontStyle: 'bold' } },
       margin
     });
   }
 
-  // Tabela 3 — Acréscimos / Impostos / Margem
   const yAcr = (doc.lastAutoTable?.finalY || margin.top) + 18;
-  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(27,110,42);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(27, 110, 42);
   doc.text('Acréscimos, Impostos e Margem de Lucro', margin.left, yAcr - 4);
+
   doc.autoTable({
     startY: yAcr,
     head: [['Item', 'Base', 'Percentual / Valor', 'Resultado (R$)']],
     body: [
-      ['Base de Cálculo',                              '—',                        '—',                                                 fmt(r.baseMultiplicada)],
+      ['Base de Cálculo', '—', '—', fmt(r.baseMultiplicada)],
       ['Acréscimos (NF + Serviços + Impostos + Adm.)', fmt(r.baseMultiplicada), `${(p_nf + p_serv + p_tax + p_admin).toFixed(2)}%`, fmt(totalAcrescimos)],
       ['Outros Custos (fixo)', '—', fmt(outrosVal), fmt(outrosVal)],
       ['Margem de Lucro', fmt(r.baseMultiplicada + totalAcrescimos + outrosVal), `${p_margem.toFixed(2)}%`, fmt(r.margem)]
@@ -888,17 +1114,8 @@ document.getElementById('btnPDF').addEventListener('click', ()=>{
 });
 
 /* ==========================
-   Word editável
+   Exportar Word editável
 ========================== */
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 document.getElementById('btnWord').addEventListener('click', () => {
   const { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos } = buildDocData();
 
@@ -1098,6 +1315,284 @@ document.getElementById('btnWord').addEventListener('click', () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
-</script>
-</body>
-</html>
+/* ==========================
+   VER SALVOS
+========================== */
+const modalSalvos = document.getElementById('modalSalvos');
+const modalClose = document.getElementById('modalClose');
+const btnVerSalvos = document.getElementById('btnVerSalvos');
+const btnReloadSalvos = document.getElementById('btnReloadSalvos');
+const searchSalvos = document.getElementById('searchSalvos');
+const savedContent = document.getElementById('savedContent');
+const paginationBar = document.getElementById('paginationBar');
+
+let SAVED_ORCAMENTOS = [];
+let SAVED_PAGE = 1;
+const SAVED_PAGE_SIZE = 8;
+let SAVED_FILTER = '';
+
+function openSavedModal() {
+  modalSalvos.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadSavedOrcamentos();
+  setTimeout(() => searchSalvos?.focus(), 100);
+}
+
+function closeSavedModal() {
+  modalSalvos.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function formatDateTime(value) {
+  if (!value) return '-';
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return '-';
+  return d.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+function getBadgeClass(status) {
+  switch ((status || 'rascunho').toLowerCase()) {
+    case 'enviado': return 'badge-enviado';
+    case 'aprovado': return 'badge-aprovado';
+    case 'cancelado': return 'badge-cancelado';
+    default: return 'badge-rascunho';
+  }
+}
+
+async function loadSavedOrcamentos() {
+  if (!savedContent) return;
+
+  savedContent.innerHTML = '<div class="spinner"></div>';
+  paginationBar.innerHTML = '';
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('orcamentos')
+      .select('slug, cliente, projeto, total, status, criado_em, atualizado_em')
+      .order('criado_em', { ascending: false });
+
+    if (error) {
+      savedContent.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erro ao carregar os orçamentos salvos.</div><div>${escapeHtml(error.message)}</div></div>`;
+      return;
+    }
+
+    SAVED_ORCAMENTOS = Array.isArray(data) ? data : [];
+    renderSavedOrcamentos();
+  } catch (err) {
+    console.error(err);
+    savedContent.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erro inesperado ao carregar os orçamentos.</div></div>';
+  }
+}
+
+function renderSavedOrcamentos() {
+  if (!savedContent) return;
+
+  const term = (SAVED_FILTER || '').trim().toLowerCase();
+
+  const filtered = SAVED_ORCAMENTOS.filter(item => {
+    const slug = String(item.slug || '').toLowerCase();
+    const cliente = String(item.cliente || '').toLowerCase();
+    const projeto = String(item.projeto || '').toLowerCase();
+    const status = String(item.status || '').toLowerCase();
+    return (
+      !term ||
+      slug.includes(term) ||
+      cliente.includes(term) ||
+      projeto.includes(term) ||
+      status.includes(term)
+    );
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / SAVED_PAGE_SIZE));
+  if (SAVED_PAGE > totalPages) SAVED_PAGE = totalPages;
+
+  const start = (SAVED_PAGE - 1) * SAVED_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + SAVED_PAGE_SIZE);
+
+  if (!pageItems.length) {
+    savedContent.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div>Nenhum orçamento encontrado.</div>
+      </div>`;
+    paginationBar.innerHTML = '';
+    return;
+  }
+
+  savedContent.innerHTML = `
+    <table class="saved-table">
+      <thead>
+        <tr>
+          <th>Slug</th>
+          <th>Cliente / Projeto</th>
+          <th>Data e hora</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${pageItems.map(item => `
+          <tr data-slug="${escapeHtml(item.slug)}" style="cursor:pointer">
+            <td class="td-slug">${escapeHtml(item.slug || '-')}</td>
+            <td>
+              <div style="font-weight:600">${escapeHtml(item.cliente || '—')}</div>
+              <div style="font-size:11px; color:var(--txt-muted)">${escapeHtml(item.projeto || '—')}</div>
+            </td>
+            <td>${formatDateTime(item.criado_em)}</td>
+            <td class="td-status">
+              <span class="badge ${getBadgeClass(item.status)}">${escapeHtml(item.status || 'rascunho')}</span>
+            </td>
+            <td class="td-total">${fmt(item.total)}</td>
+            <td>
+              <div class="td-actions">
+                <button class="btn" data-edit="${escapeHtml(item.slug)}" type="button">Editar</button>
+                <button class="btn danger" data-delete="${escapeHtml(item.slug)}" type="button">Excluir</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  renderPagination(filtered.length, totalPages);
+}
+
+function renderPagination(totalItems, totalPages) {
+  if (!paginationBar) return;
+
+  if (totalPages <= 1) {
+    paginationBar.innerHTML = `<span class="page-info">${totalItems} orçamento(s)</span>`;
+    return;
+  }
+
+  const pages = [];
+  const maxButtons = 5;
+  let start = Math.max(1, SAVED_PAGE - 2);
+  let end = Math.min(totalPages, start + maxButtons - 1);
+  if (end - start + 1 < maxButtons) start = Math.max(1, end - maxButtons + 1);
+
+  for (let p = start; p <= end; p++) pages.push(p);
+
+  paginationBar.innerHTML = `
+    <span class="page-info">${totalItems} orçamento(s)</span>
+    <button class="page-btn" data-page="${Math.max(1, SAVED_PAGE - 1)}" ${SAVED_PAGE === 1 ? 'disabled' : ''}>Anterior</button>
+    ${pages.map(p => `<button class="page-btn ${p === SAVED_PAGE ? 'active' : ''}" data-page="${p}">${p}</button>`).join('')}
+    <button class="page-btn" data-page="${Math.min(totalPages, SAVED_PAGE + 1)}" ${SAVED_PAGE === totalPages ? 'disabled' : ''}>Próxima</button>
+  `;
+}
+
+async function openOrcamentoSalvo(slug) {
+  try {
+    const { data, error } = await supabaseClient
+      .from('orcamentos')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      alert('Erro ao carregar o orçamento: ' + error.message);
+      return;
+    }
+
+    if (data && data.parametros) {
+      applySnapshot(data.parametros);
+      CURRENT_SLUG = slug;
+      setEditMode(slug);
+      const url = new URL(window.location.href);
+      url.searchParams.set('o', slug);
+      history.replaceState(null, '', url);
+      recalc();
+      closeSavedModal();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      alert('Orçamento carregado para edição.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Erro inesperado ao abrir o orçamento.');
+  }
+}
+
+async function deleteOrcamentoSalvo(slug) {
+  if (!confirm(`Tem certeza que deseja excluir o orçamento #${slug}?`)) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('orcamentos')
+      .delete()
+      .eq('slug', slug);
+
+    if (error) {
+      alert('Erro ao excluir: ' + error.message);
+      return;
+    }
+
+    if (CURRENT_SLUG === slug) {
+      clearForm();
+    }
+
+    await loadSavedOrcamentos();
+    alert('Orçamento excluído com sucesso.');
+  } catch (err) {
+    console.error(err);
+    alert('Erro inesperado ao excluir.');
+  }
+}
+
+btnVerSalvos?.addEventListener('click', openSavedModal);
+modalClose?.addEventListener('click', closeSavedModal);
+modalSalvos?.addEventListener('click', (e) => {
+  if (e.target === modalSalvos) closeSavedModal();
+});
+
+btnReloadSalvos?.addEventListener('click', loadSavedOrcamentos);
+
+searchSalvos?.addEventListener('input', () => {
+  SAVED_FILTER = searchSalvos.value || '';
+  SAVED_PAGE = 1;
+  renderSavedOrcamentos();
+});
+
+paginationBar?.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-page]');
+  if (!btn) return;
+  const p = parseInt(btn.getAttribute('data-page'), 10);
+  if (isNaN(p)) return;
+  SAVED_PAGE = p;
+  renderSavedOrcamentos();
+});
+
+savedContent?.addEventListener('click', (e) => {
+  const editBtn = e.target.closest('[data-edit]');
+  const deleteBtn = e.target.closest('[data-delete]');
+  const row = e.target.closest('tr[data-slug]');
+
+  if (editBtn) {
+    e.stopPropagation();
+    openOrcamentoSalvo(editBtn.getAttribute('data-edit'));
+    return;
+  }
+
+  if (deleteBtn) {
+    e.stopPropagation();
+    deleteOrcamentoSalvo(deleteBtn.getAttribute('data-delete'));
+    return;
+  }
+
+  if (row) {
+    openOrcamentoSalvo(row.getAttribute('data-slug'));
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modalSalvos.classList.contains('open')) {
+    closeSavedModal();
+  }
+});
