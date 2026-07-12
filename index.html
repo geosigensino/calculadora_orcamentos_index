@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Calculadora de Orçamentos — Eco Smart Group</title>
 
-  <!-- Fonte -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Libs -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2"></script>
@@ -25,7 +23,6 @@
       --section-gap:16px; --card-padding:16px;
     }
 
-    /* Tema escuro */
     body.theme-dark{
       --bg-body:#0b0d10; --bg-grad-start:#0b0d10; --bg-grad-end:#0c1014;
       --panel:#0f1317; --surface:#141922; --surface-hover:#1a212e; --input-bg:#0e1218;
@@ -43,7 +40,6 @@
       --shadow-big:var(--shadow-big-dark); --shadow-card:var(--shadow-card-dark);
     }
 
-    /* Tema claro */
     body.theme-light{
       --bg-body:#f5f7fa; --bg-grad-start:#f5f7fa; --bg-grad-end:#eef2f6;
       --panel:#ffffff; --surface:#ffffff; --surface-hover:#f5f9f4; --input-bg:#ffffff;
@@ -145,7 +141,7 @@
     .btn:hover{background:var(--surface-hover); border-color:var(--accent-main); box-shadow:0 16px 40px rgba(0,0,0,.2),0 0 12px rgba(43,138,62,.4)}
     .btn.primary{background:linear-gradient(180deg,var(--accent-main) 0%,var(--accent-alt) 100%); border-color:#1e6d2b; color:var(--txt-soft-on-accent); text-shadow:0 1px 2px rgba(0,0,0,.6)}
     .btn.primary:hover{box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 16px rgba(43,138,62,.5)}
-    .btn[data-icon="save"]::before{content:"💾";} .btn[data-icon="pdf"]::before{content:"📄";} .btn[data-icon="link"]::before{content:"🔗";} .btn[data-icon="wa"]::before{content:"📲"}
+    .btn[data-icon="save"]::before{content:"💾";} .btn[data-icon="pdf"]::before{content:"📄";} .btn[data-icon="word"]::before{content:"📝";} .btn[data-icon="link"]::before{content:"🔗";} .btn[data-icon="wa"]::before{content:"📲"}
 
     /* ASIDE */
     aside{display:grid; gap:var(--section-gap)}
@@ -162,7 +158,7 @@
     .footer-total-label{font-size:11px; color:var(--txt-muted); line-height:1.3; font-weight:400}
     .footer-total-value{font-size:14px; font-weight:600; line-height:1.3; color:var(--good); text-shadow:0 0 8px rgba(107,226,138,.4); word-break:break-word}
 
-    /* Lista de custos adicionais (Etapa 6) */
+    /* Lista de custos adicionais */
     .extra-costs-list{display:grid; gap:8px}
     .cost-item{
       display:grid; grid-template-columns:1fr 160px 120px 36px; gap:8px; align-items:center;
@@ -184,7 +180,7 @@
       <div class="brand-badge" aria-hidden>Eco</div>
       <div class="head-texts">
         <div class="app-name">
-          <span>Calculadora de Orçamentos</span><span class="dot"></span><span>EcoSmart Group</span>
+          <span>Calculadora de Orçamentos</span><span class="dot"></span><span>Eco Smart Group</span>
         </div>
         <div class="subtitle">Custos técnicos, taxa de serviço, margem e total final — tudo em um só lugar.</div>
       </div>
@@ -352,6 +348,7 @@
           <div class="actions-row">
             <button class="btn primary" id="btnSalvar" data-icon="save">Salvar</button>
             <button class="btn" id="btnPDF" data-icon="pdf">PDF</button>
+            <button class="btn" id="btnWord" data-icon="word">Word</button>
             <button class="btn" id="btnShare" data-icon="link">Copiar link</button>
             <button class="btn" id="btnWhats" data-icon="wa">WhatsApp</button>
           </div>
@@ -370,7 +367,7 @@
         <div class="card-body">
           <div class="note">
             A base considera Transporte, Mão de Obra, Análises, Variáveis Adicionais (com fator aplicado apenas ao drone) e Custos Adicionais.
-            Depois aplica Acréscimos/Impostos/Taxa Adm., “Outros” e Margem.
+            Depois aplica Acréscimos/Impostos/Taxa Adm., "Outros" e Margem.
           </div>
           <div class="stat-box"><div class="stat-label">Status</div><div class="stat-value" id="status2">online</div></div>
         </div>
@@ -427,7 +424,6 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
 const fmt = v => BRL.format(v||0);
 
-// Conversor numérico BR (aceita vírgula decimal)
 function n(v){
   if (typeof v === 'number') return v;
   let s = String(v || '0').trim();
@@ -444,37 +440,27 @@ const I = {
   combustivel_preco: document.getElementById('combustivel_preco'),
   autonomia: document.getElementById('autonomia'),
   dist_total: document.getElementById('dist_total'),
-
   vh_campo: document.getElementById('vh_campo'),
   h_campo: document.getElementById('h_campo'),
-
   vh_escr: document.getElementById('vh_escr'),
   h_escr: document.getElementById('h_escr'),
-
   v_amostra: document.getElementById('v_amostra'),
   n_amostras: document.getElementById('n_amostras'),
-
   diaria: document.getElementById('diaria'),
   dias: document.getElementById('dias'),
   pessoas: document.getElementById('pessoas'),
-
   aloj: document.getElementById('aloj'),
   alim: document.getElementById('alim'),
-
   art_valor: document.getElementById('art_valor'),
   art_qtd: document.getElementById('art_qtd'),
-
   drone_ha: document.getElementById('drone_ha'),
   preco_ha: document.getElementById('preco_ha'),
-
   fator: document.getElementById('fator'),
   assin_mensal: document.getElementById('assin_mensal'),
-
   p_nf: document.getElementById('p_nf'),
   p_serv: document.getElementById('p_serv'),
   p_tax: document.getElementById('p_tax'),
   p_admin: document.getElementById('p_admin'),
-
   outros: document.getElementById('outros'),
   p_margem: document.getElementById('p_margem')
 };
@@ -484,26 +470,22 @@ const O = {
   sub_mao: document.getElementById('sub_mao'),
   sub_analises: document.getElementById('sub_analises'),
   sub_var: document.getElementById('sub_var'),
-
   r_transporte: document.getElementById('r_transporte'),
   r_mao: document.getElementById('r_mao'),
   r_analises: document.getElementById('r_analises'),
   r_var: document.getElementById('r_var'),
-
   sub_base: document.getElementById('sub_base'),
   base_x_fator: document.getElementById('base_x_fator'),
   base_calc: document.getElementById('base_calc'),
   total_acresc: document.getElementById('total_acresc'),
-
   total_final: document.getElementById('total_final'),
   total_footer: document.getElementById('total_footer'),
-
   status: document.getElementById('status'),
   status2: document.getElementById('status2')
 };
 
 /* ====== Etapa 6: Custos Adicionais ====== */
-let EXTRA_COSTS = []; // {desc, preco, obs}
+let EXTRA_COSTS = [];
 
 const EI = {
   desc: document.getElementById('ec_desc'),
@@ -518,7 +500,6 @@ function renderExtraCosts(){
   if(!EI.list) return 0;
   EI.list.innerHTML = '';
   let total = 0;
-
   EXTRA_COSTS.forEach((item, idx)=>{
     const price = n(item.preco);
     total += price;
@@ -532,7 +513,6 @@ function renderExtraCosts(){
     `;
     EI.list.appendChild(row);
   });
-
   if(EI.sub) EI.sub.textContent = fmt(total);
   return total;
 }
@@ -582,70 +562,52 @@ function applySnapshot(s){
    Recalcular tudo
 ========================== */
 function recalc(){
-  // TRANSPORTE
   const combustivel = n(I.combustivel_preco.value);
   const autonomia   = n(I.autonomia.value);
   const distancia   = n(I.dist_total.value);
   const litros = autonomia > 0 ? (distancia / autonomia) : 0;
   const subTransporte = litros * combustivel;
 
-  // MÃO DE OBRA
   const subMao =
     n(I.vh_campo.value)*n(I.h_campo.value) +
     n(I.vh_escr.value)*n(I.h_escr.value);
 
-  // ANÁLISES
   const subAnalises = n(I.v_amostra.value)*n(I.n_amostras.value);
 
-  // VARIÁVEIS ADICIONAIS
   const fatorVal = n(I.fator.value) || 1;
   const totalDiarias = n(I.diaria.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAloj    = n(I.aloj.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalAlim    = n(I.alim.value)*n(I.dias.value)*n(I.pessoas.value);
   const totalART     = n(I.art_valor.value)*n(I.art_qtd.value);
-
   const droneHa = n(I.drone_ha.value);
   const precoHa = n(I.preco_ha.value);
-  const totalDrone = (droneHa * precoHa) * fatorVal; // fator apenas no drone
-
+  const totalDrone = (droneHa * precoHa) * fatorVal;
   const totalAssin   = n(I.assin_mensal.value)*12;
-
   const subVar = totalDiarias + totalAloj + totalAlim + totalART + totalDrone + totalAssin;
 
-  // ETAPA 6
   const totalExtra = renderExtraCosts();
 
-  // BASE
   const subBase = subTransporte + subMao + subAnalises + subVar + totalExtra;
   const baseMultiplicada = subBase;
 
-  // ACRÉSCIMOS
   const pSoma = (n(I.p_nf.value)+n(I.p_serv.value)+n(I.p_tax.value)+n(I.p_admin.value))/100;
   const outrosVal = n(I.outros.value);
   const acrescimos = baseMultiplicada * pSoma;
-
-  // MARGEM
   const margem = (baseMultiplicada + acrescimos + outrosVal) * (n(I.p_margem.value)/100);
-
-  // TOTAL
   const total = baseMultiplicada + acrescimos + outrosVal + margem;
 
-  // OUTPUTS
   O.sub_transporte.textContent = fmt(subTransporte);
   O.sub_mao.textContent        = fmt(subMao);
   O.sub_analises.textContent   = fmt(subAnalises);
   O.sub_var.textContent        = fmt(subVar);
-
   O.r_transporte.textContent   = fmt(subTransporte);
   O.r_mao.textContent          = fmt(subMao);
   O.r_analises.textContent     = fmt(subAnalises);
   O.r_var.textContent          = fmt(subVar);
-
   O.sub_base.textContent       = fmt(subBase);
   O.base_x_fator.textContent   = fmt(baseMultiplicada);
   O.base_calc.textContent      = fmt(baseMultiplicada);
   O.total_acresc.textContent   = fmt(baseMultiplicada + acrescimos);
-
   O.total_final.textContent    = fmt(total);
   O.total_footer.textContent   = fmt(total);
 
@@ -662,7 +624,6 @@ function recalc(){
   };
 }
 
-// Recalcular em qualquer input
 Object.values(I).forEach(inp=> inp.addEventListener('input', recalc));
 
 /* ==========================
@@ -688,7 +649,6 @@ document.getElementById('btnSalvar').addEventListener('click', async ()=>{
     total: r.total,
     observacoes: null
   };
-
   try{
     const { error } = await supabaseClient.from('orcamentos').insert(row);
     if(error){ console.error(error); alert('Erro ao salvar: '+error.message); return; }
@@ -707,21 +667,18 @@ document.getElementById('btnSalvar').addEventListener('click', async ()=>{
 ========================== */
 (async function loadBySlug(){
   const slug = new URLSearchParams(location.search).get('o');
-
   if(!slug) {
     EXTRA_COSTS = loadLS('calc.extraCosts.v1', []);
     renderExtraCosts();
     recalc();
     return;
   }
-
   try{
     const { data, error } = await supabaseClient
       .from('orcamentos')
       .select('*')
       .eq('slug', slug)
       .single();
-
     if(error){ console.warn('Não foi possível carregar o orçamento:', error.message); }
     if(data && data.parametros){ applySnapshot(data.parametros); }
     recalc();
@@ -750,110 +707,397 @@ document.getElementById('btnWhats').addEventListener('click', ()=>{
 });
 
 /* ==========================
-   Exportar PDF (FORMATADO)
+   Helpers PDF/Word compartilhados
+========================== */
+function buildDocData(){
+  const r = recalc();
+  const dataStr = new Date().toLocaleDateString('pt-BR');
+  const horaStr = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  const p_nf    = n(I.p_nf.value),   p_serv  = n(I.p_serv.value);
+  const p_tax   = n(I.p_tax.value),  p_admin = n(I.p_admin.value);
+  const outrosVal  = n(I.outros.value), p_margem = n(I.p_margem.value);
+  const totalAcrescimos = r.baseMultiplicada * ((p_nf+p_serv+p_tax+p_admin)/100);
+  return { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos };
+}
+
+/* ==========================
+   Exportar PDF (design reformulado)
 ========================== */
 document.getElementById('btnPDF').addEventListener('click', ()=>{
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:'pt', format:'a4'});
-  const margin = {top: 72, right: 36, bottom: 60, left: 36}; // 1" sup/inf, 0.5" laterais
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
+  const margin = {top:100, right:36, bottom:56, left:36};
 
-  const r = recalc();
-  const dataStr = new Date().toLocaleDateString('pt-BR');
+  const { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos } = buildDocData();
 
-  // Cabeçalho
-  function header(){
-    doc.setFont('helvetica','bold'); doc.setFontSize(14);
-    doc.text('EcoSmart Group — Orçamento', margin.left, margin.top - 28);
-    doc.setFont('helvetica','normal'); doc.setFontSize(10);
-    doc.text(`Emitido em ${dataStr}`, margin.left, margin.top - 12);
-    doc.setFont('helvetica','italic'); doc.setFontSize(9);
-    doc.text('Calculadora de Orçamentos • Eco Smart Group', pageW - margin.right, margin.top - 12, {align:'right'});
+  // ── Cabeçalho visual ──
+  function drawHeader(){
+    // Faixa verde topo
+    doc.setFillColor(27, 110, 42);
+    doc.rect(0, 0, pageW, 52, 'F');
+
+    // Badge quadrado arredondado (simulado com rect + texto)
+    doc.setFillColor(19, 84, 31);
+    doc.roundedRect(28, 10, 32, 32, 4, 4, 'F');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.setTextColor(234, 255, 240);
+    doc.text('ECO', 44, 30, {align:'center'});
+
+    // Nome da empresa
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(15);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Eco Smart Group', 70, 24);
+
+    // Subtítulo
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(9);
+    doc.setTextColor(200, 235, 205);
+    doc.text('Calculadora de Orçamentos', 70, 38);
+
+    // Data/hora alinhada à direita
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(9);
+    doc.setTextColor(220, 245, 222);
+    doc.text(`Emitido em ${dataStr} às ${horaStr}`, pageW - margin.right, 22, {align:'right'});
+    doc.text('ecosmart.group', pageW - margin.right, 36, {align:'right'});
+
+    // Linha separadora abaixo da faixa
+    doc.setDrawColor(27, 110, 42);
+    doc.setLineWidth(0.5);
+    doc.line(margin.left, 56, pageW - margin.right, 56);
+
+    // Título do documento
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(13);
+    doc.setTextColor(30, 40, 30);
+    doc.text('Orçamento — Estimativa de Custos Operacionais', margin.left, 80);
+
+    // Linha fina abaixo do título
+    doc.setDrawColor(200, 220, 200);
+    doc.setLineWidth(0.3);
+    doc.line(margin.left, 87, pageW - margin.right, 87);
   }
-  // Rodapé com paginação
-  function footer(){
+
+  // ── Rodapé paginado ──
+  function drawFooter(){
     const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
+    for(let i = 1; i <= pageCount; i++){
       doc.setPage(i);
-      doc.setFont('helvetica','normal'); doc.setFontSize(9);
-      doc.text(`Página ${i} de ${pageCount}`, margin.left, pageH - 24);
-      doc.text('ecosmart.group', pageW - margin.right, pageH - 24, {align:'right'});
+      doc.setFillColor(245, 248, 245);
+      doc.rect(0, pageH - 36, pageW, 36, 'F');
+      doc.setDrawColor(200,220,200);
+      doc.setLineWidth(0.3);
+      doc.line(margin.left, pageH - 36, pageW - margin.right, pageH - 36);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(8);
+      doc.setTextColor(100, 120, 100);
+      doc.text(`Página ${i} de ${pageCount}`, margin.left, pageH - 16);
+      doc.text('ecosmart.group  •  Documento gerado automaticamente', pageW - margin.right, pageH - 16, {align:'right'});
     }
   }
 
-  // Tabela: Totais por etapa
-  header();
+  drawHeader();
+
+  // Tabela 1 — Totais por seção
   doc.autoTable({
     startY: margin.top,
-    head: [['Seção', 'Valor']],
+    head: [['Seção', 'Valor (R$)']],
     body: [
-      ['Transporte', r.subTransporte ? fmt(r.subTransporte) : 'R$ 0,00'],
-      ['Mão de Obra', r.subMao ? fmt(r.subMao) : 'R$ 0,00'],
-      ['Análises', r.subAnalises ? fmt(r.subAnalises) : 'R$ 0,00'],
-      ['Variáveis Adicionais', r.subVar ? fmt(r.subVar) : 'R$ 0,00'],
-      ['Custos Adicionais (Etapa 6)', r.totalExtra ? fmt(r.totalExtra) : 'R$ 0,00'],
+      ['Transporte',                  fmt(r.subTransporte)],
+      ['Mão de Obra',                 fmt(r.subMao)],
+      ['Análises',                    fmt(r.subAnalises)],
+      ['Variáveis Adicionais',        fmt(r.subVar)],
+      ['Custos Adicionais (Etapa 6)', fmt(r.totalExtra)],
     ],
     theme: 'striped',
-    styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
-    headStyles: {fillColor: [27,110,42], textColor: 255},
+    styles:     {font:'helvetica', fontSize:10, cellPadding:7, textColor:[30,40,30]},
+    headStyles: {fillColor:[27,110,42], textColor:255, fontStyle:'bold', fontSize:10},
+    alternateRowStyles: {fillColor:[242,250,243]},
+    columnStyles: {1:{halign:'right', fontStyle:'bold'}},
     margin
   });
 
-  // Tabela: Custos adicionais (detalhamento)
-  if ((EXTRA_COSTS||[]).length){
+  // Tabela 2 — Custos adicionais detalhados
+  if((EXTRA_COSTS||[]).length){
+    const yAfter = doc.lastAutoTable.finalY + 18;
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(27,110,42);
+    doc.text('Detalhamento — Custos Adicionais', margin.left, yAfter - 4);
     doc.autoTable({
-      startY: doc.lastAutoTable.finalY + 16,
+      startY: yAfter,
       head: [['Descrição', 'Observações', 'Preço (R$)']],
-      body: EXTRA_COSTS.map(c => [c.desc || '-', c.obs || '-', fmt(n(c.preco))]),
+      body: EXTRA_COSTS.map(c => [c.desc||'-', c.obs||'-', fmt(n(c.preco))]),
       theme: 'striped',
-      styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
-      headStyles: {fillColor: [20,83,35], textColor: 255},
+      styles:     {font:'helvetica', fontSize:10, cellPadding:7, textColor:[30,40,30]},
+      headStyles: {fillColor:[20,83,35], textColor:255, fontStyle:'bold'},
+      alternateRowStyles: {fillColor:[242,250,243]},
+      columnStyles: {2:{halign:'right', fontStyle:'bold'}},
       margin
     });
   }
 
-  // Tabela: Acréscimos / Margem (percentuais e valores)
-  const p_nf = n(I.p_nf.value), p_serv = n(I.p_serv.value), p_tax = n(I.p_tax.value), p_admin = n(I.p_admin.value);
-  const outrosVal = n(I.outros.value), p_margem = n(I.p_margem.value);
-  const totalAcrescimos = r.baseMultiplicada * ((p_nf+p_serv+p_tax+p_admin)/100);
-
+  // Tabela 3 — Acréscimos / Impostos / Margem
+  const yAcr = (doc.lastAutoTable?.finalY || margin.top) + 18;
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(27,110,42);
+  doc.text('Acréscimos, Impostos e Margem de Lucro', margin.left, yAcr - 4);
   doc.autoTable({
-    startY: (doc.lastAutoTable?.finalY || margin.top) + 16,
-    head: [['Item', 'Base', 'Percentual/Valor', 'Resultado']],
+    startY: yAcr,
+    head: [['Item', 'Base', 'Percentual / Valor', 'Resultado (R$)']],
     body: [
-      ['Base de Cálculo', '', '', fmt(r.baseMultiplicada)],
-      ['Acréscimos (NF + Serviços + Impostos + Adm.)', fmt(r.baseMultiplicada), `${(p_nf+p_serv+p_tax+p_admin).toFixed(2)}%`, fmt(totalAcrescimos)],
-      ['Outros Custos (fixo)', '', fmt(outrosVal), fmt(outrosVal)],
+      ['Base de Cálculo',                              '—',                        '—',                                                 fmt(r.baseMultiplicada)],
+      ['Acréscimos (NF + Serviços + Impostos + Adm.)', fmt(r.baseMultiplicada), `${(p_nf + p_serv + p_tax + p_admin).toFixed(2)}%`, fmt(totalAcrescimos)],
+      ['Outros Custos (fixo)', '—', fmt(outrosVal), fmt(outrosVal)],
       ['Margem de Lucro', fmt(r.baseMultiplicada + totalAcrescimos + outrosVal), `${p_margem.toFixed(2)}%`, fmt(r.margem)]
     ],
     theme: 'striped',
-    styles: {font: 'helvetica', fontSize: 10, cellPadding: 6},
-    headStyles: {fillColor: [27,110,42], textColor: 255},
+    styles: { font: 'helvetica', fontSize: 10, cellPadding: 7, textColor: [30, 40, 30] },
+    headStyles: { fillColor: [27, 110, 42], textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: [242, 250, 243] },
+    columnStyles: { 1: { halign: 'right' }, 3: { halign: 'right' } },
     margin
   });
 
-  // Tabela: Resumo Final
+  const yRes = (doc.lastAutoTable?.finalY || margin.top) + 18;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(27, 110, 42);
+  doc.text('Resumo Final', margin.left, yRes - 4);
+
   doc.autoTable({
-    startY: doc.lastAutoTable.finalY + 16,
-    head: [['Resumo', 'Valor']],
+    startY: yRes,
+    head: [['Indicador', 'Valor']],
     body: [
       ['Subtotal Base', fmt(r.subBase)],
-      ['Base × Fator (fator aplicado apenas no drone)', fmt(r.baseMultiplicada)],
+      ['Base × Fator', fmt(r.baseMultiplicada)],
       ['Total com Acréscimos (antes da margem)', fmt(r.baseMultiplicada + r.acrescimos)],
       ['TOTAL DO ORÇAMENTO', fmt(r.total)]
     ],
     theme: 'grid',
-    styles: {font: 'helvetica', fontSize: 11, cellPadding: 7},
-    headStyles: {fillColor: [0,0,0], textColor: 255},
-    bodyStyles: {},
-    columnStyles: {0: {fontStyle:'bold'}},
+    styles: { font: 'helvetica', fontSize: 11, cellPadding: 7, textColor: [30, 40, 30] },
+    headStyles: { fillColor: [18, 18, 18], textColor: 255, fontStyle: 'bold' },
+    bodyStyles: { fontStyle: 'bold' },
+    columnStyles: { 1: { halign: 'right' } },
     margin
   });
 
-  footer();
+  drawFooter();
   doc.save('orcamento_ecosmart.pdf');
 });
+
+/* ==========================
+   Word editável
+========================== */
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+document.getElementById('btnWord').addEventListener('click', () => {
+  const { r, dataStr, horaStr, p_nf, p_serv, p_tax, p_admin, outrosVal, p_margem, totalAcrescimos } = buildDocData();
+
+  const extraRows = (EXTRA_COSTS || []).length
+    ? EXTRA_COSTS.map(c => `
+      <tr>
+        <td>${escapeHtml(c.desc || '-')}</td>
+        <td>${escapeHtml(c.obs || '-')}</td>
+        <td class="right">${fmt(n(c.preco))}</td>
+      </tr>`).join('')
+    : `
+      <tr>
+        <td colspan="3" class="small">Nenhum custo adicional informado.</td>
+      </tr>`;
+
+  const wordHtml = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>Eco Smart Group — Orçamento</title>
+  <style>
+    @page { size: A4; margin: 2cm 1.5cm 1.5cm 1.5cm; }
+    body{
+      font-family: Arial, sans-serif;
+      color:#1a1f2a;
+      font-size:11pt;
+      line-height:1.35;
+    }
+    .topbar{
+      background:#1b6e2a;
+      color:#fff;
+      padding:18px 20px;
+      border-radius:8px;
+      margin-bottom:16px;
+    }
+    .brand{font-size:18pt; font-weight:bold; margin-bottom:3px;}
+    .subtitle{font-size:10pt; opacity:.92;}
+    .meta{font-size:9pt; margin-top:6px; opacity:.9;}
+    h1{
+      font-size:15pt;
+      color:#1b6e2a;
+      margin:18px 0 8px;
+    }
+    h2{
+      font-size:12pt;
+      color:#1b6e2a;
+      margin:18px 0 8px;
+    }
+    p{margin:0 0 8px;}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:0 0 14px;
+    }
+    th, td{
+      border:1px solid #d4d9e3;
+      padding:8px 10px;
+      vertical-align:top;
+    }
+    th{
+      background:#1b6e2a;
+      color:#fff;
+      text-align:left;
+    }
+    .striped tbody tr:nth-child(even) td{
+      background:#f2faf3;
+    }
+    .right{text-align:right;}
+    .bold{font-weight:bold;}
+    .total-row td{
+      font-weight:bold;
+      background:#eef8ef;
+    }
+    .small{
+      font-size:9pt;
+      color:#4a5568;
+    }
+    .footer{
+      margin-top:18px;
+      font-size:9pt;
+      color:#6b7380;
+      text-align:right;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Eco Smart Group</div>
+    <div class="subtitle">Calculadora de Orçamentos</div>
+    <div class="meta">Emitido em ${dataStr} às ${horaStr} • ecosmart.group</div>
+  </div>
+
+  <h1>Orçamento — Estimativa de Custos Operacionais</h1>
+  <p><strong>Data de geração:</strong> ${dataStr} às ${horaStr}</p>
+  <p><strong>Moeda:</strong> Real brasileiro (BRL)</p>
+
+  <h2>Totais por seção</h2>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Seção</th>
+        <th class="right">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Transporte</td><td class="right">${fmt(r.subTransporte)}</td></tr>
+      <tr><td>Mão de Obra</td><td class="right">${fmt(r.subMao)}</td></tr>
+      <tr><td>Análises</td><td class="right">${fmt(r.subAnalises)}</td></tr>
+      <tr><td>Variáveis Adicionais</td><td class="right">${fmt(r.subVar)}</td></tr>
+      <tr><td>Custos Adicionais (Etapa 6)</td><td class="right">${fmt(r.totalExtra)}</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Custos Adicionais — detalhamento</h2>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Observações</th>
+        <th class="right">Preço</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${extraRows}
+    </tbody>
+  </table>
+
+  <h2>Acréscimos, impostos e margem</h2>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="right">Base</th>
+        <th class="right">Percentual / Valor</th>
+        <th class="right">Resultado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Base de Cálculo</td>
+        <td class="right">—</td>
+        <td class="right">—</td>
+        <td class="right">${fmt(r.baseMultiplicada)}</td>
+      </tr>
+      <tr>
+        <td>Acréscimos (NF + Serviços + Impostos + Adm.)</td>
+        <td class="right">${fmt(r.baseMultiplicada)}</td>
+        <td class="right">${(p_nf + p_serv + p_tax + p_admin).toFixed(2)}%</td>
+        <td class="right">${fmt(totalAcrescimos)}</td>
+      </tr>
+      <tr>
+        <td>Outros Custos (fixo)</td>
+        <td class="right">—</td>
+        <td class="right">${fmt(outrosVal)}</td>
+        <td class="right">${fmt(outrosVal)}</td>
+      </tr>
+      <tr>
+        <td>Margem de Lucro</td>
+        <td class="right">${fmt(r.baseMultiplicada + totalAcrescimos + outrosVal)}</td>
+        <td class="right">${p_margem.toFixed(2)}%</td>
+        <td class="right">${fmt(r.margem)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Resumo final</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Indicador</th>
+        <th class="right">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Subtotal Base</td><td class="right">${fmt(r.subBase)}</td></tr>
+      <tr><td>Base × Fator</td><td class="right">${fmt(r.baseMultiplicada)}</td></tr>
+      <tr><td>Total com Acréscimos (antes da margem)</td><td class="right">${fmt(r.baseMultiplicada + r.acrescimos)}</td></tr>
+      <tr class="total-row"><td>TOTAL DO ORÇAMENTO</td><td class="right">${fmt(r.total)}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">Documento gerado automaticamente pela Eco Smart Group • ${dataStr}</div>
+</body>
+</html>`;
+
+  const blob = new Blob([wordHtml], { type: 'application/msword;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'orcamento_ecosmart.doc';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
 </script>
 </body>
 </html>
